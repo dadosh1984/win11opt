@@ -42,7 +42,8 @@ class Action:
     undo_value: Any | None = None
 
     def describe(self) -> str:
-        return f"{self.kind.value} {self.target}{('\\' + self.name) if self.name else ''}"
+        suffix = '\\' + self.name if self.name else ''
+        return f"{self.kind.value} {self.target}{suffix}"
 
 
 @dataclass(frozen=True)
