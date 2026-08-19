@@ -25,6 +25,8 @@ class ActionKind(str, Enum):
     SCHED_TASK_DISABLE = "task_disable"
     APPX_REMOVE = "appx_remove"
     POWER_PLAN = "power_plan"     # powercfg /setactive
+    POWER_HIBERNATE_DISABLE = "hibernate_off"   # powercfg -h off
+    POWER_HIBERNATE_ENABLE = "hibernate_on"     # powercfg -h on
     SHELL_EXT = "shell_ext"       # будущее
 
 

@@ -191,3 +191,18 @@ def power_plan_activate(guid: str) -> None:
 powercfg /setactive {guid}
 """
     run_ps(script)
+
+
+def power_hibernate_set(enabled: bool) -> None:
+    """Включить/выключить гибернацию (powercfg -h off|on).
+
+    Отключение гибернации удаляет файл hiberfil.sys (40-75% RAM).
+    Скорость SSD немного увеличивается (TRIM работает везде).
+    На десктопе без UPS безопасно.
+    """
+    flag = "off" if not enabled else "on"
+    script = f"""
+$ErrorActionPreference = 'Stop'
+powercfg -h {flag} | Out-Null
+"""
+    run_ps(script)

@@ -1,6 +1,6 @@
 # Пресет: питание
 name: power
-description: Планы электропитания и игровые сервисы.
+description: Планы электропитания, гибернация.
 rules:
   - id: power.ultimate_performance
     name: План питания Ultimate Performance
@@ -8,5 +8,12 @@ rules:
     risk: low
     actions:
       - kind: power_plan
-        target: ultimate
-        value: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+        target: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+
+  - id: power.disable_hibernation
+    name: Отключить гибернацию
+    description: powercfg -h off — удаляет hiberfil.sys (40-75% RAM). Освобождает место на SSD и ускоряет TRIM. На десктопе без UPS безопасно.
+    risk: low
+    actions:
+      - kind: hibernate_off
+        target: hiberfil.sys

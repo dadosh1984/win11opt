@@ -83,6 +83,8 @@ _KIND_ALIASES = {
     "sched_task_disable": ActionKind.SCHED_TASK_DISABLE,
     "appx_remove": ActionKind.APPX_REMOVE,
     "power_plan": ActionKind.POWER_PLAN,
+    "hibernate_off": ActionKind.POWER_HIBERNATE_DISABLE,
+    "hibernate_on": ActionKind.POWER_HIBERNATE_ENABLE,
     "shell_ext": ActionKind.SHELL_EXT,
 }
 

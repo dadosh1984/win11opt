@@ -24,6 +24,8 @@ def fake_ps(monkeypatch):
         "registry": {},        # (hive, path, name) -> value
         "services": {},        # name -> state
         "appx_removed": [],    # list of package names removed
+        "power_plans": [],     # list of activated GUIDs
+        "hibernate": None,     # None | False | True (last set)
         "restore_points": [],
     }
 
@@ -47,6 +49,12 @@ def fake_ps(monkeypatch):
     def fake_appx_remove(package_name, all_users=True):
         state["appx_removed"].append(package_name)
 
+    def fake_power_plan_activate(guid):
+        state["power_plans"].append(guid)
+
+    def fake_power_hibernate_set(enabled):
+        state["hibernate"] = bool(enabled)
+
     def fake_create_restore_point(description):
         seq = len(state["restore_points"]) + 1
         state["restore_points"].append({"id": seq, "desc": description})
@@ -57,6 +65,8 @@ def fake_ps(monkeypatch):
     monkeypatch.setattr(ps, "reg_delete", fake_reg_delete)
     monkeypatch.setattr(ps, "service_set_state", fake_service_set_state)
     monkeypatch.setattr(ps, "appx_remove", fake_appx_remove)
+    monkeypatch.setattr(ps, "power_plan_activate", fake_power_plan_activate)
+    monkeypatch.setattr(ps, "power_hibernate_set", fake_power_hibernate_set)
     monkeypatch.setattr(ps, "create_restore_point", fake_create_restore_point)
 
     return state

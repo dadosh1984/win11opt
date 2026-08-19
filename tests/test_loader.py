@@ -259,3 +259,46 @@ def test_defender_does_not_break_real_time_protection():
         for action in rules[rid].actions:
             assert action.name not in ("DisableAntiSpyware", "DisableRealtimeMonitoring"), \
                 f"{rid} would disable real-time protection!"
+
+
+def test_power_hibernation_rule():
+    """power.disable_hibernation должен использовать hibernate_off."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["power.disable_hibernation"]
+    assert r.actions[0].kind == ActionKind.POWER_HIBERNATE_DISABLE
+
+
+def test_power_plan_uses_guid_target():
+    """power.ultimate_performance: target должен быть GUID (не 'ultimate')."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["power.ultimate_performance"]
+    assert r.actions[0].kind == ActionKind.POWER_PLAN
+    assert "-" in r.actions[0].target  # GUID содержит дефисы
+    assert r.actions[0].target != "ultimate"
+
+
+def test_hibernation_apply_calls_ps(fake_ps):
+    """apply hibernate_off должен вызвать ps.power_hibernate_set(False)."""
+    from win11opt.core import engine
+    from win11opt.core.models import Action
+    actions = [Action(kind=ActionKind.POWER_HIBERNATE_DISABLE, target="hiberfil.sys")]
+    engine.apply(actions, dry_run=False)
+    assert fake_ps["hibernate"] is False
+
+
+def test_power_plan_apply_calls_ps(fake_ps):
+    """apply power_plan должен вызвать ps.power_plan_activate(GUID)."""
+    from win11opt.core import engine
+    from win11opt.core.models import Action
+    guid = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
+    actions = [Action(kind=ActionKind.POWER_PLAN, target=guid)]
+    engine.apply(actions, dry_run=False)
+    assert guid in fake_ps["power_plans"]
+
+
+def test_telemetry_ceip_rule():
+    """telemetry.disable_ceip должен писать AllowTelemetry=0."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["telemetry.disable_ceip"]
+    assert any(a.name == "AllowTelemetry" and a.value == "0" for a in r.actions)
+    assert any(a.name == "CEIPEnable" for a in r.actions)

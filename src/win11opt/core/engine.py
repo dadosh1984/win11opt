@@ -72,6 +72,13 @@ def _execute(action: Action) -> None:
         ps.service_set_state(action.target, "Manual")
     elif action.kind == ActionKind.APPX_REMOVE:
         ps.appx_remove(action.target)
+    elif action.kind == ActionKind.POWER_PLAN:
+        # target = GUID плана (например "8c5e7fda-...")
+        ps.power_plan_activate(action.target)
+    elif action.kind == ActionKind.POWER_HIBERNATE_DISABLE:
+        ps.power_hibernate_set(False)
+    elif action.kind == ActionKind.POWER_HIBERNATE_ENABLE:
+        ps.power_hibernate_set(True)
     else:
         raise NotImplementedError(f"action kind not implemented: {action.kind}")
 
