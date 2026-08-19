@@ -1,0 +1,53 @@
+{
+  "changeId": "программу-оптимизации-windows-11",
+  "checks": [
+    {
+      "step": "lint",
+      "status": "SKIP",
+      "detail": "no lint script in package.json"
+    },
+    {
+      "step": "type",
+      "status": "FAIL",
+      "detail": "Command failed: npm exec tsc --noEmit\nnpm warn Unknown cli config \"--noEmit\". This will stop working in the next major version of npm.\n"
+    },
+    {
+      "step": "test",
+      "status": "SKIP",
+      "detail": "no test script in package.json"
+    },
+    {
+      "step": "drift",
+      "status": "FAIL",
+      "detail": "missing exported: single_exe_uac_elevated_native_gui_elect"
+    },
+    {
+      "step": "yagni",
+      "status": "SKIP",
+      "detail": "no existing .ts sources to build a baseline from"
+    },
+    {
+      "step": "economy",
+      "status": "PASS",
+      "detail": "cache 278.0 KB of 100.0 MB (703 entries) — within budget; ≈ 1463963 tok saved across 827 compress op(s)"
+    },
+    {
+      "step": "security",
+      "status": "PASS",
+      "detail": "no obvious issues"
+    },
+    {
+      "step": "policy",
+      "status": "PASS",
+      "detail": "no .orion/policy.json — no project gates to enforce"
+    },
+    {
+      "step": "verifiability",
+      "status": "WARN",
+      "detail": "oracles: none · verifiability level 0 · tests weak/missing — low verifiability: treat this PASS as lower-confidence (human review advised)"
+    }
+  ],
+  "allPass": false,
+  "generatedAt": "2026-08-19T14:03:14.653Z",
+  "contextHash": "87583116e61d"
+}
