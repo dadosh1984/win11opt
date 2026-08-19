@@ -63,6 +63,7 @@ win11opt gui
 | **Aggressive** | Максимум отзывчивости, отключает службы + Game Bar + OneDrive |
 | **Privacy** | Только телеметрия/реклама, отключает Cortana |
 | **Debloat** | Удаление UWP-приложений (Xbox, Bing, GetHelp). Необратимо. |
+| **Hardened** | Продвинутый: ослабление Defender Cloud + отложенные Update. **НЕ удаляет Defender/Edge.** |
 
 ## Категории правил
 
@@ -73,9 +74,20 @@ win11opt gui
 - **gaming** — Xbox Game Bar, Win+G hotkey
 - **onedrive** — отключение синхронизации/автозапуска
 - **debloat** — удаление UWP-приложений (Xbox/Bing/Help/дубли)
+- **defender** — ослабление Cloud/SmartScreen/MpTelemetry (НЕ удаляет!)
+- **update** — отложенные feature/quality updates
 - **telemetry** — рекламный ID
 - **power** — Ultimate Performance
 - **registry** — UAC no-delay
+
+## ⚠️ Что НЕ делает эта утилита
+
+- **Не удаляет Microsoft Defender.** Он — часть ядра Win11. Удаление = BSOD.
+  Твики только ослабляют телеметрию/SmartScreen, real-time защита остаётся.
+- **Не удаляет Microsoft Edge.** WebView2 (на нём работают Calculator, Notepad,
+  Paint, Settings) требует Edge. Удаление сломает ОС.
+- **Не отключает Windows Update полностью.** Только откладывает feature updates
+  на 12 мес и quality updates на 7 дней. Безопасность системы сохраняется.
 
 ## Расширение через YAML
 

@@ -231,3 +231,31 @@ def test_all_new_categories_loaded_v05():
     cats = {r.category for r in rules.values()}
     assert "explorer" in cats
     assert "debloat" in cats
+
+
+def test_defender_rules_loaded():
+    """defender/update появились в v0.6."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    cats = {r.category for r in rules.values()}
+    assert "defender" in cats
+    assert "update" in cats
+    # SpyNetReporting — ключевой твик
+    assert "defender.disable_cloud_protection" in rules
+    assert rules["defender.disable_cloud_protection"].risk.value == "medium"
+
+
+def test_update_defer_feature_present():
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["update.defer_feature_updates"]
+    assert r.risk.value == "low"
+    assert any("DeferFeatureUpdates" in a.name for a in r.actions)
+
+
+def test_defender_does_not_break_real_time_protection():
+    """Твики defender НЕ должны отключать реалтайм-защиту (это невозможно сделать без BSOD)."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    # Проверяем что мы НЕ пишем в DisableAntiSpyware / DisableRealtimeMonitoring
+    for rid in ("defender.disable_cloud_protection", "defender.disable_mp_telemetry", "defender.disable_smart_screen"):
+        for action in rules[rid].actions:
+            assert action.name not in ("DisableAntiSpyware", "DisableRealtimeMonitoring"), \
+                f"{rid} would disable real-time protection!"

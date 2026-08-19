@@ -66,6 +66,8 @@
 - [x] Tkinter GUI: `win11opt gui`
 - [x] Новые правила v0.4: ui (3), gaming (2), onedrive (2)
 - [x] Новые правила v0.5: explorer (4), debloat (4) + appx_remove в engine
+- [x] Новые правила v0.6: defender (3), update (4). Hardened пресет.
+- [x] Git: v0.5.0 commit + tag
 - [x] Преcет Debloat
 - [x] Git: v0.4.0 commit + tag
 - [ ] Подпись бинаря

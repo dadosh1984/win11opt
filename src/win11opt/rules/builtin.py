@@ -230,6 +230,17 @@ PRESETS: tuple[Profile, ...] = (
             "debloat.remove_help_apps",
         ),
     ),
+    Profile(
+        name="Hardened",
+        description="Продвинутый: ослабление Defender Cloud + отложенные Update. Не удаляет Defender/Edge!",
+        rule_ids=(
+            "defender.disable_cloud_protection",
+            "defender.disable_mp_telemetry",
+            "update.defer_feature_updates",
+            "update.defer_quality_updates",
+            "update.notify_only",
+        ),
+    ),
 )
 
 

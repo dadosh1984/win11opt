@@ -1,0 +1,64 @@
+# Пресет: Windows Update — отложенные обновления
+# Полностью отключать Update НЕЛЬЗЯ — система станет уязвимой через месяцы.
+# Эти твики ЗАМЕДЛЯЮТ feature updates и дают контроль, не убирая патчи безопасности.
+name: update
+description: "Windows Update: feature updates отложены на 12 мес, драйверы по расписанию."
+rules:
+  - id: update.defer_feature_updates
+    name: Отложить feature updates на 12 месяцев
+    description: DeferFeatureUpdatesPeriodInMonths=12 — major updates (23H2 → 24H2) не ставятся автоматически. Security updates продолжают ставиться.
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate'
+        name: DeferFeatureUpdates
+        value: '1'
+        value_type: DWord
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate'
+        name: DeferFeatureUpdatesPeriodInMonths
+        value: '12'
+        value_type: DWord
+
+  - id: update.defer_quality_updates
+    name: Отложить quality updates на 7 дней
+    description: DeferQualityUpdatesPeriodInDays=7 — ежемесячные патчи безопасности ставятся через неделю после выхода (время на стабилизацию).
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate'
+        name: DeferQualityUpdates
+        value: '1'
+        value_type: DWord
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate'
+        name: DeferQualityUpdatesPeriodInDays
+        value: '7'
+        value_type: DWord
+
+  - id: update.notify_only
+    name: "Update: только уведомление, без автозагрузки"
+    description: "SetPolicy=2 — Windows Update скачивает обновления только когда ты сам нажмёшь \"Скачать\". Автоматическая загрузка отключена."
+    risk: medium
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU'
+        name: AUOptions
+        value: '2'
+        value_type: DWord
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU'
+        name: NoAutoUpdate
+        value: '1'
+        value_type: DWord
+
+  - id: update.disable_driver_search
+    name: Отключить автоматический поиск драйверов
+    description: ExcludeWUDriversInQualityUpdate=1 — Windows Update не подтягивает драйверы автоматически (ты сам ставишь через Device Manager).
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate'
+        name: ExcludeWUDriversInQualityUpdate
+        value: '1'
+        value_type: DWord
