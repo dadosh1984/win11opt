@@ -75,6 +75,18 @@ def cmd_rules_validate(_args: argparse.Namespace) -> int:
     return 1
 
 
+def cmd_info(args: argparse.Namespace) -> int:
+    """Показать информацию о системе (read-only)."""
+    from ..core import sysinfo as sysinfo_mod
+    info = sysinfo_mod.collect()
+    if getattr(args, "json", False):
+        import json as _json
+        print(_json.dumps(info.to_dict(), ensure_ascii=False, indent=2))
+    else:
+        print(sysinfo_mod.format_human(info))
+    return 0
+
+
 def cmd_apply(args: argparse.Namespace) -> int:
     """Применить пресет или одиночное правило."""
     rules = get_rules()
@@ -293,6 +305,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_gui = sub.add_parser("gui", help="запустить графический интерфейс")
     p_gui.set_defaults(func=cmd_gui)
+
+    p_info = sub.add_parser("info", help="информация о системе (OS/CPU/RAM/Disk/GPU)")
+    p_info.add_argument("--json", action="store_true", help="вывод в JSON")
+    p_info.set_defaults(func=cmd_info)
 
     return p
 

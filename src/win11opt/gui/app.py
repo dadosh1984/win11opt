@@ -63,6 +63,16 @@ class App:
         ttk.Separator(top, orient=tk.VERTICAL).pack(side=tk.LEFT, padx=8, fill=tk.Y)
         ttk.Button(top, text=_("Bench before"), command=self._bench_before).pack(side=tk.LEFT, padx=4)
         ttk.Button(top, text=_("Bench after"), command=self._bench_after).pack(side=tk.LEFT, padx=4)
+        ttk.Separator(top, orient=tk.VERTICAL).pack(side=tk.LEFT, padx=8, fill=tk.Y)
+        ttk.Button(top, text=_("System Info"), command=self._open_sysinfo).pack(side=tk.LEFT, padx=4)
+
+        # Search bar (фильтр по id + description)
+        search_frame = ttk.Frame(self.root)
+        search_frame.pack(fill=tk.X, padx=8, pady=(0, 4))
+        ttk.Label(search_frame, text=_("Search:")).pack(side=tk.LEFT)
+        self.search_var = tk.StringVar()
+        self.search_var.trace_add("write", lambda *_: self._on_search())
+        ttk.Entry(search_frame, textvariable=self.search_var).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=4)
 
         # Body: categories | rules
         body = ttk.Frame(self.root)
@@ -119,8 +129,11 @@ class App:
         for w in self.rules_inner.winfo_children():
             w.destroy()
         self.selected.clear()
+        query = self.search_var.get().strip().lower() if hasattr(self, "search_var") else ""
         for rid in sorted(r for r, rule in self.rules.items() if rule.category == category):
             rule = self.rules[rid]
+            if query and query not in rid.lower() and query not in rule.description.lower():
+                continue
             var = tk.BooleanVar(value=False)
             self.selected[rid] = var
             frame = ttk.Frame(self.rules_inner)
@@ -134,6 +147,33 @@ class App:
                 frame, text=rule.description, foreground="gray",
                 wraplength=500, justify=tk.LEFT,
             ).pack(side=tk.LEFT, padx=8)
+
+    def _on_search(self) -> None:
+        """Перерисовать текущую категорию с учётом поискового запроса."""
+        sel = self.tree.selection()
+        cat = self.cat_items.get(sel[0]) if sel else "visual"
+        self._render_rules(cat)
+
+    def _open_sysinfo(self) -> None:
+        """Открыть окно с информацией о системе (read-only)."""
+        from ..core import sysinfo as sysinfo_mod
+        win = tk.Toplevel(self.root)
+        win.title(_("System Information"))
+        win.geometry("600x300")
+        txt = tk.Text(win, font=("Consolas", 10), wrap=tk.WORD)
+        txt.pack(fill=tk.BOTH, expand=True, padx=8, pady=8)
+        info = sysinfo_mod.collect()
+        txt.insert(tk.END, sysinfo_mod.format_human(info))
+        txt.configure(state=tk.DISABLED)
+        ttk.Button(win, text=_("Refresh"), command=lambda: self._refresh_sysinfo(txt)).pack(pady=4)
+
+    def _refresh_sysinfo(self, txt: tk.Text) -> None:
+        from ..core import sysinfo as sysinfo_mod
+        info = sysinfo_mod.collect()
+        txt.configure(state=tk.NORMAL)
+        txt.delete("1.0", tk.END)
+        txt.insert(tk.END, sysinfo_mod.format_human(info))
+        txt.configure(state=tk.DISABLED)
 
     def _selected_ids(self) -> list[str]:
         return [rid for rid, var in self.selected.items() if var.get()]

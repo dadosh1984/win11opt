@@ -36,8 +36,15 @@ win11opt rules describe visual.disable_animations
 # Валидировать все YAML-пресеты в rules/
 win11opt rules validate
 
+# Информация о системе (OS/CPU/RAM/Disk/GPU) — read-only
+win11opt info
+win11opt info --json
+
 # Применить пресет (dry-run, ничего не меняет)
 win11opt apply --profile Balanced --dry-run
+
+# Рекомендованная точка входа для новичков (7 low-risk твиков)
+win11opt apply --profile Safe --dry-run
 
 # Реально применить (попросит UAC)
 win11opt apply --profile Balanced

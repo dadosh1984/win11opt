@@ -1,0 +1,16 @@
+{
+  "title": "сравнительный-анализ-win11opt-v1",
+  "goal": "Сравнительный анализ win11opt v1.5.0 с аналогами (Win11Debloat, Chris Titus Tech Windows Utility, hellzerg/optimizer, SophiApp, WinAero Tweaker, O&O ShutUp10) и план новых фич v1.6.0. Контекст: наш проект — Python 3.11+, single-EXE (PyInstaller), CLI + Tkinter GUI, 52 правила в 11 категориях (visual/services/telemetry/power/registry/ui/gaming/onedrive/explorer/debloat/defender/update/network/ntfs/scheduled_tasks/storage/appcompat), 5 пресетов (Balanced/Aggressive/Privacy/Hardened/Debloat), bench (7 метрик + JSON diff), snapshot+rollback+restore_point, i18n EN+RU, dry-run по умолчанию, ms_doc_url на learn.microsoft.com для 42 правил. Что нужно: 1. По каждому аналогу — 1-3 строки: сильные стороны, слабые, что можно взять. 2. Наша уникальность (что есть только у нас или мы делаем лучше). 3. Где отстаём (must-fix vs nice-to-have). 4. Польза для конечного пользователя (1-2 строки). 5. Список из 5-8 новых фич v1.6.0 с приоритетом (P0/P1/P2), с описанием что именно внедряем и откуда идея. 6. YAGNI-проверка каждой фичи по rung-лестнице. Constraints: - Не раздувать проект: только то, что приносит измеримую пользу (ponytail rung ≥ 4). - Сохранить Python-стек, single-EXE 12MB, dry-run по умолчанию. - Без сетевых вызовов (privacy-first, как было заявлено). Budget: compact. — Windows 11 (single-EXE, Python 3.11+, PyInstaller)",
+  "platform": "YAGNI rung ≥ 4, no network calls, dry-run by default, single-EXE < 15MB",
+  "constraints": "compact",
+  "budget": "compact",
+  "clarity": "clear",
+  "language": "ru",
+  "appliesLessons": [
+    "внедрить-проект-правило-экономии:shield:6425d7e9a605",
+    "изучить-типовую-обработку-1с:shield:a9c538201233",
+    "benchmark-10-different-orion:out:53637b1c3b4c",
+    "фаза-32-0-15:shield:44b818d7fb67",
+    "mcp-python-1-7:forge:9c866da712f6"
+  ]
+}

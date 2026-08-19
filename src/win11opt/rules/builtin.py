@@ -263,6 +263,19 @@ PRESETS: tuple[Profile, ...] = (
             "update.notify_only",
         ),
     ),
+    Profile(
+        name="Safe",
+        description="Быстрый старт: 5-7 самых безопасных твиков (low risk). Рекомендованная точка входа для новичков.",
+        rule_ids=(
+            "visual.disable_animations",
+            "telemetry.advertising_id",
+            "telemetry.disable_ceip",
+            "power.ultimate_performance",
+            "ui.instant_tooltips",
+            "ui.instant_menu",
+            "explorer.show_extensions",
+        ),
+    ),
 )
 
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.6.0 — System Info + Safe пресет + GUI search
+
+### Added
+- `win11opt info` — read-only снимок системы (OS/CPU/RAM/Disk/GPU/uptime), `--json` флаг
+- Пресет `Safe` — 7 low-risk правил, рекомендованная точка входа для новичков
+- GUI: поиск по id/description + кнопка "System Info" (окно с refresh)
+- `core/sysinfo.py` — модуль сбора информации (PowerShell Get-CimInstance)
+
+### Changed
+- GUI: search bar над списком правил (фильтр по подстроке)
+
+### Tests
+- 83/83 passed (было 75; +8: sysinfo collect/parse/format, safe preset)
+
 ## v1.5.0 — Bench: services-by-state + JSON diff-report
 
 ### Added

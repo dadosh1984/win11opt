@@ -48,6 +48,7 @@ def fake_tk(monkeypatch):
         def __init__(self, *a, **k): self._v = ""
         def get(self): return self._v
         def set(self, v): self._v = v
+        def trace_add(self, *a, **k): return None
 
     tk_mod.Tk = FakeTk
     tk_mod.Toplevel = FakeTk
@@ -78,6 +79,7 @@ def fake_tk(monkeypatch):
     ttk_mod.Scrollbar = FakeWidget
     ttk_mod.LabelFrame = FakeWidget
     ttk_mod.Progressbar = FakeWidget
+    ttk_mod.Entry = FakeWidget
     ttk_mod.Style = type("Style", (), {
         "theme_names": lambda self: [],
         "theme_use": lambda self, t: None,

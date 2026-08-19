@@ -395,3 +395,19 @@ def test_ms_doc_url_is_microsoft_learn():
         if r.ms_doc_url:
             assert "learn.microsoft.com" in r.ms_doc_url or "support.microsoft.com" in r.ms_doc_url, \
                 f"{rid}: bad URL {r.ms_doc_url}"
+
+
+def test_safe_preset_exists_and_low_risk():
+    """Safe пресет (v1.6.0) — 5-7 low-risk правил, точка входа для новичков."""
+    from win11opt.rules.builtin import PRESETS, get_preset
+    safe = get_preset("Safe")
+    assert safe is not None, "Safe preset missing"
+    assert 5 <= len(safe.rule_ids) <= 7, f"Safe should have 5-7 rules, got {len(safe.rule_ids)}"
+    # Все правила Safe должны быть low risk
+    rules = load_all(DEFAULT_RULES_DIR)
+    for rid in safe.rule_ids:
+        assert rid in rules, f"Safe references unknown rule {rid}"
+        assert rules[rid].risk.value == "low", f"Safe rule {rid} is not low risk"
+    # Safe должен быть в PRESETS
+    names = {p.name for p in PRESETS}
+    assert "Safe" in names

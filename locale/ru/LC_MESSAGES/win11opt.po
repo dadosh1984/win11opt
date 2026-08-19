@@ -458,3 +458,15 @@ msgstr "Применить? Будет создана точка восстан�
 msgid "Validation failed: %s"
 msgstr "Ошибка валидации: %s"
 
+
+msgid "System Info"
+msgstr "Информация о системе"
+
+msgid "System Information"
+msgstr "Информация о системе"
+
+msgid "Search:"
+msgstr "Поиск:"
+
+msgid "Refresh"
+msgstr "Обновить"
