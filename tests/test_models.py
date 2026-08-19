@@ -10,9 +10,9 @@ def test_action_describe():
 
 
 def test_rule_categories():
-    from win11opt.rules.builtin import BUILTIN_RULES, PRESETS
+    from win11opt.rules import get_rules
 
-    cats = {r.category for r in BUILTIN_RULES.values()}
+    cats = {r.category for r in get_rules().values()}
     assert "visual" in cats
     assert "services" in cats
     assert "telemetry" in cats
@@ -21,16 +21,18 @@ def test_rule_categories():
 
 
 def test_presets_reference_real_rules():
-    from win11opt.rules.builtin import BUILTIN_RULES, PRESETS
+    from win11opt.rules import get_rules
+    from win11opt.rules.builtin import PRESETS
 
+    rules = get_rules()
     for p in PRESETS:
         for rid in p.rule_ids:
-            assert rid in BUILTIN_RULES, f"preset {p.name} references unknown rule {rid}"
+            assert rid in rules, f"preset {p.name} references unknown rule {rid}"
 
 
 def test_risk_levels_present():
-    from win11opt.rules.builtin import BUILTIN_RULES
+    from win11opt.rules import get_rules
 
-    seen = {r.risk for r in BUILTIN_RULES.values()}
+    seen = {r.risk for r in get_rules().values()}
     assert Risk.LOW in seen
     assert Risk.MEDIUM in seen

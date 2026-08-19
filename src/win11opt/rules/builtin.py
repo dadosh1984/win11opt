@@ -179,26 +179,32 @@ def uac_no_prompt_for_approved() -> Rule:
 PRESETS: tuple[Profile, ...] = (
     Profile(
         name="Balanced",
-        description="Безопасный набор: анимации, телеметрия, питание.",
+        description="Безопасный набор: анимации, UI, телеметрия, питание.",
         rule_ids=(
             "visual.disable_animations",
             "visual.classic_context_menu",
+            "ui.instant_menu",
+            "ui.instant_tooltips",
             "telemetry.advertising_id",
             "power.ultimate_performance",
         ),
     ),
     Profile(
         name="Aggressive",
-        description="Максимум отзывчивости. Включает отключение служб.",
+        description="Максимум отзывчивости. Включает отключение служб и UI.",
         rule_ids=(
             "visual.disable_animations",
             "visual.classic_context_menu",
+            "ui.instant_menu",
+            "ui.instant_tooltips",
             "telemetry.advertising_id",
             "power.ultimate_performance",
             "services.disable_search_indexer",
             "services.disable_diagtrack",
             "services.disable_xbox",
             "registry.uac_no_delay",
+            "gaming.disable_gamebar",
+            "onedrive.disable_startup",
         ),
     ),
     Profile(
@@ -207,6 +213,8 @@ PRESETS: tuple[Profile, ...] = (
         rule_ids=(
             "telemetry.advertising_id",
             "services.disable_diagtrack",
+            "ui.no_cortana",
+            "onedrive.disable_autostart",
         ),
     ),
 )

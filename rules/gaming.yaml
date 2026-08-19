@@ -1,0 +1,37 @@
+# Пресет: Gaming — отключение Game Bar и DVR
+name: gaming
+description: Отключение Xbox Game Bar и DVR — снижает фоновую нагрузку CPU.
+rules:
+  - id: gaming.disable_gamebar
+    name: Отключить Xbox Game Bar
+    description: GameDVR_Enabled=0 + AppCaptureEnabled=0 — Game Bar жрёт CPU при alt-tab и записи игр. Требуется ребут.
+    risk: low
+    requires_reboot: true
+    ms_doc_url: https://support.microsoft.com/en-us/windows/game-bar-in-windows
+    actions:
+      - kind: reg_set
+        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\GameDVR'
+        name: AppCaptureEnabled
+        value: '0'
+        value_type: DWord
+      - kind: reg_set
+        target: 'HKCU:\System\GameConfigStore'
+        name: GameDVR_Enabled
+        value: '0'
+        value_type: DWord
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR'
+        name: AllowGameDVR
+        value: '0'
+        value_type: DWord
+
+  - id: gaming.disable_xbox_gamebar_hotkey
+    name: Отключить Win+G горячую клавишу
+    description: GameBarAutoStartEnabled=0 — Win+G не открывает Game Bar при нажатии.
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKCU:\Software\Microsoft\GameBar'
+        name: ShowStartupPanel
+        value: '0'
+        value_type: DWord

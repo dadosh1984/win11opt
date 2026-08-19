@@ -163,3 +163,29 @@ rules:
     engine.apply(rule.actions, dry_run=False)
     key = ("HKCU", "x", "Foo")
     assert fake_ps["registry"][key]["value"] == "42"
+
+
+def test_all_new_categories_loaded():
+    """ui/gaming/onedrive должны появиться после v0.4."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    cats = {r.category for r in rules.values()}
+    assert "ui" in cats
+    assert "gaming" in cats
+    assert "onedrive" in cats
+
+
+def test_ui_instant_menu_low_risk():
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["ui.instant_menu"]
+    assert r.risk.value == "low"
+    assert r.requires_reboot is False
+    assert r.actions[0].target.endswith("Control Panel\\Desktop")
+    assert r.actions[0].name == "MenuShowDelay"
+    assert r.actions[0].value == "0"
+
+
+def test_gaming_disable_gamebar_requires_reboot():
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["gaming.disable_gamebar"]
+    assert r.requires_reboot is True
+    assert len(r.actions) == 3  # AppCapture + GameDVR_Enabled + AllowGameDVR

@@ -60,9 +60,11 @@
 
 ## Фаза 8 — следующие шаги
 
-- [x] PyInstaller single-EXE: `dist/win11opt.exe` 8.5 MB
+- [x] PyInstaller single-EXE: `dist/win11opt.exe` 12 MB
 - [x] UAC manifest: `requireAdministrator` встроен в EXE
 - [x] YAML пресеты: `rules/*.yaml`, loader, валидация, `rules validate`
 - [x] Tkinter GUI: `win11opt gui`
+- [x] Новые правила v0.4: ui (3), gaming (2), onedrive (2)
+- [x] Git: v0.3.0 commit + tag
 - [ ] Подпись бинаря
 - [ ] Тесты на реальной Win11 VM (snapshot/restore round-trip)

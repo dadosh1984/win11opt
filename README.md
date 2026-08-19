@@ -59,9 +59,20 @@ win11opt gui
 
 | Имя | Что делает |
 |---|---|
-| **Balanced** | Безопасный: анимации, телеметрия, питание |
-| **Aggressive** | Максимум отзывчивости, отключает службы |
-| **Privacy** | Только телеметрия/реклама |
+| **Balanced** | Безопасный: анимации, UI (мгновенные меню/тултипы), телеметрия, питание |
+| **Aggressive** | Максимум отзывчивости, отключает службы + Game Bar + OneDrive |
+| **Privacy** | Только телеметрия/реклама, отключает Cortana |
+
+## Категории правил
+
+- **visual** — анимации, классическое контекстное меню
+- **ui** — мгновенные меню/тултипы, lockscreen, Cortana
+- **services** — Windows Search, DiagTrack, Xbox-сервисы
+- **gaming** — Xbox Game Bar, Win+G hotkey
+- **onedrive** — отключение синхронизации/автозапуска
+- **telemetry** — рекламный ID
+- **power** — Ultimate Performance
+- **registry** — UAC no-delay
 
 ## Расширение через YAML
 

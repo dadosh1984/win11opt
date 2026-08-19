@@ -23,6 +23,8 @@ ponytail: rung 4 — YAML loader нужен сейчас, чтобы прави�
 """
 from __future__ import annotations
 
+import os
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -31,9 +33,38 @@ import yaml
 from ..core.models import Action, ActionKind, Risk, Rule
 
 
-# Корень с YAML-пресетами. По умолчанию — `rules/` в репо; рядом с EXE —
-# переопределяется через WIN11OPT_RULES_DIR.
-DEFAULT_RULES_DIR = Path(__file__).resolve().parents[3] / "rules"
+def _resolve_default_rules_dir() -> Path:
+    """Корень с YAML-пресетами.
+
+    Приоритет:
+    1. Env WIN11OPT_RULES_DIR (override для пользовательских пресетов)
+    2. Рядом с EXE: <exe-dir>/rules — для portable-режима
+    3. PyInstaller `_MEIPASS/rules` — внутри упакованного EXE
+    4. <src>/../rules — dev-режим (родитель src/)
+    """
+    env = os.environ.get("WIN11OPT_RULES_DIR")
+    if env:
+        return Path(env)
+
+    # PyInstaller: данные распакованы в _MEIPASS
+    meipass = getattr(sys, "_MEIPASS", None)
+    if meipass:
+        cand = Path(meipass) / "rules"
+        if cand.exists():
+            return cand
+
+    # Рядом с exe-файлом (portable)
+    exe = getattr(sys, "executable", None)
+    if exe:
+        cand = Path(exe).resolve().parent / "rules"
+        if cand.exists():
+            return cand
+
+    # Dev-режим: src/win11opt/rules/loader.py → src/ → корень
+    return Path(__file__).resolve().parents[3] / "rules"
+
+
+DEFAULT_RULES_DIR = _resolve_default_rules_dir()
 
 
 class RuleLoadError(ValueError):
