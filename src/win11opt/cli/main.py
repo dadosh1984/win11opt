@@ -87,6 +87,50 @@ def cmd_info(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_export(args: argparse.Namespace) -> int:
+    """Экспортировать custom-пресет в YAML для шаринга."""
+    from ..rules import export as export_mod
+    from ..rules import get_rules
+    from ..rules.loader import RuleLoadError
+    rule_ids = [r.strip() for r in args.rules.split(",") if r.strip()]
+    if not rule_ids:
+        print("error: --rules пустой", file=sys.stderr)
+        return 2
+    try:
+        path = export_mod.export_profile(
+            name=args.name,
+            description=args.description,
+            rule_ids=rule_ids,
+            rules_lookup=get_rules(),
+            out_path=Path(args.out),
+        )
+    except RuleLoadError as e:
+        print(f"export failed: {e}", file=sys.stderr)
+        return 2
+    print(f"exported: {path}")
+    print(f"  profile: {args.name}")
+    print(f"  rules:   {len(rule_ids)}")
+    print(f"  чтобы применить: win11opt apply --profile {args.name}")
+    print(f"  после копирования файла в rules/ (или используйте --profile явно через import)")
+    return 0
+
+
+def cmd_import(args: argparse.Namespace) -> int:
+    """Импортировать YAML-профиль и напечатать имя + правила."""
+    from ..rules import export as export_mod
+    from ..rules.loader import RuleLoadError
+    try:
+        name, rule_ids = export_mod.import_profile(Path(args.profile_path))
+    except RuleLoadError as e:
+        print(f"import failed: {e}", file=sys.stderr)
+        return 2
+    print(f"profile: {name}")
+    print(f"rules:   {len(rule_ids)}")
+    for rid in rule_ids:
+        print(f"  • {rid}")
+    return 0
+
+
 def cmd_apply(args: argparse.Namespace) -> int:
     """Применить пресет или одиночное правило."""
     rules = get_rules()
@@ -315,6 +359,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_info = sub.add_parser("info", help="информация о системе (OS/CPU/RAM/Disk/GPU)")
     p_info.add_argument("--json", action="store_true", help="вывод в JSON")
     p_info.set_defaults(func=cmd_info)
+
+    p_export = sub.add_parser("export", help="экспортировать custom-профиль в YAML")
+    p_export.add_argument("--name", required=True, help="имя профиля")
+    p_export.add_argument("--description", default="", help="описание профиля")
+    p_export.add_argument("--rules", required=True, help="список rule id через запятую")
+    p_export.add_argument("--out", required=True, help="путь к выходному .yaml")
+    p_export.set_defaults(func=cmd_export)
+
+    p_import = sub.add_parser("import", help="импортировать профиль из YAML (валідація)")
+    p_import.add_argument("profile_path", help="путь к .yaml профиля")
+    p_import.set_defaults(func=cmd_import)
 
     return p
 

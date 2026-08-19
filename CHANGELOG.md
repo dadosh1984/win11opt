@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.9.0 — Export/Import custom профилей
+
+### Added
+- `rules/export.py` — сериализация custom-профиля в YAML (тот же формат, что rules/*.yaml)
+- `win11opt export --name N --rules R1,R2 --out P.yaml` — создать custom-профиль
+- `win11opt import P.yaml` — загрузить и валидировать профиль (напечатать name + rule_ids)
+- Round-trip: export → import даёт идентичные rule_ids (тест)
+
+### Tests
+- 101/101 passed (было 92; +9 export/import)
+
 ## v1.8.0 — Gaming пресет
 
 ### Added

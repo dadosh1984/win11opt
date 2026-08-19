@@ -71,6 +71,14 @@ win11opt apply --profile Balanced
 win11opt bench diff latest --out E:/reports/pre.json
 win11opt bench diff latest --html E:/reports/report.html
 
+# Экспорт кастомного профиля (шаринг между машинами)
+win11opt export --name WorkLaptop --rules "visual.disable_animations,telemetry.advertising_id,power.ultimate_performance" --out work-laptop.yaml
+
+# Импорт + валидация (напечатает name + rule_ids)
+win11opt import work-laptop.yaml
+
+# Скопируйте файл в rules/, чтобы он появился в --profile <name>
+
 # Список baselines
 win11opt bench list
 
