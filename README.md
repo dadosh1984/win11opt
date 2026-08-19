@@ -82,6 +82,53 @@ win11opt gui
 - **ntfs** — отключение last-access-time, 8.3 имён (ускорение файловых операций)
 - **registry** — UAC no-delay
 
+## Полный список правил
+
+| ID | Категория | Риск | Reboot | Описание |
+|---|---|---|---|---|
+| `debloat.remove_apps_duplicates` | debloat | medium |  | Удаляет MixedReality, PhoneLink, People — дублируют стандартные функции. |
+| `debloat.remove_bing_apps` | debloat | medium |  | Удаляет BingWeather, BingNews, BingFinance, BingSports. Используйте Edge/браузер для погоды. |
+| `debloat.remove_help_apps` | debloat | low |  | Удаляет GetHelp, Tips (Microsoft Tips), FeedbackHub. Не нужны обычному пользователю. |
+| `debloat.remove_xbox_apps` | debloat | medium |  | Удаляет XboxGameOverlay, XboxGameCallableUI, XboxIdentityProvider, XboxSpeechToTextOverlay. Освобождает фоновые процессы. |
+| `defender.disable_cloud_protection` | defender | medium |  | SpyNetReporting=0, SubmitSamplesConsent=0 — Defender перестаёт слать образцы в Microsoft. Уменьшает фоновый трафик. |
+| `defender.disable_mp_telemetry` | defender | low |  | MpTelemetry=0 — отключает ETW-канал телеметрии Defender. Уменьшает нагрузку на диск (меньше записей в Event Log). |
+| `defender.disable_smart_screen` | defender | medium |  | EnableSmartScreen=0 для Edge/Store/Explorer. Предупреждения о скачиваемых файлах отключаются. Защита от фишинга остаётся через DNS/Network protection. |
+| `explorer.launch_to_this_pc` | explorer | low |  | LaunchTo=1 — при запуске Проводник открывает This PC (XP-style), а не Home. |
+| `explorer.show_extensions` | explorer | low |  | HideFileExt=0 — Windows показывает .txt, .exe и т.п. Безопасность + меньше фишинга. |
+| `explorer.show_full_path_in_title` | explorer | low |  | FullPath=1 — заголовок Проводника показывает полный путь к текущей папке. |
+| `explorer.show_status_bar` | explorer | low |  | ShowStatusBar=1 — внизу Проводника информация о выделенных файлах. |
+| `gaming.disable_gamebar` | gaming | low | ✅ | GameDVR_Enabled=0 + AppCaptureEnabled=0 — Game Bar жрёт CPU при alt-tab и записи игр. Требуется ребут. |
+| `gaming.disable_xbox_gamebar_hotkey` | gaming | low |  | GameBarAutoStartEnabled=0 — Win+G не открывает Game Bar при нажатии. |
+| `network.disable_gaming_qos` | network | low |  | Do not use NLA=1 — отключает приоритизацию трафика Windows (DSCP). Убирает лишнюю обработку пакетов. |
+| `network.disable_nagle` | network | low |  | TcpAckFrequency=1 + TCPNoDelay=1 — отключает задержку Nagle. Меньше latency в играх и при удалённой работе. Незначительно увеличивает трафик. |
+| `network.disable_throttling` | network | low |  | NetworkThrottlingIndex=0xffffffff — Windows не ограничивает сетевую пропускную способность для мультимедиа. Полезно для стриминга и игр. |
+| `ntfs.disable_8dot3_names` | ntfs | low |  | NtfsDisable8dot3NameCreation=1 — NTFS не создаёт короткие DOS-имена (PROGRA~1). Ускоряет создание файлов в папках с тысячами файлов. |
+| `ntfs.disable_last_access_time` | ntfs | low |  | NtfsDisableLastAccessUpdate=1 — NTFS не обновляет время последнего доступа к файлу. Ускоряет чтение файлов (меньше записей на диск). |
+| `ntfs.disable_short_name_creation` | ntfs | low |  | Win31FileSystem=0 — отключает совместимость с Win3.1 (короткие имена). Ускоряет файловые операции. |
+| `onedrive.disable_autostart` | onedrive | low |  | SilentAcquiredTier=DWORD:000000f5 — отключает запуск OneDrive при логине. |
+| `onedrive.disable_startup` | onedrive | low |  | DisableFileSyncNGSC=1 — отключает фоновую синхронизацию OneDrive. OneDrive остаётся установленным. |
+| `power.disable_hibernation` | power | low |  | powercfg -h off — удаляет hiberfil.sys (40-75% RAM). Освобождает место на SSD и ускоряет TRIM. На десктопе без UPS безопасно. |
+| `power.ultimate_performance` | power | low |  | Скрытый план питания, который не экономит энергию — максимум отзывчивости. На ноутбуке разряжает быстрее. |
+| `registry.uac_no_delay` | registry | medium |  | ConsentPromptBehaviorAdmin=0 — UAC появляется, но без затемнения экрана и без задержки. Безопасность не снижается. |
+| `services.disable_diagtrack` | services | medium |  | Microsoft Connected User Experiences and Telemetry — отправляет диагностические данные. |
+| `services.disable_search_indexer` | services | medium |  | Индексация диска на SSD создаёт лишний I/O. Полнотекстовый поиск в меню Пуск перестаёт работать. |
+| `services.disable_xbox` | services | medium |  | XGameRouter, XboxGipSvc и т.п. — нужны только для Xbox Game Pass / Xbox-контроллеров. |
+| `telemetry.advertising_id` | telemetry | low |  | Рекламный ID используется приложениями UWP для таргетированной рекламы. |
+| `telemetry.disable_activity_history` | telemetry | low |  | Activity History синхронизирует историю действий между устройствами. Отключает сбор и отправку. |
+| `telemetry.disable_ceip` | telemetry | low |  | CEIP собирает данные об использовании Windows. AllowTelemetry=0 + CEIPEnable=0 отключает сбор. |
+| `telemetry.disable_feedback_frequency` | telemetry | low |  | DoNotShowFeedbackNotifications=1 — Windows не спрашивает "как вам Windows?". |
+| `telemetry.disable_tailored_experiences` | telemetry | low |  | TailoredExperiencesWithDiagnosticDataEnabled=0 — Windows не использует диагностику для персонализации рекламы. |
+| `ui.instant_menu` | ui | low |  | MenuShowDelay=0 — контекстные меню появляются без 400мс задержки. XP-style поведение. |
+| `ui.instant_tooltips` | ui | low |  | MouseHoverTime=10 — тултипы появляются через ~17мс вместо 400мс по умолчанию. |
+| `ui.no_cortana` | ui | medium |  | AllowCortana=0 — отключает поиск Cortana. Плоский поиск Windows остаётся работать. |
+| `ui.no_lockscreen` | ui | medium | ✅ | DisableLockScreenAppNotifications=1 — убрать рекламный lockscreen. Требуется ребут. |
+| `update.defer_feature_updates` | update | low |  | DeferFeatureUpdatesPeriodInMonths=12 — major updates (23H2 → 24H2) не ставятся автоматически. Security updates продолжают ставиться. |
+| `update.defer_quality_updates` | update | low |  | DeferQualityUpdatesPeriodInDays=7 — ежемесячные патчи безопасности ставятся через неделю после выхода (время на стабилизацию). |
+| `update.disable_driver_search` | update | low |  | ExcludeWUDriversInQualityUpdate=1 — Windows Update не подтягивает драйверы автоматически (ты сам ставишь через Device Manager). |
+| `update.notify_only` | update | medium |  | SetPolicy=2 — Windows Update скачивает обновления только когда ты сам нажмёшь "Скачать". Автоматическая загрузка отключена. |
+| `visual.classic_context_menu` | visual | low | ✅ | Win11 прячет часть команд за "Show more options". Возвращаем полное меню сразу. |
+| `visual.disable_animations` | visual | low |  | Убирает анимацию свёртывания/развёртывания/закрытия окон. Сильно влияет на ощущение скорости UI. |
+
 ## ⚠️ Что НЕ делает эта утилита
 
 - **Не удаляет Microsoft Defender.** Он — часть ядра Win11. Удаление = BSOD.
@@ -114,8 +161,10 @@ rules:
 Поддерживаемые `kind`:
 - `reg_set` / `reg_delete` — реестр
 - `service_disable` / `service_manual` / `service_delete` — службы
-- `power_plan` — план электропитания (value = GUID)
-- `appx_remove`, `sched_task_disable`, `shell_ext` — зарезервированы
+- `power_plan` — план электропитания (target = GUID)
+- `hibernate_off` / `hibernate_on` — гибернация (powercfg -h)
+- `appx_remove` — удаление UWP-приложения (target = маска имени)
+- `sched_task_disable`, `shell_ext` — зарезервированы
 
 Перед использованием: `win11opt rules validate`.
 
