@@ -64,15 +64,16 @@ win11opt bench save --label pre
 # Применить твики
 win11opt apply --profile Balanced
 
-# Сравнить с baseline
-win11opt bench diff latest
+# Сравнить с baseline + HTML-отчёт
+win11opt bench diff latest --out E:/reports/pre.json
+win11opt bench diff latest --html E:/reports/report.html
 
 # Список baselines
 win11opt bench list
 
 # Подкоманды:
 #   bench save [--label LABEL]          → измерить и сохранить
-#   bench diff [PATH|latest] [--out P]  → сравнить current с baseline (опц. JSON-отчёт)
+#   bench diff [PATH|latest] [--out P] [--html H]  → сравнить current с baseline (JSON и/или HTML-отчёт)
 #   bench list                          → показать все baselines
 #   bench report [PATH]                 → напечатать diff-отчёт (последний, если PATH не указан)
 

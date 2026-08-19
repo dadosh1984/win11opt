@@ -201,6 +201,11 @@ def cmd_bench(args: argparse.Namespace) -> int:
         if out_path:
             saved = benchmod.save_diff_report(before, after, Path(out_path))
             print(f"\nsaved diff report: {saved}")
+        html_path = getattr(args, "html", None)
+        if html_path:
+            from ..core.bench_html import save_html_diff
+            saved_html = save_html_diff(before, after, Path(html_path))
+            print(f"saved HTML report: {saved_html}")
         return 0
 
     if getattr(args, "bench_action", None) == "list":
@@ -298,6 +303,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_bench_diff = p_bench_sub.add_parser("diff", help="сравнить с baseline")
     p_bench_diff.add_argument("bench_target", nargs="?", default="latest", help="latest или путь к .json")
     p_bench_diff.add_argument("--out", help="сохранить diff-отчёт в JSON по указанному пути")
+    p_bench_diff.add_argument("--html", help="сохранить diff-отчёт в HTML по указанному пути")
     p_bench_sub.add_parser("list", help="список baselines")
     p_bench_report = p_bench_sub.add_parser("report", help="напечатать diff-отчёт в human-readable")
     p_bench_report.add_argument("report_path", nargs="?", help="путь к diff-*.json (по умолчанию — последний)")

@@ -215,6 +215,7 @@ class App:
                 "services_running": r.services_running,
                 "sched_tasks_enabled": r.sched_tasks_enabled,
                 "explorer_first_paint_ms": r.explorer_first_paint_ms,
+                "services_by_state": dict(r.services_by_state or {}),
             }
         except Exception as e:  # noqa: BLE001
             log.warning("bench failed: %s", e)
@@ -226,10 +227,13 @@ class App:
             self._set_status(f"bench error: {self.bench_before['error']}")
             return
         b = self.bench_before
+        svc_str = ""
+        if b.get("services_by_state"):
+            svc_str = " [" + ", ".join(f"{k}={v}" for k, v in sorted(b["services_by_state"].items())) + "]"
         self._set_status(
             f"bench BEFORE: RAM {b['idle_ram_mb']}/{b['total_ram_mb']}MB, "
             f"CPU {b['idle_cpu_pct']}%, services {b['services_running']}, "
-            f"tasks {b['sched_tasks_enabled']}"
+            f"tasks {b['sched_tasks_enabled']}{svc_str}"
         )
 
     def _bench_after(self) -> None:
@@ -241,10 +245,13 @@ class App:
             d_ram = b["idle_ram_mb"] - self.bench_before["idle_ram_mb"]
             d_svc = b["services_running"] - self.bench_before["services_running"]
             d_tasks = b["sched_tasks_enabled"] - self.bench_before["sched_tasks_enabled"]
+            svc_str = ""
+            if b.get("services_by_state"):
+                svc_str = " [" + ", ".join(f"{k}={v}" for k, v in sorted(b["services_by_state"].items())) + "]"
             self._set_status(
                 f"bench AFTER: RAM {b['idle_ram_mb']}MB (Δ{d_ram:+d}), "
                 f"services {b['services_running']} (Δ{d_svc:+d}), "
-                f"tasks {b['sched_tasks_enabled']} (Δ{d_tasks:+d})"
+                f"tasks {b['sched_tasks_enabled']} (Δ{d_tasks:+d}){svc_str}"
             )
         else:
             self._set_status(f"bench AFTER: {b}  (no baseline)")

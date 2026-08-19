@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.7.0 — HTML bench diff report + GUI services_by_state
+
+### Added
+- `core/bench_html.py` — stdlib-only HTML renderer (no jinja2, single-EXE safe)
+- `bench diff --html PATH` — флаг для сохранения HTML-отчёта (в дополнение к `--out` для JSON)
+- HTML-страница: таблица метрик с CSS-классами good/bad/zero + блок services_by_state
+
+### Changed
+- GUI: status bar в `_bench_before/_bench_after` показывает `services_by_state` (был orphaned field)
+
+### Tests
+- 91/91 passed (было 83; +8 HTML renderer)
+
 ## v1.6.0 — System Info + Safe пресет + GUI search
 
 ### Added
