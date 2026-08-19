@@ -21,16 +21,29 @@ class PowerShellError(RuntimeError):
 
 
 def run_ps(script: str, *, timeout: int = 60) -> str:
-    """Выполнить PowerShell-скрипт, вернуть stdout.
+    """Выполнить PowerShell-скрипт, вернуть stdout (UTF-8).
 
     Использует powershell.exe (Windows PowerShell 5.x), который есть на
     любой Win10/11. -NoProfile -NonInteractive — без пользовательских
     хуков и блокировок.
+
+    PowerShell 5.1 по умолчанию выводит в системную кодировку
+    (cp866/cp1251 на русской Windows). Чтобы получить UTF-8,
+    скрипту prepend'ится [Console]::OutputEncoding = UTF8,
+    а subprocess.run читает с encoding='utf-8'.
     """
+    # Префикс для UTF-8 вывода в PowerShell 5.1
+    utf8_prefix = (
+        "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; "
+        "$OutputEncoding = [System.Text.Encoding]::UTF8; "
+    )
+    full_script = utf8_prefix + script
+
+    # UTF-8 с BOM — PowerShell 5.1 без BOM трактует скрипт как cp1251
     with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".ps1", delete=False, encoding="utf-8"
+        mode="w", suffix=".ps1", delete=False, encoding="utf-8-sig"
     ) as f:
-        f.write(script)
+        f.write(full_script)
         path = f.name
     try:
         try:
@@ -44,6 +57,8 @@ def run_ps(script: str, *, timeout: int = 60) -> str:
                 ],
                 capture_output=True,
                 text=True,
+                encoding="utf-8",
+                errors="replace",
                 timeout=timeout,
             )
         except FileNotFoundError as e:

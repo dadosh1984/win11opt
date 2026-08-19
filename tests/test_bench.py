@@ -152,3 +152,36 @@ def test_diff_report_services_by_state_in_deltas():
     assert rep["before"]["services_by_state"] == {"Running": 10, "Stopped": 20, "Disabled": 5}
     assert rep["after"]["services_by_state"] == {"Running": 7, "Stopped": 23, "Disabled": 5}
     assert rep["deltas"]["services_running"]["delta"] == -3
+
+
+def test_measure_ram_uses_kb_not_mb(monkeypatch):
+    """Regression: bench.measure() скрипт делит RAM на 1KB, не 1MB.
+
+    WMI возвращает KB. PowerShell делит на 1KB → MB.
+    Мок возвращает уже-MB значения (как будто PowerShell сделал деление).
+    """
+    # PowerShell выводит "<free_mb>|<total_mb>" (после деления на 1KB)
+    fake_output = "20480|40960"  # 20 GB free / 40 GB total (в MB)
+    monkeypatch.setattr(bench, "_run", lambda *a, **kw: fake_output)
+    result = bench.measure()
+    assert result.idle_ram_mb == 20480
+    assert result.total_ram_mb == 40960
+
+
+def test_bench_powershell_script_divides_ram_by_kb():
+    """Regression: bench PowerShell делит RAM на 1KB."""
+    import inspect
+    import re
+    source = inspect.getsource(bench.measure)
+    # Берём только строки без '#' (комментарии)
+    code_lines = [
+        l for l in source.split("\n")
+        if "FreePhysicalMemory" in l and "1" in l and not l.strip().startswith("#")
+    ]
+    assert code_lines, "RAM-строка не найдена в measure()"
+    assert re.search(r"/\s*1KB", code_lines[0]), (
+        f"bench должен делить RAM на 1KB: {code_lines[0]}"
+    )
+    assert not re.search(r"/\s*1MB", code_lines[0]), (
+        f"RAM делить на 1MB — баг: {code_lines[0]}"
+    )

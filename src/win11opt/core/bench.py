@@ -77,8 +77,8 @@ def _parse_float(s: str) -> float:
 
 def measure() -> BenchResult:
     """Снять текущий снимок состояния."""
-    # 1. RAM
-    ram = _run("(Get-CimInstance Win32_OperatingSystem | Select-Object -First 1 | ForEach-Object { '{0}|{1}' -f [int]($_.FreePhysicalMemory/1MB), [int]($_.TotalVisibleMemorySize/1MB) })")
+    # 1. RAM (TotalVisibleMemorySize / FreePhysicalMemory — в KB)
+    ram = _run("(Get-CimInstance Win32_OperatingSystem | Select-Object -First 1 | ForEach-Object { '{0}|{1}' -f [int]($_.FreePhysicalMemory/1KB), [int]($_.TotalVisibleMemorySize/1KB) })")
     parts = ram.split("|") if ram else ["0", "0"]
     idle_ram = _parse_int(parts[0]) if len(parts) >= 1 else 0
     total_ram = _parse_int(parts[1]) if len(parts) >= 2 else 0

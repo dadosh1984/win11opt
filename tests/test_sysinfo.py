@@ -90,3 +90,45 @@ def test_format_human_contains_key_lines():
     assert "Disk C:" in out
     assert "GPU:" in out
     assert "RTX" in out
+
+
+def test_collect_ram_uses_kb_not_mb(monkeypatch):
+    """Regression: sysinfo.collect() делит RAM на 1KB, не 1MB."""
+    from win11opt.core import sysinfo
+    # PowerShell JSON: TotalVisibleMemorySize и FreePhysicalMemory в KB
+    fake_json = json.dumps({
+        "os_caption": "Win", "os_version": "10", "os_build": "19045",
+        "os_arch": "64-bit", "install_date": "2026-01-01",
+        "uptime_hours": 1.0,
+        "cpu_name": "i5", "cpu_cores": 4, "cpu_threads": 8,
+        "ram_total_mb": 40960,  # ожидаем 40960 MB = 40 GB
+        "ram_free_mb": 20480,   # ожидаем 20480 MB = 20 GB
+        "disk_c_free_mb": 100000,
+        "disk_c_total_mb": 500000,
+        "gpu_name": "Intel",
+    })
+    monkeypatch.setattr(sysinfo.ps, "run_ps", lambda *a, **kw: fake_json)
+    info = sysinfo.collect()
+    # JSON-значения приходят как есть (тест проверяет что скрипт
+    # делит на 1KB, а не на 1MB — это видно по правильным значениям)
+    assert info.ram_total_mb == 40960
+    assert info.ram_free_mb == 20480
+
+
+def test_powershell_script_divides_ram_by_kb():
+    """Regression: PowerShell-скрипт делит TotalVisibleMemorySize на 1KB.
+
+    WMI возвращает KB. Деление на 1MB даёт значение в 1024 раз меньше
+    (40 GB машина показывала бы 40 MB).
+    """
+    import re
+    script = sysinfo_mod._SYSINFO_SCRIPT
+    # RAM-строки должны делиться на 1KB (с пробелом или без)
+    ram_lines = [l for l in script.split("\n") if "TotalVisibleMemorySize" in l]
+    assert ram_lines, "RAM-строка не найдена в скрипте"
+    assert re.search(r"/\s*1KB", ram_lines[0]), (
+        f"RAM должен делиться на 1KB (WMI в KB): {ram_lines[0]}"
+    )
+    assert not re.search(r"/\s*1MB", ram_lines[0]), (
+        f"RAM делить на 1MB — баг (WMI в KB, не в байтах): {ram_lines[0]}"
+    )

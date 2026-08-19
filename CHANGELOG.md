@@ -1,5 +1,28 @@
 # Changelog
 
+## v1.9.5 — VM-тест на реальной Windows: RAM, UTF-8
+
+### Fixed
+- **RAM в 1024 раз меньше** (критический баг, скрытый моками):
+  `core/sysinfo.py` и `core/bench.py` делили `TotalVisibleMemorySize`
+  (WMI в KB) на `1MB` (1,048,576) — получалось 40 GB → 40.
+  Теперь `/ 1KB` (1024) → 40960 MB.
+  Проявлялось: `info` и `bench` показывали «21 MB / 40 MB» вместо
+  «21324 MB / 40684 MB».
+- **UTF-8 из PowerShell**: `core/ps.py:run_ps` теперь читает stdout
+  как UTF-8 (`subprocess.run(encoding="utf-8")`) и пишет .ps1 с
+  UTF-8 BOM (`utf-8-sig`) — иначе PowerShell 5.1 выводит в системной
+  кодировке (cp1251/cp866 на русской Windows) и Python читает мусор.
+  Также добавлен `[Console]::OutputEncoding = UTF8` в скрипт.
+
+### Added
+- Тесты-регрессии: RAM деление на 1KB (sysinfo + bench), UTF-8
+  encoding в `run_ps`.
+
+### Tests
+- 124/124 passed (было 119; +5).
+- `ruff check`: 0 ошибок.
+
 ## v1.9.4 — Подготовка к VM-тесту (UTF-8, admin check, FileNotFoundError)
 
 ### Fixed

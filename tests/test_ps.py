@@ -44,3 +44,22 @@ def test_is_admin_returns_bool():
     from win11opt.core.engine import _is_admin
     result = _is_admin()
     assert isinstance(result, bool)
+
+
+def test_run_ps_uses_utf8_encoding():
+    """run_ps() должен ставить encoding='utf-8' для subprocess.run.
+
+    Без этого PowerShell 5.1 выводит в системной кодировке (cp1251/cp866
+    на русской Windows), и Python читает мусор.
+    """
+    import inspect
+
+    from win11opt.core import ps
+    source = inspect.getsource(ps.run_ps)
+    assert 'encoding="utf-8"' in source, (
+        "run_ps() должен читать stdout как UTF-8"
+    )
+    assert "utf-8-sig" in source, (
+        "run_ps() должен писать .ps1 с UTF-8 BOM (utf-8-sig) "
+        "— иначе PowerShell 5.1 трактует скрипт как cp1251"
+    )
