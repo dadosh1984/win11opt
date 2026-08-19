@@ -14,3 +14,6 @@ venv/
 .vscode/
 *.local.json
 *.spec
+
+# pi session HTML exports (saved by `pi --export`)
+pi-session-*.html
