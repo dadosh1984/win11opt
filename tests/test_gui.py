@@ -16,6 +16,7 @@ def fake_tk(monkeypatch):
             self.children = []
             self._vars = {}
         def pack(self, *a, **k): return None
+        def pack_forget(self): return None
         def grid(self, *a, **k): return None
         def bind(self, *a, **k): return None
         def configure(self, *a, **k): return None
@@ -39,6 +40,7 @@ def fake_tk(monkeypatch):
         def title(self, t): self.title_text = t
         def geometry(self, g): pass
         def mainloop(self): pass
+        def update_idletasks(self): pass
         def columnconfigure(self, *a, **k): pass
         def rowconfigure(self, *a, **k): pass
 
@@ -75,7 +77,13 @@ def fake_tk(monkeypatch):
     ttk_mod.Separator = FakeWidget
     ttk_mod.Scrollbar = FakeWidget
     ttk_mod.LabelFrame = FakeWidget
-    ttk_mod.Style = type("Style", (), {"theme_names": lambda self: [], "theme_use": lambda self, t: None})
+    ttk_mod.Progressbar = FakeWidget
+    ttk_mod.Style = type("Style", (), {
+        "theme_names": lambda self: [],
+        "theme_use": lambda self, t: None,
+        "configure": lambda self, *a, **k: None,
+        "map": lambda self, *a, **k: None,
+    })
 
     monkeypatch.setitem(sys.modules, "tkinter", tk_mod)
     monkeypatch.setitem(sys.modules, "tkinter.ttk", ttk_mod)

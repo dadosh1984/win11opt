@@ -28,6 +28,7 @@ from pathlib import Path
 from tkinter import messagebox, ttk
 
 from .. import __version__
+from ..core import bench as bench_mod
 from ..core import engine, ps, snapshot as snap_mod
 from ..core.models import Snapshot
 from ..rules import PRESETS, get_preset, get_rules
@@ -108,6 +109,11 @@ class App:
             fill=tk.X, side=tk.BOTTOM
         )
 
+        # Progress bar (hidden until apply)
+        self.progress = ttk.Progressbar(self.root, mode="determinate", maximum=100)
+        self.progress.pack(fill=tk.X, side=tk.BOTTOM, padx=8, pady=(0, 4))
+        self.progress.pack_forget()
+
     def _render_rules(self, category: str) -> None:
         for w in self.rules_inner.winfo_children():
             w.destroy()
@@ -157,18 +163,48 @@ class App:
             self._render_rules(cat)
 
     def _bench(self) -> dict:
-        startup = ps.list_startup_apps()
-        return {"startup_apps": len(startup), "rules_loaded": len(self.rules)}
+        """Полный bench через core.bench.measure() — 6 метрик."""
+        try:
+            r = bench_mod.measure()
+            return {
+                "idle_ram_mb": r.idle_ram_mb,
+                "total_ram_mb": r.total_ram_mb,
+                "idle_cpu_pct": r.idle_cpu_pct,
+                "startup_apps": r.startup_apps_count,
+                "services_running": r.services_running,
+                "sched_tasks_enabled": r.sched_tasks_enabled,
+                "explorer_first_paint_ms": r.explorer_first_paint_ms,
+            }
+        except Exception as e:  # noqa: BLE001
+            log.warning("bench failed: %s", e)
+            return {"error": str(e)}
 
     def _bench_before(self) -> None:
         self.bench_before = self._bench()
-        self._set_status(f"bench BEFORE: {self.bench_before}")
+        if "error" in self.bench_before:
+            self._set_status(f"bench error: {self.bench_before['error']}")
+            return
+        b = self.bench_before
+        self._set_status(
+            f"bench BEFORE: RAM {b['idle_ram_mb']}/{b['total_ram_mb']}MB, "
+            f"CPU {b['idle_cpu_pct']}%, services {b['services_running']}, "
+            f"tasks {b['sched_tasks_enabled']}"
+        )
 
     def _bench_after(self) -> None:
         b = self._bench()
-        if self.bench_before:
-            d_startup = b["startup_apps"] - self.bench_before["startup_apps"]
-            self._set_status(f"bench AFTER: {b}  Δ startup={d_startup:+d}")
+        if "error" in b:
+            self._set_status(f"bench error: {b['error']}")
+            return
+        if self.bench_before and "error" not in self.bench_before:
+            d_ram = b["idle_ram_mb"] - self.bench_before["idle_ram_mb"]
+            d_svc = b["services_running"] - self.bench_before["services_running"]
+            d_tasks = b["sched_tasks_enabled"] - self.bench_before["sched_tasks_enabled"]
+            self._set_status(
+                f"bench AFTER: RAM {b['idle_ram_mb']}MB (Δ{d_ram:+d}), "
+                f"services {b['services_running']} (Δ{d_svc:+d}), "
+                f"tasks {b['sched_tasks_enabled']} (Δ{d_tasks:+d})"
+            )
         else:
             self._set_status(f"bench AFTER: {b}  (no baseline)")
 
@@ -199,13 +235,28 @@ class App:
         actions = []
         for rid in ids:
             actions.extend(self.rules[rid].actions)
+        total = len(actions)
+        # Показываем прогресс-бар
+        self.progress.pack(fill=tk.X, side=tk.BOTTOM, padx=8, pady=(0, 4))
+        self.progress.configure(maximum=total, value=0)
+        self.root.update_idletasks()
         try:
             if dry_run:
-                engine.apply(actions, dry_run=True)
-                self._set_status(f"DRY-RUN: {len(ids)} rules, {len(actions)} actions")
+                # dry-run: применяем по одному, обновляя прогресс
+                for i, a in enumerate(actions, 1):
+                    engine.apply([a], dry_run=True)
+                    self.progress.configure(value=i)
+                    self._set_status(f"DRY-RUN {i}/{total}: {a.describe()}")
+                    self.root.update_idletasks()
+                self._set_status(f"DRY-RUN: {len(ids)} rules, {total} actions")
             else:
                 snap_pre = snap_mod.make_snapshot(ids, [])
-                applied = engine.apply(actions, dry_run=False)
+                applied = []
+                for i, a in enumerate(actions, 1):
+                    applied.extend(engine.apply([a], dry_run=False))
+                    self.progress.configure(value=i)
+                    self._set_status(f"APPLY {i}/{total}: {a.describe()}")
+                    self.root.update_idletasks()
                 snap_obj = Snapshot(
                     id=snap_pre.id, created_at=snap_pre.created_at,
                     rules_applied=ids, actions_undone=applied,
@@ -218,6 +269,8 @@ class App:
         except Exception as e:  # noqa: BLE001
             log.exception("apply failed")
             messagebox.showerror("Error", str(e))
+        finally:
+            self.progress.pack_forget()
 
     def _open_snapshots(self) -> None:
         """Открыть окно со списком snapshot'ов."""
@@ -248,15 +301,34 @@ class App:
         ttk.Button(win, text="Restore selected", command=restore).pack(pady=4)
 
 
+def _apply_dark_theme(root: tk.Tk) -> None:
+    """Тёмная тема через ttk styling (без внешних зависимостей)."""
+    style = ttk.Style(root)
+    try:
+        style.theme_use("clam")
+    except Exception:  # noqa: BLE001
+        return
+    bg = "#1e1e1e"
+    fg = "#d4d4d4"
+    accent = "#007acc"
+    style.configure(".", background=bg, foreground=fg, fieldbackground="#2d2d2d")
+    style.configure("TFrame", background=bg)
+    style.configure("TLabel", background=bg, foreground=fg)
+    style.configure("TLabelframe", background=bg, foreground=fg)
+    style.configure("TLabelframe.Label", background=bg, foreground=fg)
+    style.configure("TButton", background="#333333", foreground=fg)
+    style.map("TButton", background=[("active", accent)])
+    style.configure("TCheckbutton", background=bg, foreground=fg)
+    style.map("TCheckbutton", background=[("active", bg)])
+    style.configure("TCombobox", fieldbackground="#2d2d2d", background="#2d2d2d", foreground=fg)
+    style.configure("Treeview", background="#252526", foreground=fg, fieldbackground="#252526")
+    style.configure("TProgressbar", background=accent, troughcolor="#333333")
+    root.configure(bg=bg)
+
+
 def main_gui() -> int:
     root = tk.Tk()
-    try:
-        # Попытка применить тему (если есть ttkthemes — нет, но вдруг)
-        style = ttk.Style(root)
-        if "vista" in style.theme_names():
-            style.theme_use("vista")
-    except Exception:  # noqa: BLE001
-        pass
+    _apply_dark_theme(root)
     App(root)
     root.mainloop()
     return 0
