@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — CI/CD
+
+### Added
+- GitHub Actions: авто-тесты (ubuntu + windows) на push/PR
+- GitHub Actions: сборка EXE + авто-release на тег `v*`
+- Отслеживание `win11opt.spec` (исключение в .gitignore) для воспроизводимых сборок
+
 ## v1.9.1 — GUI export/import
 
 ### Added
