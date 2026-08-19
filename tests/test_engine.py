@@ -86,7 +86,7 @@ def test_apply_without_admin_raises(monkeypatch):
         engine.apply(actions, dry_run=False)
 
 
-def test_apply_dry_run_skips_admin_check(monkeypatch):
+def test_apply_dry_run_skips_admin_check(monkeypatch, fake_ps):
     """dry-run не требует админа (не выполняет PowerShell)."""
     from win11opt.core import engine
     from win11opt.core.models import Action, ActionKind
