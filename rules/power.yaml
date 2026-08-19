@@ -1,0 +1,12 @@
+# Пресет: питание
+name: power
+description: Планы электропитания и игровые сервисы.
+rules:
+  - id: power.ultimate_performance
+    name: План питания Ultimate Performance
+    description: Скрытый план питания, который не экономит энергию — максимум отзывчивости. На ноутбуке разряжает быстрее.
+    risk: low
+    actions:
+      - kind: power_plan
+        target: ultimate
+        value: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c

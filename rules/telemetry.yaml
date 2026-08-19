@@ -1,0 +1,15 @@
+# Пресет: телеметрия и реклама
+name: telemetry
+description: Отключение телеметрии, рекламного ID, синхронизации, Activity History.
+rules:
+  - id: telemetry.advertising_id
+    name: Отключить рекламный ID
+    description: Рекламный ID используется приложениями UWP для таргетированной рекламы.
+    risk: low
+    ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/advertising-id
+    actions:
+      - kind: reg_set
+        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo'
+        name: Enabled
+        value: '0'
+        value_type: DWord

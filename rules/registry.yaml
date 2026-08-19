@@ -1,0 +1,15 @@
+# Пресет: реестр
+name: registry
+description: Системные политики через реестр.
+rules:
+  - id: registry.uac_no_delay
+    name: UAC без задержки для одобренных операций
+    description: ConsentPromptBehaviorAdmin=0 — UAC появляется, но без затемнения экрана и без задержки. Безопасность не снижается.
+    risk: medium
+    ms_doc_url: https://learn.microsoft.com/en-us/windows/security/identity-protection/access-control/user-account-control
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+        name: ConsentPromptBehaviorAdmin
+        value: '0'
+        value_type: DWord

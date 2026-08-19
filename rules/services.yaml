@@ -1,0 +1,40 @@
+# Пресет: службы
+# Средний риск — отключение сервисов может сломать специфичные функции.
+# Каждое правило снабжено ссылкой на документацию MS.
+name: services
+description: Отключение фоновых служб, увеличивающих задержку UI.
+rules:
+  - id: services.disable_search_indexer
+    name: Отключить Windows Search
+    description: Индексация диска на SSD создаёт лишний I/O. Полнотекстовый поиск в меню Пуск перестаёт работать.
+    risk: medium
+    ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/search/-search-iface-indexer
+    actions:
+      - kind: service_disable
+        target: WSearch
+
+  - id: services.disable_diagtrack
+    name: Отключить DiagTrack (телеметрия)
+    description: Microsoft Connected User Experiences and Telemetry — отправляет диагностические данные.
+    risk: medium
+    ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/diagnostic-data
+    actions:
+      - kind: service_disable
+        target: DiagTrack
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection'
+        name: AllowTelemetry
+        value: '0'
+        value_type: DWord
+
+  - id: services.disable_xbox
+    name: Отключить Xbox-сервисы
+    description: XGameRouter, XboxGipSvc и т.п. — нужны только для Xbox Game Pass / Xbox-контроллеров.
+    risk: medium
+    actions:
+      - kind: service_disable
+        target: XblGameSave
+      - kind: service_disable
+        target: XboxGipSvc
+      - kind: service_disable
+        target: XboxNetApiSvc

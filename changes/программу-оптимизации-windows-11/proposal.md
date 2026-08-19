@@ -1,0 +1,23 @@
+# Предложение — программу-оптимизации-windows-11
+
+## Цель
+Создать программу для оптимизации Windows 11, чтобы она ощущалась такой же отзывчивой, как Windows XP. Цель: интерактивная отзывчивость UI (время открытия меню, запуск приложений, переключение окон, RAM/CPU idle) — не сырая CPU-производительность. Deliverable: десктопная утилита под Win11 (single EXE, UAC-elevated) + библиотека правил оптимизации, применимая в режимах dry-run / apply / rollback. Ключевые направления (от дешёвого к дорогому): 1. Визуальные эффекты: анимации, тени, прозрачность, Mica/Acrylic; классическое контекстное меню; скрыть Copilot/Widgets/Search из taskbar. 2. Службы и автозагрузка: отключить SysMain, DiagTrack, Search indexer, Xbox, Biometric, Phone Link, факсы; Startup-менеджер (Run, Services, Scheduled Tasks, Shell Extensions, AppXSvc); деблoат предустановленного ПО. 3. Телеметрия и реклама: диагностические данные=0, рекламный ID, Activity History, синхронизация; отключение OneDrive и Edge-телеметрии. 4. Питание/железо: план Ultimate Performance, отключение Game Bar/DVR, опц. VBS/HVCI; GPU предпочтение производительности. 5. Реестр: UAC без задержек для одобренных операций, отключение lock screen/CAD, метро-уведомлений. 6. Безопасность операций: точка восстановления перед изменениями, снимок реестра, режим rollback, dry-run. 7. UX утилиты: GUI на нативном стеке (WPF/.NET 8 или Avalonia), профили Aggressive/Balanced/Gaming/Privacy/Restore, бенчмарк до/после. Стек: C# .NET 8 + WPF (нативно для Win11, легко подписать). Альтернатива — Rust + Tauri/Avalonia — обсудить. Архитектура: ядро правил в YAML, чтобы пресеты были расширяемыми сообществом; CLI + GUI; профили конфигурации. Аудитория: опытные пользователи, готовые принять риск (программа просит UAC, делает точку восстановления). — Windows 11 x64, .NET 8 + WPF (нативно), альтернатива Rust+Avalonia
+
+## Контекст
+
+| Аспект | Значение |
+|--------|----------|
+| Платформа | - Single EXE, без установки, UAC-elevated
+- Native GUI (не Electron — иронично)
+- Правила в YAML для расширяемости
+- Обязательно: dry-run, snapshot, rollback, точка восстановления
+- Профили: Aggressive / Balanced / Gaming / Privacy / Restore
+- Бенчмарк до/после (cold boot, app launch, idle RAM, disk IO)
+- Подписанный бинарь, MIT/Apache лицензия
+- Win11 22H2+ minimum, x64/arm64
+- Без скрытых telemetry в самой утилите (важно по теме)
+- Стоимость разработки: MVP ~2-4 недели solo, full ~2-3 месяца |
+| Бюджет | compact |
+| Ограничения | compact |
+
+- **Lessons applied (v0.12):** e-164-phone-number:forge:f2321bc13cfb, полноценное-ядро-erp-системы:forge:56948fc8dac0, полноценное-ядро-erp-системы:forge:075fc160e1b6, полноценное-ядро-erp-системы:forge:ee22592ccb62, фазу-24-полный-сценарий:forge:bf6b9c285eb6

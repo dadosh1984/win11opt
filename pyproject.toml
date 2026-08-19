@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "win11opt"
+version = "0.1.0"
+description = "Native single-EXE Win11 optimizer (XP-like responsiveness)"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "win11opt contributors" }]
+dependencies = []
+
+[project.scripts]
+win11opt = "win11opt.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"

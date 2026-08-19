@@ -1,0 +1,6 @@
+# Orion guard-prompt deny-list policy template (`orion init`, v0.28).
+# One pattern per line (plain substring). Any `orion think` prompt matching
+# a deny word is blocked before a proposal is created. Remove or extend freely.
+# eval
+# exec(
+# rm -rf
