@@ -68,6 +68,8 @@
 - [x] Новые правила v0.5: explorer (4), debloat (4) + appx_remove в engine
 - [x] Новые правила v0.6: defender (3), update (4). Hardened пресет.
 - [x] Новые правила v0.7: гибернация (powercfg -h off), телеметрия CEIP/Activity/Tailored. Фикс POWER_PLAN в engine.
+- [x] Новые правила v0.8: network (3), ntfs (3). Aggressive +4 правила.
+- [x] Git: v0.7.0 commit + tag
 - [x] Git: v0.6.0 commit + tag
 - [x] Git: v0.5.0 commit + tag
 - [x] Преcет Debloat

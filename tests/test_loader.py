@@ -302,3 +302,28 @@ def test_telemetry_ceip_rule():
     r = rules["telemetry.disable_ceip"]
     assert any(a.name == "AllowTelemetry" and a.value == "0" for a in r.actions)
     assert any(a.name == "CEIPEnable" for a in r.actions)
+
+
+def test_network_rules_loaded():
+    """network/ntfs появились в v0.8."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    cats = {r.category for r in rules.values()}
+    assert "network" in cats
+    assert "ntfs" in cats
+    assert rules["network.disable_nagle"].risk.value == "low"
+    assert rules["ntfs.disable_last_access_time"].risk.value == "low"
+
+
+def test_network_nagle_target():
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["network.disable_nagle"]
+    assert any(a.name == "TcpAckFrequency" and a.value == "1" for a in r.actions)
+    assert any(a.name == "TCPNoDelay" for a in r.actions)
+
+
+def test_ntfs_last_access_target():
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["ntfs.disable_last_access_time"]
+    assert r.actions[0].name == "NtfsDisableLastAccessUpdate"
+    assert r.actions[0].value == "1"
+    assert "FileSystem" in r.actions[0].target

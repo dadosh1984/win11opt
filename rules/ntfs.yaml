@@ -1,0 +1,36 @@
+# Пресет: NTFS — ускорение файловых операций
+name: ntfs
+description: "NTFS: отключение last-access-time и 8.3 имён для ускорения файловых операций."
+rules:
+  - id: ntfs.disable_last_access_time
+    name: Отключить Last Access Time
+    description: NtfsDisableLastAccessUpdate=1 — NTFS не обновляет время последнего доступа к файлу. Ускоряет чтение файлов (меньше записей на диск).
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem'
+        name: NtfsDisableLastAccessUpdate
+        value: '1'
+        value_type: DWord
+
+  - id: ntfs.disable_8dot3_names
+    name: Отключить 8.3 имена (DOS)
+    description: NtfsDisable8dot3NameCreation=1 — NTFS не создаёт короткие DOS-имена (PROGRA~1). Ускоряет создание файлов в папках с тысячами файлов.
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem'
+        name: NtfsDisable8dot3NameCreation
+        value: '1'
+        value_type: DWord
+
+  - id: ntfs.disable_short_name_creation
+    name: Отключить создание коротких имён
+    description: Win31FileSystem=0 — отключает совместимость с Win3.1 (короткие имена). Ускоряет файловые операции.
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem'
+        name: Win31FileSystem
+        value: '0'
+        value_type: DWord

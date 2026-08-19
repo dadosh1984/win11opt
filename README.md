@@ -60,7 +60,7 @@ win11opt gui
 | Имя | Что делает |
 |---|---|
 | **Balanced** | Безопасный: анимации, UI, Explorer, телеметрия, питание, гибернация |
-| **Aggressive** | Максимум отзывчивости, отключает службы + Game Bar + OneDrive |
+| **Aggressive** | Максимум отзывчивости: службы, Game Bar, OneDrive, network, NTFS |
 | **Privacy** | Полная телеметрия/реклама: CEIP, Activity History, Tailored, Cortana |
 | **Debloat** | Удаление UWP-приложений (Xbox, Bing, GetHelp). Необратимо. |
 | **Hardened** | Продвинутый: ослабление Defender Cloud + отложенные Update. **НЕ удаляет Defender/Edge.** |
@@ -78,6 +78,8 @@ win11opt gui
 - **update** — отложенные feature/quality updates
 - **telemetry** — рекламный ID, CEIP, Activity History, Tailored Experiences
 - **power** — Ultimate Performance, отключение гибернации (hiberfil.sys)
+- **network** — отключение Nagle, throttling, Gaming QoS (низкая задержка)
+- **ntfs** — отключение last-access-time, 8.3 имён (ускорение файловых операций)
 - **registry** — UAC no-delay
 
 ## ⚠️ Что НЕ делает эта утилита

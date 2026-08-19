@@ -213,6 +213,10 @@ PRESETS: tuple[Profile, ...] = (
             "registry.uac_no_delay",
             "gaming.disable_gamebar",
             "onedrive.disable_startup",
+            "network.disable_nagle",
+            "network.disable_throttling",
+            "ntfs.disable_last_access_time",
+            "ntfs.disable_8dot3_names",
         ),
     ),
     Profile(
