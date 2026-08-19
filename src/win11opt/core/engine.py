@@ -34,6 +34,14 @@ def _capture_undo(action: Action) -> Action:
             undo_target=action.target,
             undo_value=current,
         )
+    if action.kind == ActionKind.SCHED_TASK_DISABLE:
+        # Запоминаем что отключили (откат = enable)
+        return Action(
+            kind=action.kind,
+            target=action.target,
+            undo_target=action.target,
+            undo_value="enabled",
+        )
     return action
 
 
@@ -79,6 +87,8 @@ def _execute(action: Action) -> None:
         ps.power_hibernate_set(False)
     elif action.kind == ActionKind.POWER_HIBERNATE_ENABLE:
         ps.power_hibernate_set(True)
+    elif action.kind == ActionKind.SCHED_TASK_DISABLE:
+        ps.sched_task_disable(action.target)
     else:
         raise NotImplementedError(f"action kind not implemented: {action.kind}")
 
@@ -117,3 +127,6 @@ def _undo_one(action: Action) -> None:
         # Возвращаем исходный тип запуска
         original = action.undo_value if action.undo_value in ("Automatic", "Manual", "Disabled") else "Automatic"
         ps.service_set_state(action.target, original)
+    elif action.kind == ActionKind.SCHED_TASK_DISABLE:
+        # undo_value="enabled" — значит задача была включена, возвращаем
+        ps.sched_task_enable(action.target)

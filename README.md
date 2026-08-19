@@ -78,14 +78,21 @@ win11opt gui
 - **update** — отложенные feature/quality updates
 - **telemetry** — рекламный ID, CEIP, Activity History, Tailored Experiences
 - **power** — Ultimate Performance, отключение гибернации (hiberfil.sys)
+- **tasks** *(scheduled_tasks)* — отключение телеметрии, Xbox-tasks, FEH
+- **storage** — Storage Sense, Delivery Optimization (P2P upstream)
+- **appcompat** — PCA, Steps Recorder, Suggestions, Windows Copilot
 - **network** — отключение Nagle, throttling, Gaming QoS (низкая задержка)
 - **ntfs** — отключение last-access-time, 8.3 имён (ускорение файловых операций)
 - **registry** — UAC no-delay
 
-## Полный список правил
+## Полный список правил (52)
 
 | ID | Категория | Риск | Reboot | Описание |
 |---|---|---|---|---|
+| `appcompat.disable_copilot` | appcompat | low |  | DisableWindowsCopilot=1 — убирает AI-помощник из панели задач. Фоновая обработка отключается. |
+| `appcompat.disable_pca_engine` | appcompat | low |  | PCA каждый раз проверяет установленные программы на совместимость. На SSD тормозит систему. |
+| `appcompat.disable_steps_recorder` | appcompat | low |  | Steps Recorder не запускается автоматически, но отключает фоновые процессы. |
+| `appcompat.disable_windows_suggestions` | appcompat | low |  | Отключает подсказки в Settings и рекомендации приложений. |
 | `debloat.remove_apps_duplicates` | debloat | medium |  | Удаляет MixedReality, PhoneLink, People — дублируют стандартные функции. |
 | `debloat.remove_bing_apps` | debloat | medium |  | Удаляет BingWeather, BingNews, BingFinance, BingSports. Используйте Edge/браузер для погоды. |
 | `debloat.remove_help_apps` | debloat | low |  | Удаляет GetHelp, Tips (Microsoft Tips), FeedbackHub. Не нужны обычному пользователю. |
@@ -113,6 +120,12 @@ win11opt gui
 | `services.disable_diagtrack` | services | medium |  | Microsoft Connected User Experiences and Telemetry — отправляет диагностические данные. |
 | `services.disable_search_indexer` | services | medium |  | Индексация диска на SSD создаёт лишний I/O. Полнотекстовый поиск в меню Пуск перестаёт работать. |
 | `services.disable_xbox` | services | medium |  | XGameRouter, XboxGipSvc и т.п. — нужны только для Xbox Game Pass / Xbox-контроллеров. |
+| `storage.disable_delivery_optimization` | storage | low |  | Отключает P2P-доставку обновлений Windows. Твоя машина не используется как раздатчик для других. |
+| `storage.disable_storage_sense_temp` | storage | low |  | Storage Sense удаляет папку Temp каждые 30 дней. Отключает если мешает сборке/компиляции. |
+| `storage.enable_storage_sense` | storage | low |  | Storage Sense автоматически удаляет временные файлы и файлы из Корзины старше 30 дней. Освобождает место без участия пользователя. |
+| `tasks.disable_fehcache` | scheduled_tasks | low |  | Фоновый cleanup файла-эскизов. На SSD бесполезен, на HDD включается по требованию. |
+| `tasks.disable_telemetry` | scheduled_tasks | medium |  | Отключает 10+ scheduled tasks под Microsoft\\Windows, которые собирают и отправляют телеметрические данные. |
+| `tasks.disable_xbox_related` | scheduled_tasks | low |  | XboxGameSaveTask, Consolidator — фоновые задачи Xbox (нужны только для Xbox Game Pass). |
 | `telemetry.advertising_id` | telemetry | low |  | Рекламный ID используется приложениями UWP для таргетированной рекламы. |
 | `telemetry.disable_activity_history` | telemetry | low |  | Activity History синхронизирует историю действий между устройствами. Отключает сбор и отправку. |
 | `telemetry.disable_ceip` | telemetry | low |  | CEIP собирает данные об использовании Windows. AllowTelemetry=0 + CEIPEnable=0 отключает сбор. |

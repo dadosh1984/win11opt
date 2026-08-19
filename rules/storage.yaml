@@ -1,0 +1,46 @@
+# Пресет: Storage — Storage Sense, Delivery Optimization
+name: storage
+description: "Storage: автоочистка временных файлов, отключение P2P-доставки обновлений."
+rules:
+  - id: storage.enable_storage_sense
+    name: Включить Storage Sense
+    description: Storage Sense автоматически удаляет временные файлы и файлы из Корзины старше 30 дней. Освобождает место без участия пользователя.
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy'
+        name: 01
+        value: '1'
+        value_type: DWord
+      - kind: reg_set
+        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy'
+        name: 04
+        value: '1'
+        value_type: DWord
+      - kind: reg_set
+        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy'
+        name: 08
+        value: '1'
+        value_type: DWord
+
+  - id: storage.disable_delivery_optimization
+    name: Отключить Delivery Optimization (P2P)
+    description: Отключает P2P-доставку обновлений Windows. Твоя машина не используется как раздатчик для других.
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization'
+        name: DODownloadMode
+        value: '0'
+        value_type: DWord
+
+  - id: storage.disable_storage_sense_temp
+    name: Отключить автоматическую очистку Temp
+    description: Storage Sense удаляет папку Temp каждые 30 дней. Отключает если мешает сборке/компиляции.
+    risk: low
+    actions:
+      - kind: reg_set
+        target: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy'
+        name: 04
+        value: '0'
+        value_type: DWord

@@ -26,6 +26,8 @@ def fake_ps(monkeypatch):
         "appx_removed": [],    # list of package names removed
         "power_plans": [],     # list of activated GUIDs
         "hibernate": None,     # None | False | True (last set)
+        "sched_tasks_disabled": [],  # list of disabled task paths
+        "sched_tasks_enabled": [],   # list of (re-)enabled task paths
         "restore_points": [],
     }
 
@@ -55,6 +57,12 @@ def fake_ps(monkeypatch):
     def fake_power_hibernate_set(enabled):
         state["hibernate"] = bool(enabled)
 
+    def fake_sched_task_disable(task_path):
+        state["sched_tasks_disabled"].append(task_path)
+
+    def fake_sched_task_enable(task_path):
+        state["sched_tasks_enabled"].append(task_path)
+
     def fake_create_restore_point(description):
         seq = len(state["restore_points"]) + 1
         state["restore_points"].append({"id": seq, "desc": description})
@@ -67,6 +75,8 @@ def fake_ps(monkeypatch):
     monkeypatch.setattr(ps, "appx_remove", fake_appx_remove)
     monkeypatch.setattr(ps, "power_plan_activate", fake_power_plan_activate)
     monkeypatch.setattr(ps, "power_hibernate_set", fake_power_hibernate_set)
+    monkeypatch.setattr(ps, "sched_task_disable", fake_sched_task_disable)
+    monkeypatch.setattr(ps, "sched_task_enable", fake_sched_task_enable)
     monkeypatch.setattr(ps, "create_restore_point", fake_create_restore_point)
 
     return state

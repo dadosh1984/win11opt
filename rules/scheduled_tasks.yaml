@@ -1,0 +1,47 @@
+# Пресет: Scheduled Tasks — отключение фоновых телеметрических задач
+name: scheduled_tasks
+description: "Scheduled Tasks: телеметрия, сбор данных, обслуживание — всё что жрёт CPU/idle."
+rules:
+  - id: tasks.disable_telemetry
+    name: Отключить телеметрические задачи
+    description: Отключает 10+ scheduled tasks под Microsoft\\Windows, которые собирают и отправляют телеметрические данные.
+    risk: medium
+    actions:
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\Application Experience\ProgramDataUpdater
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\Customer Experience Improvement Program\Consolidator
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\Customer Experience Improvement Program\UsbCeip
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\Maps\MapsUpdateTask
+      - kind: sched_task_disable
+        target: \Microsoft\Maps\MapsToastTask
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\Autochk\Proxy
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\Diagnosis\Scheduled
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector
+
+  - id: tasks.disable_xbox_related
+    name: Отключить Xbox scheduled tasks
+    description: XboxGameSaveTask, Consolidator — фоновые задачи Xbox (нужны только для Xbox Game Pass).
+    risk: low
+    actions:
+      - kind: sched_task_disable
+        target: \Microsoft\XblGameSave\XblGameSaveTask
+      - kind: sched_task_disable
+        target: \Microsoft\XblGameSave\XblGameSaveTaskLogon
+
+  - id: tasks.disable_fehcache
+    name: Отключить FEH cache cleanup
+    description: Фоновый cleanup файла-эскизов. На SSD бесполезен, на HDD включается по требованию.
+    risk: low
+    actions:
+      - kind: sched_task_disable
+        target: \Microsoft\Windows\FileHistory\File History (maintenance mode)

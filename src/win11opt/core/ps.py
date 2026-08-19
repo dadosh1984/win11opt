@@ -206,3 +206,35 @@ $ErrorActionPreference = 'Stop'
 powercfg -h {flag} | Out-Null
 """
     run_ps(script)
+
+
+def sched_task_disable(task_path: str) -> None:
+    """Отключить scheduled task.
+
+    task_path — полный путь вида ``\\Microsoft\\Windows\\Foo\\Bar``.
+    Действие не удаляет задачу, только ставит её в Disabled.
+    Откат возможен через Set-ScheduledTask -Enable.
+    """
+    script = f"""
+$ErrorActionPreference = 'Stop'
+$task = '{task_path}'
+try {{
+    Set-ScheduledTask -TaskPath (Split-Path -Parent $task) -TaskName (Split-Path -Leaf $task) -Settings (New-ScheduledTaskSettingsSet -Disable:$true) | Out-Null
+}} catch {{
+    Write-Warning "task not found or already disabled: $task"
+}}
+"""
+    run_ps(script)
+
+
+def sched_task_enable(task_path: str) -> None:
+    """Включить обратно (для rollback)."""
+    script = f"""
+$ErrorActionPreference = 'Stop'
+$task = '{task_path}'
+try {{
+    Set-ScheduledTask -TaskPath (Split-Path -Parent $task) -TaskName (Split-Path -Leaf $task) -Settings (New-ScheduledTaskSettingsSet -Disable:$false) | Out-Null
+}} catch {{
+    Write-Warning "task not found: $task"
+}}
+"""

@@ -217,6 +217,11 @@ PRESETS: tuple[Profile, ...] = (
             "network.disable_throttling",
             "ntfs.disable_last_access_time",
             "ntfs.disable_8dot3_names",
+            "tasks.disable_telemetry",
+            "tasks.disable_xbox_related",
+            "storage.disable_delivery_optimization",
+            "appcompat.disable_pca_engine",
+            "appcompat.disable_copilot",
         ),
     ),
     Profile(
@@ -231,6 +236,11 @@ PRESETS: tuple[Profile, ...] = (
             "services.disable_diagtrack",
             "ui.no_cortana",
             "onedrive.disable_autostart",
+            "tasks.disable_telemetry",
+            "tasks.disable_xbox_related",
+            "storage.disable_delivery_optimization",
+            "appcompat.disable_windows_suggestions",
+            "appcompat.disable_copilot",
         ),
     ),
     Profile(

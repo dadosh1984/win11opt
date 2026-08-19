@@ -327,3 +327,55 @@ def test_ntfs_last_access_target():
     assert r.actions[0].name == "NtfsDisableLastAccessUpdate"
     assert r.actions[0].value == "1"
     assert "FileSystem" in r.actions[0].target
+
+
+def test_sched_tasks_rule():
+    """tasks.disable_telemetry должен использовать SCHED_TASK_DISABLE."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["tasks.disable_telemetry"]
+    assert r.actions[0].kind == ActionKind.SCHED_TASK_DISABLE
+    target = r.actions[0].target
+    assert target.startswith("\\Microsoft\\Windows")
+    assert "Microsoft Compatibility Appraiser" in target
+
+
+def test_storage_sense_rule():
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["storage.enable_storage_sense"]
+    assert "StoragePolicy" in r.actions[0].target
+
+
+def test_appcompat_copilot_rule():
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["appcompat.disable_copilot"]
+    assert any(a.name == "TurnOffWindowsCopilot" for a in r.actions)
+
+
+def test_sched_task_apply_calls_ps(fake_ps):
+    """apply SCHED_TASK_DISABLE должен вызвать ps.sched_task_disable."""
+    from win11opt.core import engine
+    from win11opt.core.models import Action
+    actions = [Action(kind=ActionKind.SCHED_TASK_DISABLE, target="\\Foo\\Bar")]
+    engine.apply(actions, dry_run=False)
+    assert "\\Foo\\Bar" in fake_ps["sched_tasks_disabled"]
+
+
+def test_sched_task_rollback_calls_enable(fake_ps):
+    """rollback SCHED_TASK_DISABLE должен вызвать ps.sched_task_enable."""
+    from win11opt.core import engine
+    from win11opt.core.models import Action, Snapshot
+    action = Action(
+        kind=ActionKind.SCHED_TASK_DISABLE,
+        target="\\Foo\\Bar",
+        undo_target="\\Foo\\Bar",
+        undo_value="enabled",
+    )
+    snap = Snapshot(id="test", created_at="now", actions_undone=[action])
+    engine.rollback(snap, dry_run=False)
+    assert "\\Foo\\Bar" in fake_ps["sched_tasks_enabled"]
+
+
+def test_45_rules_count():
+    """Контроль количества правил — помогает найти дубликаты."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    assert len(rules) >= 45, f"expected >=45 rules, got {len(rules)}"
