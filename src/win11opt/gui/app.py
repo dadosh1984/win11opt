@@ -31,6 +31,7 @@ from .. import __version__
 from ..core import bench as bench_mod
 from ..core import engine, ps, snapshot as snap_mod
 from ..core.models import Snapshot
+from ..i18n import _
 from ..rules import PRESETS, get_preset, get_rules
 
 log = logging.getLogger(__name__)
@@ -39,7 +40,7 @@ log = logging.getLogger(__name__)
 class App:
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
-        self.root.title(f"Win11Optimizer {__version__}")
+        self.root.title(_("Win11Optimizer %s") % __version__)
         self.root.geometry("900x600")
         self.rules = get_rules()
         self.selected: dict[str, tk.BooleanVar] = {}
@@ -50,7 +51,7 @@ class App:
         # Top bar: preset + bench
         top = ttk.Frame(self.root)
         top.pack(fill=tk.X, padx=8, pady=6)
-        ttk.Label(top, text="Preset:").pack(side=tk.LEFT)
+        ttk.Label(top, text=_("Preset:")).pack(side=tk.LEFT)
         self.preset_var = tk.StringVar()
         cb = ttk.Combobox(
             top, textvariable=self.preset_var, state="readonly", width=20,
@@ -58,10 +59,10 @@ class App:
         )
         cb.pack(side=tk.LEFT, padx=4)
         cb.bind("<<ComboboxSelected>>", self._on_preset)
-        ttk.Button(top, text="Apply preset", command=self._apply_preset_selection).pack(side=tk.LEFT, padx=4)
+        ttk.Button(top, text=_("Apply preset"), command=self._apply_preset_selection).pack(side=tk.LEFT, padx=4)
         ttk.Separator(top, orient=tk.VERTICAL).pack(side=tk.LEFT, padx=8, fill=tk.Y)
-        ttk.Button(top, text="Bench before", command=self._bench_before).pack(side=tk.LEFT, padx=4)
-        ttk.Button(top, text="Bench after", command=self._bench_after).pack(side=tk.LEFT, padx=4)
+        ttk.Button(top, text=_("Bench before"), command=self._bench_before).pack(side=tk.LEFT, padx=4)
+        ttk.Button(top, text=_("Bench after"), command=self._bench_after).pack(side=tk.LEFT, padx=4)
 
         # Body: categories | rules
         body = ttk.Frame(self.root)
@@ -71,7 +72,7 @@ class App:
         body.rowconfigure(0, weight=1)
 
         # Categories tree (left)
-        cats_frame = ttk.LabelFrame(body, text="Categories")
+        cats_frame = ttk.LabelFrame(body, text=_("Categories"))
         cats_frame.grid(row=0, column=0, sticky="nsew", padx=(0, 4))
         self.tree = ttk.Treeview(cats_frame, show="tree")
         self.tree.pack(fill=tk.BOTH, expand=True)
@@ -82,7 +83,7 @@ class App:
             self.cat_items[iid] = cat
 
         # Rules list (right)
-        rules_frame = ttk.LabelFrame(body, text="Rules")
+        rules_frame = ttk.LabelFrame(body, text=_("Rules"))
         rules_frame.grid(row=0, column=1, sticky="nsew")
         self.rules_canvas = tk.Canvas(rules_frame, borderwidth=0, highlightthickness=0)
         scroll = ttk.Scrollbar(rules_frame, orient=tk.VERTICAL, command=self.rules_canvas.yview)
@@ -98,10 +99,10 @@ class App:
         # Bottom: actions
         bottom = ttk.Frame(self.root)
         bottom.pack(fill=tk.X, padx=8, pady=6)
-        ttk.Button(bottom, text="Dry-run selected", command=self._dry_run).pack(side=tk.LEFT, padx=4)
-        ttk.Button(bottom, text="Apply selected", command=self._apply).pack(side=tk.LEFT, padx=4)
+        ttk.Button(bottom, text=_("Dry-run selected"), command=self._dry_run).pack(side=tk.LEFT, padx=4)
+        ttk.Button(bottom, text=_("Apply selected"), command=self._apply).pack(side=tk.LEFT, padx=4)
         ttk.Separator(bottom, orient=tk.VERTICAL).pack(side=tk.LEFT, padx=8, fill=tk.Y)
-        ttk.Button(bottom, text="Snapshots…", command=self._open_snapshots).pack(side=tk.LEFT, padx=4)
+        ttk.Button(bottom, text=_("Snapshots…"), command=self._open_snapshots).pack(side=tk.LEFT, padx=4)
 
         # Status bar
         self.status_var = tk.StringVar(value=f"idle — {len(self.rules)} rules loaded")

@@ -1,0 +1,460 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ru\n"
+"Project: Win11Optimizer\n"
+"Version: 1.3.0\n"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "Dry-run"
+msgstr "Пробный запуск"
+
+msgid "Restore point created"
+msgstr "Точка восстановления создана"
+
+msgid "Snapshot"
+msgstr "Снимок"
+
+msgid "Rule"
+msgstr "Правило"
+
+msgid "Rules"
+msgstr "Правила"
+
+msgid "Baseline"
+msgstr "Базовая линия"
+
+msgid "Saved"
+msgstr "Сохранено"
+
+msgid "Bench"
+msgstr "Бенчмарк"
+
+msgid "Bench before"
+msgstr "Бенчмарк до"
+
+msgid "Bench after"
+msgstr "Бенчмарк после"
+
+msgid "Apply preset"
+msgstr "Применить пресет"
+
+msgid "Preset"
+msgstr "Пресет"
+
+msgid "Categories"
+msgstr "Категории"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Documentation"
+msgstr "Документация"
+
+msgid "Apply selected"
+msgstr "Применить выбранные"
+
+msgid "Dry-run selected"
+msgstr "Пробный прогон"
+
+msgid "Snapshots"
+msgstr "Снимки"
+
+msgid "Confirm apply"
+msgstr "Подтвердить применение"
+
+msgid "Restore"
+msgstr "Восстановить"
+
+msgid "Rollback"
+msgstr "Откатить"
+
+msgid "before"
+msgstr "до"
+
+msgid "after"
+msgstr "после"
+
+msgid "delta"
+msgstr "разница"
+
+msgid "metric"
+msgstr "метрика"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "No rules selected"
+msgstr "Правила не выбраны"
+
+msgid "No baseline"
+msgstr "Нет базовой линии"
+
+msgid "Idle"
+msgstr "Готов"
+
+msgid "ready"
+msgstr "готово"
+
+msgid "open GUI"
+msgstr "открыть GUI"
+
+msgid "show this help"
+msgstr "показать эту справку"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Source language"
+msgstr "Исходный язык"
+
+msgid "Total rules: %d"
+msgstr "Всего правил: %d"
+
+msgid "Profile: %s (%d rules)"
+msgstr "Профиль: %s (%d правил)"
+
+msgid "snapshot %s"
+msgstr "снимок %s"
+
+msgid "rolled back to %s"
+msgstr "откат к %s"
+
+msgid "apply %d action(s)"
+msgstr "применить %d действий"
+
+msgid "rollback %d action(s)"
+msgstr "откатить %d действий"
+
+msgid "create restore point"
+msgstr "создать точку восстановления"
+
+msgid "delete registry key %s"
+msgstr "удалить ключ реестра %s"
+
+msgid "set registry %s"
+msgstr "установить реестр %s"
+
+msgid "service %s → disabled"
+msgstr "служба %s → отключена"
+
+msgid "service %s → manual"
+msgstr "служба %s → вручную"
+
+msgid "delete service %s"
+msgstr "удалить службу %s"
+
+msgid "disable scheduled task %s"
+msgstr "отключить задачу %s"
+
+msgid "enable scheduled task %s"
+msgstr "включить задачу %s"
+
+msgid "remove app %s"
+msgstr "удалить приложение %s"
+
+msgid "activate power plan %s"
+msgstr "активировать план питания %s"
+
+msgid "disable hibernation (%s)"
+msgstr "отключить гибернацию (%s)"
+
+msgid "enable hibernation (%s)"
+msgstr "включить гибернацию (%s)"
+
+msgid "Shell extension removed: %s"
+msgstr "Расширение оболочки удалено: %s"
+
+msgid "Cannot rollback APPX_REMOVE — reinstallation required"
+msgstr "Невозможно откатить APPX_REMOVE — требуется переустановка"
+
+msgid "dry-run: %d rule(s), %d action(s) planned"
+msgstr "пробный запуск: %d правил, %d действий запланировано"
+
+msgid "applied %d action(s), snapshot %s"
+msgstr "применено %d действий, снимок %s"
+
+msgid "rollback snapshot %s — %d action(s) to undo"
+msgstr "откат снимка %s — отменить %d действий"
+
+msgid "rollback complete"
+msgstr "откат завершён"
+
+msgid "All YAML presets are valid"
+msgstr "Все YAML-пресеты валидны"
+
+msgid "YAML validation failed: %s"
+msgstr "Ошибка валидации YAML: %s"
+
+msgid "Unknown preset: %s"
+msgstr "Неизвестный пресет: %s"
+
+msgid "Rule not found: %s"
+msgstr "Правило не найдено: %s"
+
+msgid "Bench BEFORE"
+msgstr "Бенчмарк ДО"
+
+msgid "Bench AFTER"
+msgstr "Бенчмарк ПОСЛЕ"
+
+msgid "Bench BEFORE: RAM %d/%d MB, CPU %.1f%%, services %d, tasks %d"
+msgstr "Бенчмарк ДО: RAM %d/%d МБ, CPU %.1f%%, служб %d, задач %d"
+
+msgid "Bench AFTER: RAM %d MB (Δ%+d), services %d (Δ%+d), tasks %d (Δ%+d)"
+msgstr "Бенчмарк ПОСЛЕ: RAM %d МБ (Δ%+d), служб %d (Δ%+d), задач %d (Δ%+d)"
+
+msgid "Bench after"
+msgstr "Бенчмарк после"
+
+msgid "Bench diff"
+msgstr "Сравнить с baseline"
+
+msgid "Bench list"
+msgstr "Список baseline"
+
+msgid "Bench save"
+msgstr "Сохранить baseline"
+
+msgid "Bench"
+msgstr "Бенчмарк"
+
+msgid "Save baseline before applying rules: %s bench save --label pre"
+msgstr "Сохраните baseline перед применением: %s bench save --label pre"
+
+msgid "Compare: %s bench diff latest"
+msgstr "Сравнить: %s bench diff latest"
+
+msgid "Language: %s"
+msgstr "Язык: %s"
+
+msgid "Tip: %s"
+msgstr "Подсказка: %s"
+
+msgid "Examples"
+msgstr "Примеры"
+
+msgid "Show current language"
+msgstr "Показать текущий язык"
+
+msgid "Set language (en/ru)"
+msgstr "Установить язык (en/ru)"
+
+msgid "List all available rules"
+msgstr "Список всех правил"
+
+msgid "Describe a specific rule by id"
+msgstr "Описать правило по id"
+
+msgid "Validate all YAML presets"
+msgstr "Проверить все YAML-пресеты"
+
+msgid "Apply a preset by name"
+msgstr "Применить пресет по имени"
+
+msgid "Apply one rule by id"
+msgstr "Применить одно правило по id"
+
+msgid "Snapshot current state"
+msgstr "Снимок текущего состояния"
+
+msgid "List all snapshots"
+msgstr "Список снимков"
+
+msgid "Restore from a snapshot"
+msgstr "Восстановить из снимка"
+
+msgid "Measure system responsiveness"
+msgstr "Измерить отзывчивость системы"
+
+msgid "Save baseline with optional label"
+msgstr "Сохранить baseline с меткой"
+
+msgid "Compare current state to a saved baseline"
+msgstr "Сравнить текущее состояние с baseline"
+
+msgid "List all saved baselines"
+msgstr "Список всех baseline"
+
+msgid "Restore selected"
+msgstr "Восстановить выбранный"
+
+msgid "snapshot"
+msgstr "снимок"
+
+msgid "stored in %s"
+msgstr "хранится в %s"
+
+msgid "Confirm rollback to %s?"
+msgstr "Подтвердить откат к %s?"
+
+msgid "Apply %d rule(s)? A restore point will be created."
+msgstr "Применить %d правил? Будет создана точка восстановления."
+
+msgid "rule"
+msgstr "правило"
+
+msgid "rules"
+msgstr "правил"
+
+msgid "rules loaded"
+msgstr "правил загружено"
+
+msgid "DRY-RUN: %d rules, %d actions"
+msgstr "ПРОБНЫЙ: %d правил, %d действий"
+
+msgid "APPLIED %d actions — snapshot %s"
+msgstr "ПРИМЕНЕНО %d действий — снимок %s"
+
+msgid "APPLY %d/%d: %s"
+msgstr "ПРИМЕНИТЬ %d/%d: %s"
+
+msgid "DRY-RUN %d/%d: %s"
+msgstr "ПРОБНЫЙ %d/%d: %s"
+
+msgid "risk"
+msgstr "риск"
+
+msgid "reboot"
+msgstr "перезагрузка"
+
+msgid "high"
+msgstr "высокий"
+
+msgid "medium"
+msgstr "средний"
+
+msgid "low"
+msgstr "низкий"
+
+msgid "off"
+msgstr "выкл"
+
+msgid "on"
+msgstr "вкл"
+
+msgid "OK: %s"
+msgstr "ОК: %s"
+
+msgid "FAIL: %s"
+msgstr "ОШИБКА: %s"
+
+msgid "OK: applied"
+msgstr "ОК: применено"
+
+msgid "FAIL: %s"
+msgstr "ОШИБКА: %s"
+
+msgid "Rollback only restores registry/service changes. APPX removal, power plan and hibernation changes require manual intervention."
+msgstr "Откат восстанавливает только реестр/службы. Удаление APPX, план питания и гибернация требуют ручного вмешательства."
+
+msgid "Win11Optimizer %s"
+msgstr "Win11Оптимизатор %s"
+
+msgid "Windows 11 optimization utility — make Win11 feel like WinXP"
+msgstr "Утилита оптимизации Windows 11 — сделай Win11 отзывчивой как WinXP"
+
+msgid "Set language for this invocation only (en/ru)"
+msgstr "Установить язык только для этого вызова (en/ru)"
+
+msgid "language: %s"
+msgstr "язык: %s"
+
+msgid "show current language"
+msgstr ""
+
+msgid "set language (en/ru) for this invocation"
+msgstr ""
+
+msgid "available: %s"
+msgstr "доступно: %s"
+
+msgid "supported"
+msgstr "поддерживается"
+
+msgid "Metric"
+msgstr "Метрика"
+
+msgid "Before"
+msgstr "До"
+
+msgid "After"
+msgstr "После"
+
+msgid "Delta"
+msgstr "Разница"
+
+msgid "RAM"
+msgstr "RAM"
+
+msgid "CPU"
+msgstr "CPU"
+
+msgid "Apps"
+msgstr "Приложения"
+
+msgid "Services"
+msgstr "Службы"
+
+msgid "Tasks"
+msgstr "Задачи"
+
+msgid "Explorer"
+msgstr "Проводник"
+
+msgid "ms"
+msgstr "мс"
+
+msgid "MB"
+msgstr "МБ"
+
+msgid "%%"
+msgstr "%%"
+
+msgid "Baseline: %s (%s)"
+msgstr "Baseline: %s (%s)"
+
+msgid "Current: %s"
+msgstr "Текущее: %s"
+
+msgid "Tip: save baseline before applying rules: %s bench save --label pre"
+msgstr "Подсказка: сохраните baseline перед применением: %s bench save --label pre"
+
+msgid "then compare: %s bench diff latest"
+msgstr "затем сравните: %s bench diff latest"
+
+msgid "Saved: %s"
+msgstr "Сохранено: %s"
+
+msgid "Rules file: %s"
+msgstr "Файл правил: %s"
+
+msgid "Tip: %s"
+msgstr "Подсказка: %s"
+
+msgid "open GUI"
+msgstr "открыть GUI"
+
+msgid "Apply? A restore point will be created."
+msgstr "Применить? Будет создана точка восстановления."
+
+msgid "Validation failed: %s"
+msgstr "Ошибка валидации: %s"
+

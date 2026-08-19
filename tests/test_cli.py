@@ -26,7 +26,7 @@ def test_rules_describe_unknown(capsys, fake_ps):
 
 
 def test_apply_dry_run_prints(capsys, fake_ps):
-    rc = main(["apply", "--profile", "Balanced", "--dry-run"])
+    rc = main(["--lang", "en", "apply", "--profile", "Balanced", "--dry-run"])
     assert rc == 0
     out = capsys.readouterr().out
     assert "DRY-RUN" in out

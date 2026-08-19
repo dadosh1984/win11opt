@@ -13,6 +13,7 @@ from pathlib import Path
 from .. import __version__
 from ..core import engine, ps, snapshot as snap_mod
 from ..core.models import Snapshot
+from ..i18n import _, N_, get_language, set_language
 from ..rules import PRESETS, get_preset, get_rules, validate_dir
 
 
@@ -64,10 +65,10 @@ def cmd_rules_validate(_args: argparse.Namespace) -> int:
     """Валидировать все YAML-пресеты в rules/."""
     errs = validate_dir()
     if not errs:
-        print("OK: all YAML presets are valid")
+        print(_("OK: all YAML presets are valid"))
         return 0
     for path, msgs in errs.items():
-        print(f"FAIL {path}:")
+        print(_("FAIL: %s") % path)
         for m in msgs:
             print(f"  • {m}")
     return 1
@@ -97,7 +98,7 @@ def cmd_apply(args: argparse.Namespace) -> int:
         actions.extend(rule.actions)
 
     if args.dry_run:
-        print(f"DRY-RUN: would apply {len(rule_ids)} rule(s), {len(actions)} action(s)")
+        print(_("DRY-RUN: %d rules, %d actions") % (len(rule_ids), len(actions)))
         for rid in rule_ids:
             print(f"  • {rid}")
         applied = engine.apply(actions, dry_run=True)
@@ -111,7 +112,7 @@ def cmd_apply(args: argparse.Namespace) -> int:
             restore_point_id=snap.restore_point_id,
         )
         snap_mod.save(snap_obj)
-        print(f"OK: applied {len(applied)} action(s)")
+        print(_("APPLIED %d actions — snapshot %s") % (len(applied), snap_obj.id))
         print(f"snapshot: {snap_obj.id}  restore_point: {snap_obj.restore_point_id}")
 
     for a in applied:
@@ -218,6 +219,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     p.add_argument("-v", "--verbose", action="store_true")
+    p.add_argument("--lang", choices=["en", "ru"], help="язык для этого вызова (en/ru)")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     p_rules = sub.add_parser("rules", help="управление правилами")
@@ -260,6 +262,9 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    # Apply --lang if specified
+    if getattr(args, "lang", None):
+        set_language(args.lang)
     _setup_logging(args.verbose)
     return args.func(args)
 

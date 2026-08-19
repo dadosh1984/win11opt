@@ -1,0 +1,459 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en\n"
+"Project: Win11Optimizer\n"
+"Version: 1.3.0\n"
+
+msgid "Apply"
+msgstr ""
+
+msgid "Dry-run"
+msgstr ""
+
+msgid "Restore point created"
+msgstr ""
+
+msgid "Snapshot"
+msgstr ""
+
+msgid "Rule"
+msgstr ""
+
+msgid "Rules"
+msgstr ""
+
+msgid "Baseline"
+msgstr ""
+
+msgid "Saved"
+msgstr ""
+
+msgid "Bench"
+msgstr ""
+
+msgid "Bench before"
+msgstr ""
+
+msgid "Bench after"
+msgstr ""
+
+msgid "Apply preset"
+msgstr ""
+
+msgid "Preset"
+msgstr ""
+
+msgid "Categories"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Documentation"
+msgstr ""
+
+msgid "Apply selected"
+msgstr ""
+
+msgid "Dry-run selected"
+msgstr ""
+
+msgid "Snapshots"
+msgstr ""
+
+msgid "Confirm apply"
+msgstr ""
+
+msgid "Restore"
+msgstr ""
+
+msgid "Rollback"
+msgstr ""
+
+msgid "before"
+msgstr ""
+
+msgid "after"
+msgstr ""
+
+msgid "delta"
+msgstr ""
+
+msgid "metric"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "No rules selected"
+msgstr ""
+
+msgid "No baseline"
+msgstr ""
+
+msgid "Idle"
+msgstr ""
+
+msgid "ready"
+msgstr ""
+
+msgid "open GUI"
+msgstr ""
+
+msgid "show this help"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Source language"
+msgstr ""
+
+msgid "Total rules: %d"
+msgstr ""
+
+msgid "Profile: %s (%d rules)"
+msgstr ""
+
+msgid "snapshot %s"
+msgstr ""
+
+msgid "rolled back to %s"
+msgstr ""
+
+msgid "apply %d action(s)"
+msgstr ""
+
+msgid "rollback %d action(s)"
+msgstr ""
+
+msgid "create restore point"
+msgstr ""
+
+msgid "delete registry key %s"
+msgstr ""
+
+msgid "set registry %s"
+msgstr ""
+
+msgid "service %s → disabled"
+msgstr ""
+
+msgid "service %s → manual"
+msgstr ""
+
+msgid "delete service %s"
+msgstr ""
+
+msgid "disable scheduled task %s"
+msgstr ""
+
+msgid "enable scheduled task %s"
+msgstr ""
+
+msgid "remove app %s"
+msgstr ""
+
+msgid "activate power plan %s"
+msgstr ""
+
+msgid "disable hibernation (%s)"
+msgstr ""
+
+msgid "enable hibernation (%s)"
+msgstr ""
+
+msgid "Shell extension removed: %s"
+msgstr ""
+
+msgid "Cannot rollback APPX_REMOVE — reinstallation required"
+msgstr ""
+
+msgid "dry-run: %d rule(s), %d action(s) planned"
+msgstr ""
+
+msgid "applied %d action(s), snapshot %s"
+msgstr ""
+
+msgid "rollback snapshot %s — %d action(s) to undo"
+msgstr ""
+
+msgid "rollback complete"
+msgstr ""
+
+msgid "All YAML presets are valid"
+msgstr ""
+
+msgid "YAML validation failed: %s"
+msgstr ""
+
+msgid "Unknown preset: %s"
+msgstr ""
+
+msgid "Rule not found: %s"
+msgstr ""
+
+msgid "Bench BEFORE"
+msgstr ""
+
+msgid "Bench AFTER"
+msgstr ""
+
+msgid "Bench BEFORE: RAM %d/%d MB, CPU %.1f%%, services %d, tasks %d"
+msgstr ""
+
+msgid "Bench AFTER: RAM %d MB (Δ%+d), services %d (Δ%+d), tasks %d (Δ%+d)"
+msgstr ""
+
+msgid "Bench after"
+msgstr ""
+
+msgid "Bench diff"
+msgstr ""
+
+msgid "Bench list"
+msgstr ""
+
+msgid "Bench save"
+msgstr ""
+
+msgid "Bench"
+msgstr ""
+
+msgid "Save baseline before applying rules: %s bench save --label pre"
+msgstr ""
+
+msgid "Compare: %s bench diff latest"
+msgstr ""
+
+msgid "Language: %s"
+msgstr ""
+
+msgid "Tip: %s"
+msgstr ""
+
+msgid "Examples"
+msgstr ""
+
+msgid "Show current language"
+msgstr ""
+
+msgid "Set language (en/ru)"
+msgstr ""
+
+msgid "List all available rules"
+msgstr ""
+
+msgid "Describe a specific rule by id"
+msgstr ""
+
+msgid "Validate all YAML presets"
+msgstr ""
+
+msgid "Apply a preset by name"
+msgstr ""
+
+msgid "Apply one rule by id"
+msgstr ""
+
+msgid "Snapshot current state"
+msgstr ""
+
+msgid "List all snapshots"
+msgstr ""
+
+msgid "Restore from a snapshot"
+msgstr ""
+
+msgid "Measure system responsiveness"
+msgstr ""
+
+msgid "Save baseline with optional label"
+msgstr ""
+
+msgid "Compare current state to a saved baseline"
+msgstr ""
+
+msgid "List all saved baselines"
+msgstr ""
+
+msgid "Restore selected"
+msgstr ""
+
+msgid "snapshot"
+msgstr ""
+
+msgid "stored in %s"
+msgstr ""
+
+msgid "Confirm rollback to %s?"
+msgstr ""
+
+msgid "Apply %d rule(s)? A restore point will be created."
+msgstr ""
+
+msgid "rule"
+msgstr ""
+
+msgid "rules"
+msgstr ""
+
+msgid "rules loaded"
+msgstr ""
+
+msgid "DRY-RUN: %d rules, %d actions"
+msgstr ""
+
+msgid "APPLIED %d actions — snapshot %s"
+msgstr ""
+
+msgid "APPLY %d/%d: %s"
+msgstr ""
+
+msgid "DRY-RUN %d/%d: %s"
+msgstr ""
+
+msgid "risk"
+msgstr ""
+
+msgid "reboot"
+msgstr ""
+
+msgid "high"
+msgstr ""
+
+msgid "medium"
+msgstr ""
+
+msgid "low"
+msgstr ""
+
+msgid "off"
+msgstr ""
+
+msgid "on"
+msgstr ""
+
+msgid "OK: %s"
+msgstr ""
+
+msgid "FAIL: %s"
+msgstr ""
+
+msgid "OK: applied"
+msgstr ""
+
+msgid "FAIL: %s"
+msgstr ""
+
+msgid "Rollback only restores registry/service changes. APPX removal, power plan and hibernation changes require manual intervention."
+msgstr ""
+
+msgid "Win11Optimizer %s"
+msgstr ""
+
+msgid "Windows 11 optimization utility — make Win11 feel like WinXP"
+msgstr ""
+
+msgid "Set language for this invocation only (en/ru)"
+msgstr ""
+
+msgid "language: %s"
+msgstr ""
+
+msgid "show current language"
+msgstr ""
+
+msgid "set language (en/ru) for this invocation"
+msgstr ""
+
+msgid "available: %s"
+msgstr ""
+
+msgid "supported"
+msgstr ""
+
+msgid "Metric"
+msgstr ""
+
+msgid "Before"
+msgstr ""
+
+msgid "After"
+msgstr ""
+
+msgid "Delta"
+msgstr ""
+
+msgid "RAM"
+msgstr ""
+
+msgid "CPU"
+msgstr ""
+
+msgid "Apps"
+msgstr ""
+
+msgid "Services"
+msgstr ""
+
+msgid "Tasks"
+msgstr ""
+
+msgid "Explorer"
+msgstr ""
+
+msgid "ms"
+msgstr ""
+
+msgid "MB"
+msgstr ""
+
+msgid "%%"
+msgstr ""
+
+msgid "Baseline: %s (%s)"
+msgstr ""
+
+msgid "Current: %s"
+msgstr ""
+
+msgid "Tip: save baseline before applying rules: %s bench save --label pre"
+msgstr ""
+
+msgid "then compare: %s bench diff latest"
+msgstr ""
+
+msgid "Saved: %s"
+msgstr ""
+
+msgid "Rules file: %s"
+msgstr ""
+
+msgid "Tip: %s"
+msgstr ""
+
+msgid "open GUI"
+msgstr ""
+
+msgid "Apply? A restore point will be created."
+msgstr ""
+
+msgid "Validation failed: %s"
+msgstr ""
