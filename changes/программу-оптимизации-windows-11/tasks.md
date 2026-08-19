@@ -70,6 +70,8 @@
 - [x] Новые правила v0.7: гибернация (powercfg -h off), телеметрия CEIP/Activity/Tailored. Фикс POWER_PLAN в engine.
 - [x] Новые правила v0.8: network (3), ntfs (3). Aggressive +4 правила.
 - [x] Новые правила v1.0: scheduled_tasks (3 пакета, 13 задач), storage (3), appcompat (4). Итого 52 правила.
+- [x] Bench v1.1: save/diff/list, 6 метрик (RAM, CPU, startup, services, tasks, explorer paint).
+- [x] Git: v1.0.0 commit + tag
 - [x] Git: v0.8.0 commit + tag
 - [x] Git: v0.7.0 commit + tag
 - [x] Git: v0.6.0 commit + tag

@@ -51,6 +51,23 @@ win11opt snapshot restore 20250101-120000
 # Бенчмарк (стартовая точка)
 win11opt bench
 
+# Сохранить baseline (например 'pre')
+win11opt bench save --label pre
+
+# Применить твики
+win11opt apply --profile Balanced
+
+# Сравнить с baseline
+win11opt bench diff latest
+
+# Список baselines
+win11opt bench list
+
+# Подкоманды:
+#   bench save [--label LABEL] → измерить и сохранить
+#   bench diff [PATH|latest]  → сравнить current с baseline
+#   bench list                → показать все baselines
+
 # Графический интерфейс
 win11opt gui
 ```
@@ -180,6 +197,17 @@ rules:
 - `sched_task_disable`, `shell_ext` — зарезервированы
 
 Перед использованием: `win11opt rules validate`.
+
+## Метрики bench
+
+- `idle_ram_mb` — свободная RAM в MB
+- `idle_cpu_pct` — %CPU idle (среднее за 2 сек)
+- `startup_apps_count` — количество автозагрузки
+- `services_running` — количество запущенных служб
+- `sched_tasks_enabled` — количество включённых scheduled tasks
+- `explorer_first_paint_ms` — время до появления главного окна Проводника
+
+Baseline хранится в `%LOCALAPPDATA%\win11opt\bench\`.
 
 ## Безопасность
 

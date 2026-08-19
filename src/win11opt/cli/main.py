@@ -143,12 +143,65 @@ def cmd_snapshot_restore(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_bench(_args: argparse.Namespace) -> int:
-    """Базовый бенчмарк: количество служб, автозагрузка."""
-    startup = ps.list_startup_apps()
-    print(f"startup_apps_count: {len(startup)}")
-    for s in startup:
-        print(f"  {s.get('Hive')}\\{s.get('Path')}\\{s.get('Name')}")
+def cmd_bench(args: argparse.Namespace) -> int:
+    """Бенчмарк: измерение отзывчивости, save/diff."""
+    from ..core import bench as benchmod
+
+    if getattr(args, "bench_action", None) == "save":
+        label = getattr(args, "label", None)
+        result = benchmod.measure()
+        path = benchmod.save_baseline(result, label)
+        print(f"saved: {path}")
+        print(f"  idle_ram: {result.idle_ram_mb} MB / {result.total_ram_mb} MB")
+        print(f"  idle_cpu: {result.idle_cpu_pct}%")
+        print(f"  startup_apps: {result.startup_apps_count}")
+        print(f"  services_running: {result.services_running}")
+        print(f"  sched_tasks_enabled: {result.sched_tasks_enabled}")
+        print(f"  explorer_first_paint: {result.explorer_first_paint_ms} ms")
+        return 0
+
+    if getattr(args, "bench_action", None) == "diff":
+        baselines = benchmod.list_baselines()
+        if not baselines:
+            print("no baselines — run: win11opt bench save")
+            return 1
+        target = baselines[0] if args.bench_target == "latest" else Path(args.bench_target)
+        if not target.exists():
+            print(f"baseline not found: {target}")
+            return 1
+        before = benchmod.load_baseline(target)
+        after = benchmod.measure()
+        print(f"baseline: {target.name} ({before.timestamp})")
+        print(f"current:  {after.timestamp}")
+        print()
+        print(f"{'metric':<24} {'before':>12} {'after':>12} {'delta':>12}")
+        print("-" * 64)
+        deltas = benchmod.diff(before, after)
+        for metric, (va, vb, delta) in deltas.items():
+            sign = "+" if delta > 0 else ""
+            print(f"{metric:<24} {va:>12} {vb:>12} {sign}{delta:>11}")
+        return 0
+
+    if getattr(args, "bench_action", None) == "list":
+        baselines = benchmod.list_baselines()
+        if not baselines:
+            print("no baselines")
+        for b in baselines:
+            print(b.name)
+        return 0
+
+    # default: measure and print
+    result = benchmod.measure()
+    print(f"timestamp: {result.timestamp}")
+    print(f"idle_ram: {result.idle_ram_mb} MB / {result.total_ram_mb} MB")
+    print(f"idle_cpu: {result.idle_cpu_pct}%")
+    print(f"startup_apps: {result.startup_apps_count}")
+    print(f"services_running: {result.services_running}")
+    print(f"sched_tasks_enabled: {result.sched_tasks_enabled}")
+    print(f"explorer_first_paint: {result.explorer_first_paint_ms} ms")
+    print()
+    print("tip: save baseline before applying rules: win11opt bench save --label pre")
+    print("     then compare:   win11opt bench diff latest")
     return 0
 
 
@@ -189,7 +242,13 @@ def build_parser() -> argparse.ArgumentParser:
     p_snap_restore.add_argument("--dry-run", action="store_true")
     p_snap_restore.set_defaults(func=cmd_snapshot_restore)
 
-    p_bench = sub.add_parser("bench", help="базовый бенчмарк")
+    p_bench = sub.add_parser("bench", help="базовый бенчмарк с save/diff")
+    p_bench_sub = p_bench.add_subparsers(dest="bench_action")
+    p_bench_save = p_bench_sub.add_parser("save", help="сохранить baseline")
+    p_bench_save.add_argument("--label", help="метка (например 'pre', 'after-tier1')")
+    p_bench_diff = p_bench_sub.add_parser("diff", help="сравнить с baseline")
+    p_bench_diff.add_argument("bench_target", nargs="?", default="latest", help="latest или путь к .json")
+    p_bench_sub.add_parser("list", help="список baselines")
     p_bench.set_defaults(func=cmd_bench)
 
     p_gui = sub.add_parser("gui", help="запустить графический интерфейс")
