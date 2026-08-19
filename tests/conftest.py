@@ -79,4 +79,8 @@ def fake_ps(monkeypatch):
     monkeypatch.setattr(ps, "sched_task_enable", fake_sched_task_enable)
     monkeypatch.setattr(ps, "create_restore_point", fake_create_restore_point)
 
+    # fake_ps симулирует систему, где PowerShell работает (=> админ есть).
+    from win11opt.core import engine
+    monkeypatch.setattr(engine, "_is_admin", lambda: True)
+
     return state

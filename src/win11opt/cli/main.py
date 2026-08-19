@@ -152,6 +152,8 @@ def cmd_import(args: argparse.Namespace) -> int:
 
 def cmd_apply(args: argparse.Namespace) -> int:
     """Применить пресет или одиночное правило."""
+    from ..core.engine import AdminRequiredError
+    from ..core.ps import PowerShellError
     rules = get_rules()
     if args.profile:
         preset = get_preset(args.profile)
@@ -179,9 +181,16 @@ def cmd_apply(args: argparse.Namespace) -> int:
             print(f"  • {rid}")
         applied = engine.apply(actions, dry_run=True)
     else:
-        snap = snap_mod.make_snapshot(rule_ids, [])
-        # Сначала apply и capture, потом сохранить snapshot с actions_undone
-        applied = engine.apply(actions, dry_run=False)
+        try:
+            snap = snap_mod.make_snapshot(rule_ids, [])
+            # Сначала apply и capture, потом сохранить snapshot с actions_undone
+            applied = engine.apply(actions, dry_run=False)
+        except AdminRequiredError as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            return 3
+        except PowerShellError as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            return 4
         snap_obj = Snapshot(
             id=snap.id, created_at=snap.created_at,
             rules_applied=rule_ids, actions_undone=applied,

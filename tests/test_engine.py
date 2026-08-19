@@ -1,4 +1,6 @@
 """Tests: apply engine + rollback (round-trip)."""
+import pytest
+
 from win11opt.core import engine
 from win11opt.rules.builtin import (
     disable_animations,
@@ -71,3 +73,41 @@ def test_apply_creates_restore_point(fake_ps):
     snap = make_snapshot([rule.id], applied)
     assert snap.restore_point_id is not None
     assert snap.restore_point_id >= 1
+
+
+def test_apply_without_admin_raises(monkeypatch):
+    """Без прав админа apply должен поднять AdminRequiredError."""
+    from win11opt.core import engine
+    from win11opt.core.engine import AdminRequiredError
+    from win11opt.core.models import Action, ActionKind
+    monkeypatch.setattr(engine, "_is_admin", lambda: False)
+    actions = [Action(kind=ActionKind.REG_SET, target=r"HKCU:\X", name="Y", value=1)]
+    with pytest.raises(AdminRequiredError):
+        engine.apply(actions, dry_run=False)
+
+
+def test_apply_dry_run_skips_admin_check(monkeypatch):
+    """dry-run не требует админа (не выполняет PowerShell)."""
+    from win11opt.core import engine
+    from win11opt.core.models import Action, ActionKind
+    monkeypatch.setattr(engine, "_is_admin", lambda: False)
+    actions = [Action(kind=ActionKind.REG_SET, target=r"HKCU:\X", name="Y", value=1)]
+    # Не должно бросить исключение
+    engine.apply(actions, dry_run=True)
+
+
+def test_rollback_without_admin_raises(monkeypatch):
+    """Без прав админа rollback тоже требует админа."""
+    from win11opt.core import engine
+    from win11opt.core.engine import AdminRequiredError
+    from win11opt.core.models import Action, ActionKind, Snapshot
+    monkeypatch.setattr(engine, "_is_admin", lambda: False)
+    snap = Snapshot(
+        id="20260101-000000", created_at="2026-01-01T00:00:00",
+        rules_applied=[], actions_undone=[
+            Action(kind=ActionKind.REG_SET, target=r"HKCU:\X", name="Y",
+                   undo_target=r"HKCU:\X", undo_value=0),
+        ],
+    )
+    with pytest.raises(AdminRequiredError):
+        engine.rollback(snap, dry_run=False)

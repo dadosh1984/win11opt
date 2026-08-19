@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.9.4 — Подготовка к VM-тесту (UTF-8, admin check, FileNotFoundError)
+
+### Fixed
+- **UTF-8 консоль**: EXE выводил русский текст в cp866 (мусор).
+  `win11opt_entry.py` теперь ставит `SetConsoleOutputCP(65001)` +
+  `sys.stdout.reconfigure(encoding="utf-8")`.
+- **FileNotFoundError**: `ps.run_ps` теперь даёт понятную ошибку если
+  `powershell.exe` не найден в PATH (раньше — голый traceback).
+- **Admin check**: `engine.apply`/`rollback` поднимают `AdminRequiredError`
+  с понятным сообщением если нет прав админа (раньше — непонятный
+  Access Denied от PowerShell).
+
+### Added
+- `engine._is_admin()` + `engine.AdminRequiredError`.
+- `tests/test_ps.py`: FileNotFoundError + is_admin.
+- `tests/test_engine.py`: admin check (apply/rollback/dry-run).
+
+### Tests
+- 119/119 passed (было 114; +5 admin/FileNotFoundError).
+- `ruff check`: 0 ошибок.
+
 ## v1.9.3 — Bugfixes (ruff + найденные баги)
 
 ### Fixed

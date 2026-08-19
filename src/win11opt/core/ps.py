@@ -33,18 +33,24 @@ def run_ps(script: str, *, timeout: int = 60) -> str:
         f.write(script)
         path = f.name
     try:
-        proc = subprocess.run(
-            [
-                "powershell.exe",
-                "-NoProfile",
-                "-NonInteractive",
-                "-ExecutionPolicy", "Bypass",
-                "-File", path,
-            ],
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-        )
+        try:
+            proc = subprocess.run(
+                [
+                    "powershell.exe",
+                    "-NoProfile",
+                    "-NonInteractive",
+                    "-ExecutionPolicy", "Bypass",
+                    "-File", path,
+                ],
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+            )
+        except FileNotFoundError as e:
+            raise PowerShellError(
+                "powershell.exe not found in PATH. "
+                "Установите PowerShell или добавьте C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\ в PATH."
+            ) from e
     finally:
         Path(path).unlink(missing_ok=True)
 

@@ -9,13 +9,39 @@ ponytail: rung 4 — MVP делает apply+rollback по одному прав�
 """
 from __future__ import annotations
 
+import ctypes
 import logging
+import os
+import sys
 from collections.abc import Iterable
 
 from . import ps
 from .models import Action, ActionKind, Snapshot
 
 log = logging.getLogger(__name__)
+
+
+class AdminRequiredError(RuntimeError):
+    """Операция требует прав администратора."""
+
+
+def _is_admin() -> bool:
+    """Проверить, запущен ли процесс с правами администратора (Windows)."""
+    if sys.platform != "win32":
+        return os.geteuid() == 0  # для совместимости с Linux-тестами
+    try:
+        return bool(ctypes.windll.shell32.IsUserAnAdmin())
+    except Exception:
+        return False
+
+
+def _require_admin(operation: str) -> None:
+    """Поднять понятную ошибку если нет прав админа."""
+    if not _is_admin():
+        raise AdminRequiredError(
+            f"'{operation}' требует прав администратора. "
+            "Запустите EXE или cmd от имени администратора."
+        )
 
 
 def _capture_undo(action: Action) -> Action:
@@ -46,8 +72,11 @@ def _capture_undo(action: Action) -> Action:
 
 def apply(rule_actions: Iterable[Action], *, dry_run: bool = False) -> list[Action]:
     """Применить список действий. Возвращает список с undo-данными для snapshot."""
+    actions = list(rule_actions)
+    if actions and not dry_run:
+        _require_admin("apply")
     applied: list[Action] = []
-    for action in rule_actions:
+    for action in actions:
         captured = _capture_undo(action)
         log.info("[%s] %s", "DRY" if dry_run else "APPLY", action.describe())
         if not dry_run:
@@ -58,6 +87,8 @@ def apply(rule_actions: Iterable[Action], *, dry_run: bool = False) -> list[Acti
 
 def rollback(snapshot: Snapshot, *, dry_run: bool = False) -> None:
     """Откатить snapshot — выполнить обратные действия в обратном порядке."""
+    if snapshot.actions_undone and not dry_run:
+        _require_admin("rollback")
     for action in reversed(snapshot.actions_undone):
         log.info("[%s] undo %s", "DRY" if dry_run else "ROLLBACK", action.describe())
         if not dry_run:
