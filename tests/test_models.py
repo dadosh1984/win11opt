@@ -1,5 +1,5 @@
 """Tests: domain models."""
-from win11opt.core.models import Action, ActionKind, Risk, Rule
+from win11opt.core.models import Action, ActionKind, Risk
 
 
 def test_action_describe():

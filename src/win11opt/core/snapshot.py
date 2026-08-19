@@ -6,9 +6,8 @@ import json
 import os
 from pathlib import Path
 
-from .engine import apply, rollback
-from .models import Action, Snapshot
 from . import ps
+from .models import Action, ActionKind, Snapshot
 
 
 def _snapshots_dir() -> Path:

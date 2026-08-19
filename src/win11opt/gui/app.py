@@ -19,17 +19,15 @@ ponytail: rung 2 — Tkinter вместо PyQt/PySide. Single-EXE без зав�
 """
 from __future__ import annotations
 
-import datetime as dt
 import logging
-import subprocess
-import sys
 import tkinter as tk
 from pathlib import Path
 from tkinter import ttk
 
 from .. import __version__
 from ..core import bench as bench_mod
-from ..core import engine, ps, snapshot as snap_mod
+from ..core import engine
+from ..core import snapshot as snap_mod
 from ..core.models import Snapshot
 from ..i18n import _
 from ..rules import PRESETS, get_preset, get_rules
@@ -181,6 +179,7 @@ class App:
     def _export_dialog(self) -> None:
         """Экспортировать выбранные чекбоксы в YAML-профиль."""
         from tkinter import filedialog, messagebox
+
         from ..rules import export as export_mod
         ids = self._selected_ids()
         if not ids:
@@ -203,12 +202,13 @@ class App:
                 out_path=Path(path),
             )
             self._set_status(f"exported {len(ids)} rules → {path}")
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             messagebox.showerror("Export failed", str(e))
 
     def _import_dialog(self) -> None:
         """Импортировать YAML-профиль, отметить чекбоксы правил."""
         from tkinter import filedialog, messagebox
+
         from ..rules import export as export_mod
         path = filedialog.askopenfilename(
             title="Import profile",
@@ -218,7 +218,7 @@ class App:
             return
         try:
             name, ids = export_mod.import_profile(Path(path))
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             messagebox.showerror("Import failed", str(e))
             return
         # Отметить все категории
@@ -278,7 +278,7 @@ class App:
                 "explorer_first_paint_ms": r.explorer_first_paint_ms,
                 "services_by_state": dict(r.services_by_state or {}),
             }
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             log.warning("bench failed: %s", e)
             return {"error": str(e)}
 
@@ -378,7 +378,7 @@ class App:
                 self._set_status(
                     f"APPLIED {len(applied)} actions — snapshot {snap_obj.id}"
                 )
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             log.exception("apply failed")
             messagebox.showerror("Error", str(e))
         finally:
@@ -408,7 +408,7 @@ class App:
                 engine.rollback(snap)
                 self._set_status(f"rolled back {sid}")
                 win.destroy()
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 messagebox.showerror("Error", str(e))
 
         ttk.Button(win, text="Restore selected", command=restore).pack(pady=4)
@@ -419,7 +419,7 @@ def _apply_dark_theme(root: tk.Tk) -> None:
     style = ttk.Style(root)
     try:
         style.theme_use("clam")
-    except Exception:  # noqa: BLE001
+    except Exception:
         return
     bg = "#1e1e1e"
     fg = "#d4d4d4"

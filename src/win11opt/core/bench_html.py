@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from html import escape
 from pathlib import Path
-from typing import Optional
 
 from .bench import diff_report
 
@@ -99,10 +98,11 @@ def render_html_diff(a, b) -> str:
 """
 
 
-def save_html_diff(a, b, path: Optional[Path] = None) -> Path:
+def save_html_diff(a, b, path: Path | None = None) -> Path:
     """Сохранить HTML-отчёт. Если path не указан — _bench_dir()/diff-<ts>.html."""
-    from .bench import _bench_dir
     from datetime import datetime
+
+    from .bench import _bench_dir
     if path is None:
         ts = datetime.now().strftime("%Y%m%d-%H%M%S")
         path = _bench_dir() / f"diff-{ts}.html"

@@ -1,15 +1,23 @@
 """win11opt.rules — встроенные правила, пресеты и YAML loader."""
 from .builtin import PRESETS, get_preset
 from .loader import (
-    DEFAULT_RULES_DIR, RuleLoadError, load_all, load_preset,
-    validate_dir, validate_file,
+    DEFAULT_RULES_DIR,
+    RuleLoadError,
+    load_all,
+    load_preset,
+    validate_dir,
+    validate_file,
 )
 
 __all__ = [
-    "PRESETS", "get_preset",
-    "DEFAULT_RULES_DIR", "RuleLoadError",
-    "load_all", "load_preset",
-    "validate_dir", "validate_file",
+    "DEFAULT_RULES_DIR",
+    "PRESETS",
+    "RuleLoadError",
+    "get_preset",
+    "load_all",
+    "load_preset",
+    "validate_dir",
+    "validate_file",
 ]
 
 

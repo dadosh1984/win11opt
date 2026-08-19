@@ -14,7 +14,6 @@ import locale
 import os
 import sys
 from pathlib import Path
-from typing import Optional
 
 # ponytail: rung 1 — built-in gettext, zero external deps.
 
@@ -23,7 +22,7 @@ _LOCALE_DIRNAME = "locale"
 _DEFAULT_LANG = "en"
 
 
-def _find_locale_dir() -> Optional[Path]:
+def _find_locale_dir() -> Path | None:
     """Find locale dir in dev tree or next to frozen EXE."""
     candidates = []
     # 1. Env override
@@ -61,7 +60,7 @@ def _load_mo(path: Path) -> dict[str, str]:
         endian = ">"
     else:
         return {}
-    version, n, off1, off2 = struct.unpack(f"{endian}4I", data[4:20])
+    _, n, off1, off2 = struct.unpack(f"{endian}4I", data[4:20])
     result: dict[str, str] = {}
     for i in range(n):
         id_off, id_len = struct.unpack(f"{endian}2I", data[off1 + i*8:off1 + i*8 + 8])
@@ -83,7 +82,7 @@ def detect_system_language() -> str:
         loc = locale.getlocale()[0] or os.environ.get("LANG", "") or os.environ.get("LC_ALL", "")
         if loc and loc.lower().startswith("ru"):
             return "ru"
-    except Exception:  # noqa: BLE001
+    except Exception:  # noqa: S110
         pass
     return _DEFAULT_LANG
 
@@ -92,7 +91,7 @@ _translation: dict[str, str] = {}
 _current_lang: str = _DEFAULT_LANG
 
 
-def set_language(lang: Optional[str] = None) -> str:
+def set_language(lang: str | None = None) -> str:
     """Activate translation. Returns the language actually activated."""
     global _translation, _current_lang
     if not lang:

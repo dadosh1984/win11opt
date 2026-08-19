@@ -17,11 +17,9 @@ import json
 import logging
 import re
 import subprocess
-import time
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 log = logging.getLogger(__name__)
 
@@ -46,7 +44,7 @@ class BenchResult:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, d: dict) -> "BenchResult":
+    def from_dict(cls, d: dict) -> BenchResult:
         return cls(**{k: v for k, v in d.items() if k in cls.__dataclass_fields__})
 
 
@@ -169,7 +167,7 @@ def list_baselines() -> list[Path]:
     return sorted(_bench_dir().glob("*.json"), reverse=True)
 
 
-def save_baseline(result: BenchResult, label: Optional[str] = None) -> Path:
+def save_baseline(result: BenchResult, label: str | None = None) -> Path:
     ts = datetime.now().strftime("%Y%m%d-%H%M%S")
     name = f"{ts}-{label}" if label else ts
     path = _bench_dir() / f"{name}.json"
@@ -207,7 +205,7 @@ def diff_report(a: BenchResult, b: BenchResult) -> dict:
     }
 
 
-def save_diff_report(a: BenchResult, b: BenchResult, path: Optional[Path] = None) -> Path:
+def save_diff_report(a: BenchResult, b: BenchResult, path: Path | None = None) -> Path:
     """Сохранить diff-отчёт в JSON. Если path не указан — в _bench_dir()/diff-<ts>.json."""
     if path is None:
         ts = datetime.now().strftime("%Y%m%d-%H%M%S")

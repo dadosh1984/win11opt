@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.9.3 — Bugfixes (ruff + найденные баги)
+
+### Fixed
+- **snapshot.py:48** — NameError при `snapshot.load()`: использовался
+  `ActionKind` без импорта. Модуль вообще не имел тестов. Добавлен
+  `tests/test_snapshot.py` (4 теста, round-trip всех ActionKind).
+- **ps.py:230** — `sched_task_enable` был мёртвым кодом (script собирался
+  но `run_ps` не вызывался). **Критический баг rollback**: отключённые
+  scheduled tasks не включались обратно. Добавлен `tests/test_ps.py`
+  (2 теста — disable и enable вызывают `run_ps`).
+- i18n.py: распаковка `version` → `_` (unused).
+
+### Changed
+- pyproject.toml: ruff ignore для намеренных паттернов
+  (PLW1510 subprocess без check, BLE001 blind except, DTZ005 naive datetime).
+- ruff --fix: 59 авто-фиксов (unused imports, multi-line import style).
+
+### Tests
+- 114/114 passed (было 108; +6: 4 snapshot + 2 ps).
+- `ruff check`: 0 ошибок.
+
 ## v1.9.2 — `import` теперь устанавливает профиль
 
 ### Changed

@@ -3,11 +3,15 @@ from pathlib import Path
 
 import pytest
 
-from win11opt.rules.loader import (
-    DEFAULT_RULES_DIR, RuleLoadError, load_all, load_preset,
-    validate_dir, validate_file,
-)
 from win11opt.core.models import ActionKind, Risk
+from win11opt.rules.loader import (
+    DEFAULT_RULES_DIR,
+    RuleLoadError,
+    load_all,
+    load_preset,
+    validate_dir,
+    validate_file,
+)
 
 
 def _write_yaml(tmp_path: Path, name: str, content: str) -> Path:

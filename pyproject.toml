@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "win11opt"
-version = "1.9.2"
+version = "1.9.3"
 description = "Native single-EXE Win11 optimizer (XP-like responsiveness)"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -20,3 +20,15 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+# Паттерны намеренные: парсим stdout (не exit code), защита от любых ошибок,
+# локальный timestamp для имени файла.
+ignore = [
+    "PLW1510",  # subprocess.run без check — мы парсим stdout
+    "BLE001",   # except Exception — защита bench-парсера
+    "DTZ005",   # datetime.now() без tz — локальный timestamp ОК
+]

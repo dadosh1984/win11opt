@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from ..core.models import Action, ActionKind, Profile, Risk, Rule
 
-
 # Категории — для группировки в GUI и фильтрации в CLI.
 CAT_VISUAL = "visual"
 CAT_SERVICES = "services"

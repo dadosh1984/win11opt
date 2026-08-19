@@ -1,8 +1,6 @@
 """Тесты для i18n."""
 from __future__ import annotations
 
-import pytest
-
 from win11opt import i18n
 
 

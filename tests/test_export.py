@@ -183,8 +183,8 @@ def test_install_profile_default_dir(tmp_path, monkeypatch):
 
 def test_cmd_import_validates_only_does_not_copy(tmp_path, monkeypatch, capsys):
     """CLI import --validate-only не копирует файл."""
-    from win11opt.rules import loader as loader_mod
     from win11opt.rules import get_rules
+    from win11opt.rules import loader as loader_mod
     export_mod = __import__("win11opt.rules.export", fromlist=["export_profile"])
     src = tmp_path / "p.yaml"
     export_mod.export_profile(
@@ -205,8 +205,8 @@ def test_cmd_import_validates_only_does_not_copy(tmp_path, monkeypatch, capsys):
 
 def test_cmd_import_copies_and_prints_install_path(tmp_path, monkeypatch, capsys):
     """CLI import без --validate-only копирует и печатает путь."""
-    from win11opt.rules import loader as loader_mod
     from win11opt.rules import get_rules
+    from win11opt.rules import loader as loader_mod
     export_mod = __import__("win11opt.rules.export", fromlist=["export_profile"])
     src = tmp_path / "p.yaml"
     export_mod.export_profile(

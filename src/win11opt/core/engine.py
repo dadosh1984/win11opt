@@ -9,12 +9,11 @@ ponytail: rung 4 — MVP делает apply+rollback по одному прав�
 """
 from __future__ import annotations
 
-import datetime as dt
 import logging
-from typing import Iterable
+from collections.abc import Iterable
 
-from .models import Action, ActionKind, Result, Snapshot
 from . import ps
+from .models import Action, ActionKind, Snapshot
 
 log = logging.getLogger(__name__)
 

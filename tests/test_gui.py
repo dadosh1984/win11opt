@@ -159,8 +159,7 @@ def test_export_dialog_writes_yaml(tmp_path, fake_tk, fake_ps, monkeypatch):
 
 def test_export_dialog_no_selection(tmp_path, fake_tk, fake_ps, monkeypatch):
     """Если ничего не выбрано — messagebox.showinfo, файл не создаётся."""
-    from tkinter import filedialog
-    from tkinter import messagebox
+    from tkinter import filedialog, messagebox
     infos = []
     monkeypatch.setattr(messagebox, "showinfo", lambda *a, **k: infos.append(a))
     monkeypatch.setattr(filedialog, "asksaveasfilename", lambda **k: str(tmp_path / "x.yaml"))
@@ -176,6 +175,7 @@ def test_export_dialog_no_selection(tmp_path, fake_tk, fake_ps, monkeypatch):
 def test_import_dialog_selects_rules(tmp_path, fake_tk, fake_ps, monkeypatch):
     """GUI import: импорт помечает правила в текущей категории."""
     from tkinter import filedialog
+
     from win11opt.rules import export as export_mod
     from win11opt.rules import get_rules
     profile = tmp_path / "p.yaml"

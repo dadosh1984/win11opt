@@ -12,9 +12,10 @@ import sys
 from pathlib import Path
 
 from .. import __version__
-from ..core import engine, ps, snapshot as snap_mod
+from ..core import engine
+from ..core import snapshot as snap_mod
 from ..core.models import Snapshot
-from ..i18n import _, N_, get_language, set_language
+from ..i18n import _, set_language
 from ..rules import PRESETS, get_preset, get_rules, validate_dir
 
 
@@ -111,7 +112,7 @@ def cmd_export(args: argparse.Namespace) -> int:
     print(f"  profile: {args.name}")
     print(f"  rules:   {len(rule_ids)}")
     print(f"  чтобы применить: win11opt apply --profile {args.name}")
-    print(f"  после копирования файла в rules/ (или используйте --profile явно через import)")
+    print("  после копирования файла в rules/ (или используйте --profile явно через import)")
     return 0
 
 

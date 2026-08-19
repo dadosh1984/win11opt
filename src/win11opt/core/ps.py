@@ -147,7 +147,7 @@ Checkpoint-Computer -Description '{description.replace(chr(39), chr(39)*2)}' -Re
     except PowerShellError:
         return None
     # Получаем sequence number созданной точки
-    out = run_ps(f"""
+    out = run_ps("""
 Get-ComputerRestorePoint | Sort-Object -Property SequenceNumber -Descending | Select-Object -First 1 | ConvertTo-Json -Compress
 """)
     try:
@@ -238,3 +238,4 @@ try {{
     Write-Warning "task not found: $task"
 }}
 """
+    run_ps(script)

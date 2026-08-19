@@ -1,5 +1,5 @@
 """Tests: CLI smoke (аргументы + exit codes)."""
-from win11opt.cli import main, build_parser
+from win11opt.cli import build_parser, main
 
 
 def test_help_runs():

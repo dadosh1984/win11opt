@@ -1,8 +1,9 @@
 """Tests: apply engine + rollback (round-trip)."""
 from win11opt.core import engine
-from win11opt.core.models import Action, ActionKind
 from win11opt.rules.builtin import (
-    disable_animations, disable_diagtrack, telemetry_advertising_id,
+    disable_animations,
+    disable_diagtrack,
+    telemetry_advertising_id,
 )
 
 
@@ -58,7 +59,6 @@ def test_rollback_deletes_added_value(fake_ps):
 
 
 def test_apply_service_disable(fake_ps):
-    from win11opt.rules.builtin import disable_diagtrack
     rule = disable_diagtrack()
     engine.apply(rule.actions, dry_run=False)
     assert fake_ps["services"]["DiagTrack"] == "Disabled"
