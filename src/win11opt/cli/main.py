@@ -6,6 +6,7 @@ ponytail: rung 2 — argparse вместо click/typer. Идёт в stdlib, ме
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import sys
 from pathlib import Path
@@ -198,6 +199,33 @@ def cmd_bench(args: argparse.Namespace) -> int:
             print(b.name)
         return 0
 
+    if getattr(args, "bench_action", None) == "report":
+        # win11opt bench report [PATH] — прочитать diff-<ts>.json и напечатать human-readable.
+        path = getattr(args, "report_path", None)
+        if path is None:
+            diffs = sorted(benchmod._bench_dir().glob("diff-*.json"), reverse=True)
+            if not diffs:
+                print("no diff reports — run: win11opt bench diff latest --out <path>")
+                return 1
+            path = diffs[0]
+        else:
+            path = Path(path)
+        if not path.exists():
+            print(f"report not found: {path}")
+            return 1
+        report = json.loads(path.read_text(encoding="utf-8"))
+        print(f"report: {path.name}")
+        print(f"before: {report['before']['timestamp']}")
+        print(f"after:  {report['after']['timestamp']}")
+        print(f"gen:    {report.get('generated_at', '-')}")
+        print()
+        print(f"{'metric':<24} {'before':>12} {'after':>12} {'delta':>12}")
+        print("-" * 64)
+        for metric, d in report["deltas"].items():
+            sign = "+" if d["delta"] > 0 else ""
+            print(f"{metric:<24} {d['before']:>12} {d['after']:>12} {sign}{d['delta']:>11}")
+        return 0
+
     # default: measure and print
     result = benchmod.measure()
     print(f"timestamp: {result.timestamp}")
@@ -259,6 +287,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_bench_diff.add_argument("bench_target", nargs="?", default="latest", help="latest или путь к .json")
     p_bench_diff.add_argument("--out", help="сохранить diff-отчёт в JSON по указанному пути")
     p_bench_sub.add_parser("list", help="список baselines")
+    p_bench_report = p_bench_sub.add_parser("report", help="напечатать diff-отчёт в human-readable")
+    p_bench_report.add_argument("report_path", nargs="?", help="путь к diff-*.json (по умолчанию — последний)")
     p_bench.set_defaults(func=cmd_bench)
 
     p_gui = sub.add_parser("gui", help="запустить графический интерфейс")

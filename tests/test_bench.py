@@ -139,3 +139,19 @@ def test_save_diff_report_default_path(tmp_path, monkeypatch):
     assert p.parent == tmp_path
     assert p.name.startswith("diff-")
     assert p.suffix == ".json"
+
+
+def test_diff_report_services_by_state_in_deltas():
+    """services_by_state в before/after присутствует; deltas — для скалярных метрик."""
+    a = bench.BenchResult(
+        timestamp="t1", services_running=10,
+        services_by_state={"Running": 10, "Stopped": 20, "Disabled": 5},
+    )
+    b = bench.BenchResult(
+        timestamp="t2", services_running=7,
+        services_by_state={"Running": 7, "Stopped": 23, "Disabled": 5},
+    )
+    rep = bench.diff_report(a, b)
+    assert rep["before"]["services_by_state"] == {"Running": 10, "Stopped": 20, "Disabled": 5}
+    assert rep["after"]["services_by_state"] == {"Running": 7, "Stopped": 23, "Disabled": 5}
+    assert rep["deltas"]["services_running"]["delta"] == -3

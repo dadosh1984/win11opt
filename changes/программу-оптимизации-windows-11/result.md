@@ -1,11 +1,11 @@
 # Result — программу-оптимизации-windows-11
 
 - **Status:** INCOMPLETE
-- **Tasks:** 50/52 done
+- **Tasks:** 52/54 done
 **Guard:** lint:SKIP, type:FAIL, test:SKIP, drift:PASS, yagni:SKIP, economy:PASS, security:PASS, policy:PASS, verifiability:WARN
 - **Budget:** compact
 - **Constraints:** compact
-- **Generated:** 2026-08-19T14:10:28.936Z
+- **Generated:** 2026-08-19T14:14:02.166Z
 
 ## Checklist
 
@@ -50,6 +50,8 @@
 - [x] Новые правила v0.8: network (3), ntfs (3). Aggressive +4 правила.
 - [x] Новые правила v1.0: scheduled_tasks (3 пакета, 13 задач), storage (3), appcompat (4). Итого 52 правила.
 - [x] Bench v1.1: save/diff/list, 6 метрик (RAM, CPU, startup, services, tasks, explorer paint).
+- [x] Bench v1.5: services_by_state + diff_report/save_diff_report + `bench report` CLI
+- [x] README: обновлена секция bench + CHANGELOG.md (v1.5.0)
 - [x] ms_doc_url v1.2: 42 правила дополнены ссылками на learn.microsoft.com, тест на полноту.
 - [x] Git: v1.1.0 commit + tag
 - [x] Git: v1.0.0 commit + tag
@@ -73,7 +75,7 @@ npm warn Unknown cli config "--noEmit". This will stop working in the next major
 | test | SKIP | no test script in package.json |
 | drift | PASS | no capabilities in specs |
 | yagni | SKIP | no existing .ts sources to build a baseline from |
-| economy | PASS | cache 278.0 KB of 100.0 MB (703 entries) — within budget; ≈ 1463963 tok saved across 828 compress op(s) |
+| economy | PASS | cache 278.0 KB of 100.0 MB (703 entries) — within budget; ≈ 1463963 tok saved across 830 compress op(s) |
 | security | PASS | no obvious issues |
 | policy | PASS | no .orion/policy.json — no project gates to enforce |
 | verifiability | WARN | oracles: none · verifiability level 0 · tests weak/missing — low verifiability: treat this PASS as lower-confidence (human review advised) |

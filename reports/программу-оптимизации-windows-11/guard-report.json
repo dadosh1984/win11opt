@@ -29,7 +29,7 @@
     {
       "step": "economy",
       "status": "PASS",
-      "detail": "cache 278.0 KB of 100.0 MB (703 entries) — within budget; ≈ 1463963 tok saved across 828 compress op(s)"
+      "detail": "cache 278.0 KB of 100.0 MB (703 entries) — within budget; ≈ 1463963 tok saved across 830 compress op(s)"
     },
     {
       "step": "security",
@@ -48,6 +48,6 @@
     }
   ],
   "allPass": false,
-  "generatedAt": "2026-08-19T14:10:28.936Z",
-  "contextHash": "44d01bb39007"
+  "generatedAt": "2026-08-19T14:14:02.166Z",
+  "contextHash": "6a7400ed0fb5"
 }

@@ -64,9 +64,10 @@ win11opt bench diff latest
 win11opt bench list
 
 # Подкоманды:
-#   bench save [--label LABEL] → измерить и сохранить
-#   bench diff [PATH|latest]  → сравнить current с baseline
-#   bench list                → показать все baselines
+#   bench save [--label LABEL]          → измерить и сохранить
+#   bench diff [PATH|latest] [--out P]  → сравнить current с baseline (опц. JSON-отчёт)
+#   bench list                          → показать все baselines
+#   bench report [PATH]                 → напечатать diff-отчёт (последний, если PATH не указан)
 
 # Графический интерфейс
 win11opt gui
@@ -206,8 +207,12 @@ rules:
 - `services_running` — количество запущенных служб
 - `sched_tasks_enabled` — количество включённых scheduled tasks
 - `explorer_first_paint_ms` — время до появления главного окна Проводника
+- `services_by_state` — разбивка служб по состоянию (Running / Stopped / Disabled / ...)
 
 Baseline хранится в `%LOCALAPPDATA%\win11opt\bench\`.
+
+Diff-отчёт `до/после` можно сохранить в JSON (`bench diff latest --out report.json`)
+и затем напечатать в человекочитаемом виде (`bench report [path]` — по умолчанию последний).
 
 ## Документация Microsoft
 

@@ -71,6 +71,8 @@
 - [x] Новые правила v0.8: network (3), ntfs (3). Aggressive +4 правила.
 - [x] Новые правила v1.0: scheduled_tasks (3 пакета, 13 задач), storage (3), appcompat (4). Итого 52 правила.
 - [x] Bench v1.1: save/diff/list, 6 метрик (RAM, CPU, startup, services, tasks, explorer paint).
+- [x] Bench v1.5: services_by_state + diff_report/save_diff_report + `bench report` CLI
+- [x] README: обновлена секция bench + CHANGELOG.md (v1.5.0)
 - [x] ms_doc_url v1.2: 42 правила дополнены ссылками на learn.microsoft.com, тест на полноту.
 - [x] Git: v1.1.0 commit + tag
 - [x] Git: v1.0.0 commit + tag
