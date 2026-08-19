@@ -23,6 +23,7 @@ def fake_ps(monkeypatch):
     state: dict[str, object] = {
         "registry": {},        # (hive, path, name) -> value
         "services": {},        # name -> state
+        "appx_removed": [],    # list of package names removed
         "restore_points": [],
     }
 
@@ -43,6 +44,9 @@ def fake_ps(monkeypatch):
     def fake_service_set_state(name, st):
         state["services"][name] = st
 
+    def fake_appx_remove(package_name, all_users=True):
+        state["appx_removed"].append(package_name)
+
     def fake_create_restore_point(description):
         seq = len(state["restore_points"]) + 1
         state["restore_points"].append({"id": seq, "desc": description})
@@ -52,6 +56,7 @@ def fake_ps(monkeypatch):
     monkeypatch.setattr(ps, "reg_set", fake_reg_set)
     monkeypatch.setattr(ps, "reg_delete", fake_reg_delete)
     monkeypatch.setattr(ps, "service_set_state", fake_service_set_state)
+    monkeypatch.setattr(ps, "appx_remove", fake_appx_remove)
     monkeypatch.setattr(ps, "create_restore_point", fake_create_restore_point)
 
     return state

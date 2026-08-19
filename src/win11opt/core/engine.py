@@ -70,12 +70,18 @@ def _execute(action: Action) -> None:
         ps.service_set_state(action.target, "Disabled")
     elif action.kind == ActionKind.SERVICE_MANUAL:
         ps.service_set_state(action.target, "Manual")
+    elif action.kind == ActionKind.APPX_REMOVE:
+        ps.appx_remove(action.target)
     else:
         raise NotImplementedError(f"action kind not implemented: {action.kind}")
 
 
 def _undo_one(action: Action) -> None:
     """Восстановить исходное состояние по undo_* полям."""
+    if action.kind == ActionKind.APPX_REMOVE:
+        # APPX удаление не имеет undo — пакет пропал после apply.
+        log.warning("APPX package removal is irreversible: %s", action.target)
+        return
     if action.undo_target is None:
         # Ничего не знаем о прошлом — пропускаем
         log.warning("no undo data for %s, skipping", action.describe())

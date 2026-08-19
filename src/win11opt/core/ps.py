@@ -117,6 +117,25 @@ Set-Service -Name '{name}' -StartupType {state} -ErrorAction Stop
     run_ps(script)
 
 
+def appx_remove(package_name: str, *, all_users: bool = True) -> None:
+    """Удалить APPX-пакет по имени (или маске).
+
+    `package_name` может быть полным именем или маской (например
+    `*BingWeather*`). При `all_users=True` используется
+    `Get-AppxPackage -AllUsers` + `Remove-AppxPackage -AllUsers`.
+    """
+    # Внутри строкового литерала PowerShell маску нужно передавать как есть.
+    # Экранируем одинарные кавычки.
+    pkg = package_name.replace("'", "''")
+    users_flag = "-AllUsers" if all_users else ""
+    script = f"""
+$ErrorActionPreference = 'SilentlyContinue'
+Get-AppxPackage {users_flag} -Name '{pkg}' -ErrorAction SilentlyContinue |
+  Remove-AppxPackage {users_flag} -ErrorAction SilentlyContinue
+"""
+    run_ps(script)
+
+
 def create_restore_point(description: str) -> int | None:
     """Создать точку восстановления. Возвращает sequence number или None."""
     script = f"""

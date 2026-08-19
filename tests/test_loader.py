@@ -189,3 +189,45 @@ def test_gaming_disable_gamebar_requires_reboot():
     r = rules["gaming.disable_gamebar"]
     assert r.requires_reboot is True
     assert len(r.actions) == 3  # AppCapture + GameDVR_Enabled + AllowGameDVR
+
+
+def test_debloat_appx_remove_actions():
+    """Правила debloat должны содержать appx_remove действия."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["debloat.remove_xbox_apps"]
+    assert all(a.kind == ActionKind.APPX_REMOVE for a in r.actions)
+    assert any("XboxGameOverlay" in a.target for a in r.actions)
+
+
+def test_debloat_apply_runs_appx_remove(fake_ps):
+    """apply appx_remove должен вызвать ps.appx_remove."""
+    from win11opt.core import engine
+    from win11opt.core.models import Action
+    actions = [Action(kind=ActionKind.APPX_REMOVE, target="*BingWeather*")]
+    engine.apply(actions, dry_run=False)
+    assert "*BingWeather*" in fake_ps["appx_removed"]
+
+
+def test_debloat_dry_run_does_not_remove(fake_ps):
+    """В dry-run appx_remove НЕ должен вызываться."""
+    from win11opt.core import engine
+    from win11opt.core.models import Action
+    actions = [Action(kind=ActionKind.APPX_REMOVE, target="*BingWeather*")]
+    engine.apply(actions, dry_run=True)
+    assert fake_ps["appx_removed"] == []
+
+
+def test_explorer_show_extensions_target():
+    rules = load_all(DEFAULT_RULES_DIR)
+    r = rules["explorer.show_extensions"]
+    assert r.actions[0].target.endswith("Explorer\\Advanced")
+    assert r.actions[0].name == "HideFileExt"
+    assert r.actions[0].value == "0"
+
+
+def test_all_new_categories_loaded_v05():
+    """explorer/debloat должны появиться после v0.5."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    cats = {r.category for r in rules.values()}
+    assert "explorer" in cats
+    assert "debloat" in cats

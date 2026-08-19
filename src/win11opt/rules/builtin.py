@@ -179,12 +179,14 @@ def uac_no_prompt_for_approved() -> Rule:
 PRESETS: tuple[Profile, ...] = (
     Profile(
         name="Balanced",
-        description="Безопасный набор: анимации, UI, телеметрия, питание.",
+        description="Безопасный набор: анимации, UI, Explorer, телеметрия, питание.",
         rule_ids=(
             "visual.disable_animations",
             "visual.classic_context_menu",
             "ui.instant_menu",
             "ui.instant_tooltips",
+            "explorer.show_extensions",
+            "explorer.show_status_bar",
             "telemetry.advertising_id",
             "power.ultimate_performance",
         ),
@@ -197,6 +199,8 @@ PRESETS: tuple[Profile, ...] = (
             "visual.classic_context_menu",
             "ui.instant_menu",
             "ui.instant_tooltips",
+            "explorer.show_extensions",
+            "explorer.launch_to_this_pc",
             "telemetry.advertising_id",
             "power.ultimate_performance",
             "services.disable_search_indexer",
@@ -215,6 +219,15 @@ PRESETS: tuple[Profile, ...] = (
             "services.disable_diagtrack",
             "ui.no_cortana",
             "onedrive.disable_autostart",
+        ),
+    ),
+    Profile(
+        name="Debloat",
+        description="Удаление UWP-приложений (Xbox, Bing, GetHelp). Необратимо.",
+        rule_ids=(
+            "debloat.remove_xbox_apps",
+            "debloat.remove_bing_apps",
+            "debloat.remove_help_apps",
         ),
     ),
 )
