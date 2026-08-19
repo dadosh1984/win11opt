@@ -18,8 +18,8 @@
     },
     {
       "step": "drift",
-      "status": "FAIL",
-      "detail": "missing exported: single_exe_uac_elevated_native_gui_elect"
+      "status": "PASS",
+      "detail": "no capabilities in specs"
     },
     {
       "step": "yagni",
@@ -29,7 +29,7 @@
     {
       "step": "economy",
       "status": "PASS",
-      "detail": "cache 278.0 KB of 100.0 MB (703 entries) — within budget; ≈ 1463963 tok saved across 827 compress op(s)"
+      "detail": "cache 278.0 KB of 100.0 MB (703 entries) — within budget; ≈ 1463963 tok saved across 828 compress op(s)"
     },
     {
       "step": "security",
@@ -48,6 +48,6 @@
     }
   ],
   "allPass": false,
-  "generatedAt": "2026-08-19T14:03:14.653Z",
-  "contextHash": "87583116e61d"
+  "generatedAt": "2026-08-19T14:10:28.936Z",
+  "contextHash": "44d01bb39007"
 }

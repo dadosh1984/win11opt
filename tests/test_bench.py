@@ -80,14 +80,62 @@ def test_measure_returns_benchresult():
     """measure() возвращает BenchResult без crash (мок через патч)."""
     # Подменяем _run чтобы не зависеть от реального PowerShell
     real = bench._run
-    bench._run = lambda cmd, timeout=10: {
-        "FreePhysicalMemory|TotalVisibleMemorySize": "8000|16000",
-        "LoadPercentage": "12.5",
-        "Count": "10",
-    }.get(cmd.split("|")[0] if "|" in cmd else cmd, "0")
+    def fake_run(cmd, timeout=10):
+        if "FreePhysicalMemory" in cmd:
+            return "8000|16000"
+        if "LoadPercentage" in cmd:
+            return "12.5"
+        if "Get-Service | Group-Object Status" in cmd:
+            return "Running=80;Stopped=40;Disabled=5"
+        if "Measure-Object" in cmd or "Count" in cmd:
+            return "10"
+        return "0"
+    bench._run = fake_run
     try:
         r = bench.measure()
         assert isinstance(r, bench.BenchResult)
         assert r.timestamp  # ISO format заполнен
+        assert r.services_by_state == {"Running": 80, "Stopped": 40, "Disabled": 5}
+        assert r.services_running == 80  # производное от services_by_state["Running"]
     finally:
         bench._run = real
+
+
+def test_diff_report_and_save(tmp_path, monkeypatch):
+    """diff_report() + save_diff_report() — JSON-отчёт до/после."""
+    monkeypatch.setattr(bench, "_bench_dir", lambda: tmp_path)
+    a = bench.BenchResult(
+        timestamp="t1", idle_ram_mb=1000, total_ram_mb=16000,
+        idle_cpu_pct=20.0, startup_apps_count=10,
+        services_running=100, sched_tasks_enabled=200,
+        explorer_first_paint_ms=500.0,
+        services_by_state={"Running": 100, "Stopped": 20},
+    )
+    b = bench.BenchResult(
+        timestamp="t2", idle_ram_mb=2000, total_ram_mb=16000,
+        idle_cpu_pct=5.0, startup_apps_count=8,
+        services_running=80, sched_tasks_enabled=150,
+        explorer_first_paint_ms=300.0,
+        services_by_state={"Running": 80, "Stopped": 40},
+    )
+    report = bench.diff_report(a, b)
+    assert report["before"]["services_running"] == 100
+    assert report["after"]["services_running"] == 80
+    assert report["deltas"]["services_running"]["delta"] == -20
+    assert "generated_at" in report
+
+    path = bench.save_diff_report(a, b, path=tmp_path / "report.json")
+    assert path.exists()
+    loaded = json.loads(path.read_text(encoding="utf-8"))
+    assert loaded["deltas"]["idle_ram_mb"]["delta"] == 1000
+
+
+def test_save_diff_report_default_path(tmp_path, monkeypatch):
+    """Без явного path — сохраняется в _bench_dir()/diff-<ts>.json."""
+    monkeypatch.setattr(bench, "_bench_dir", lambda: tmp_path)
+    a = bench.BenchResult(timestamp="t1", idle_ram_mb=1000)
+    b = bench.BenchResult(timestamp="t2", idle_ram_mb=2000)
+    p = bench.save_diff_report(a, b)
+    assert p.parent == tmp_path
+    assert p.name.startswith("diff-")
+    assert p.suffix == ".json"

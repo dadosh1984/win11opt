@@ -38,6 +38,8 @@ class BenchResult:
     sched_tasks_enabled: int = 0
     # explorer_first_paint_ms: запуск explorer.exe и замер до готовности окна
     explorer_first_paint_ms: float = 0.0
+    # services_by_state: {Running: n, Stopped: m, Disabled: k, ...}
+    services_by_state: dict[str, int] = field(default_factory=dict)
     notes: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
@@ -91,9 +93,19 @@ def measure() -> BenchResult:
     startup_out = _run("(Get-CimInstance Win32_StartupCommand | Measure-Object).Count")
     startup_count = _parse_int(startup_out)
 
-    # 4. Services running
-    svc = _run("((Get-Service | Where-Object { $_.Status -eq 'Running' }) | Measure-Object).Count")
-    svc_count = _parse_int(svc)
+    # 4. Services by state
+    svc_by_state_raw = _run("(Get-Service | Group-Object Status | ForEach-Object { '{0}={1}' -f $_.Name, $_.Count }) -join ';'")
+    services_by_state: dict[str, int] = {}
+    for chunk in (svc_by_state_raw or "").split(";"):
+        chunk = chunk.strip()
+        if not chunk or "=" not in chunk:
+            continue
+        name, _, count = chunk.partition("=")
+        try:
+            services_by_state[name.strip()] = int(count.strip())
+        except ValueError:
+            continue
+    svc_count = services_by_state.get("Running", 0)
 
     # 5. Scheduled tasks enabled
     tasks = _run("((Get-ScheduledTask | Where-Object { $_.State -eq 'Ready' }) | Measure-Object).Count")
@@ -113,6 +125,7 @@ def measure() -> BenchResult:
         services_running=svc_count,
         sched_tasks_enabled=tasks_count,
         explorer_first_paint_ms=explorer_ms,
+        services_by_state=services_by_state,
     )
 
 
@@ -181,3 +194,27 @@ def diff(a: BenchResult, b: BenchResult) -> dict[str, tuple[float, float, float]
         if isinstance(va, (int, float)) and isinstance(vb, (int, float)):
             out[f] = (va, vb, vb - va)
     return out
+
+
+def diff_report(a: BenchResult, b: BenchResult) -> dict:
+    """JSON-отчёт до/после: полные снимки + дельты. ponytail: rung 4 — измеримый артефакт."""
+    return {
+        "before": a.to_dict(),
+        "after": b.to_dict(),
+        "deltas": {m: {"before": va, "after": vb, "delta": vb - va}
+                   for m, (va, vb, delta) in diff(a, b).items()},
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+    }
+
+
+def save_diff_report(a: BenchResult, b: BenchResult, path: Optional[Path] = None) -> Path:
+    """Сохранить diff-отчёт в JSON. Если path не указан — в _bench_dir()/diff-<ts>.json."""
+    if path is None:
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+        path = _bench_dir() / f"diff-{ts}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(diff_report(a, b), ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    return path

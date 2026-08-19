@@ -159,6 +159,9 @@ def cmd_bench(args: argparse.Namespace) -> int:
         print(f"  services_running: {result.services_running}")
         print(f"  sched_tasks_enabled: {result.sched_tasks_enabled}")
         print(f"  explorer_first_paint: {result.explorer_first_paint_ms} ms")
+        if result.services_by_state:
+            parts = ", ".join(f"{k}={v}" for k, v in sorted(result.services_by_state.items()))
+            print(f"  services_by_state: {{{parts}}}")
         return 0
 
     if getattr(args, "bench_action", None) == "diff":
@@ -181,6 +184,10 @@ def cmd_bench(args: argparse.Namespace) -> int:
         for metric, (va, vb, delta) in deltas.items():
             sign = "+" if delta > 0 else ""
             print(f"{metric:<24} {va:>12} {vb:>12} {sign}{delta:>11}")
+        out_path = getattr(args, "out", None)
+        if out_path:
+            saved = benchmod.save_diff_report(before, after, Path(out_path))
+            print(f"\nsaved diff report: {saved}")
         return 0
 
     if getattr(args, "bench_action", None) == "list":
@@ -250,6 +257,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_bench_save.add_argument("--label", help="метка (например 'pre', 'after-tier1')")
     p_bench_diff = p_bench_sub.add_parser("diff", help="сравнить с baseline")
     p_bench_diff.add_argument("bench_target", nargs="?", default="latest", help="latest или путь к .json")
+    p_bench_diff.add_argument("--out", help="сохранить diff-отчёт в JSON по указанному пути")
     p_bench_sub.add_parser("list", help="список baselines")
     p_bench.set_defaults(func=cmd_bench)
 

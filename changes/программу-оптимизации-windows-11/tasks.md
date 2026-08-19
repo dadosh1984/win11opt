@@ -45,8 +45,8 @@
 ## Фаза 5 — бенчмарк (Bench)
 
 - [x] [assumption] Bench: list_startup_apps (autoruns-like)
-- [ ] [assumption] Bench: services count by state — отложено
-- [ ] [assumption] Bench: JSON отчёт до/после — отложено
+- [x] [assumption] Bench: services count by state — services_by_state (Running/Stopped/Disabled/...)
+- [x] [assumption] Bench: JSON отчёт до/после — diff_report() + save_diff_report() + `--out PATH`
 
 ## Фаза 6 — GUI (App)
 

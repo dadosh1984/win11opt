@@ -1,11 +1,11 @@
 # Result — программу-оптимизации-windows-11
 
 - **Status:** INCOMPLETE
-- **Tasks:** 48/52 done
-**Guard:** lint:SKIP, type:FAIL, test:SKIP, drift:FAIL, yagni:SKIP, economy:PASS, security:PASS, policy:PASS, verifiability:WARN
+- **Tasks:** 50/52 done
+**Guard:** lint:SKIP, type:FAIL, test:SKIP, drift:PASS, yagni:SKIP, economy:PASS, security:PASS, policy:PASS, verifiability:WARN
 - **Budget:** compact
 - **Constraints:** compact
-- **Generated:** 2026-08-19T14:03:14.653Z
+- **Generated:** 2026-08-19T14:10:28.936Z
 
 ## Checklist
 
@@ -33,8 +33,8 @@
 - [x] [assumption] CLI: `rules list/describe <id>`
 - [x] [assumption] CLI: `bench` (базовый: startup apps, services count)
 - [x] [assumption] Bench: list_startup_apps (autoruns-like)
-- [ ] [assumption] Bench: services count by state — отложено
-- [ ] [assumption] Bench: JSON отчёт до/после — отложено
+- [x] [assumption] Bench: services count by state — services_by_state (Running/Stopped/Disabled/...)
+- [x] [assumption] Bench: JSON отчёт до/после — diff_report() + save_diff_report() + `--out PATH`
 - [x] [assumption] Tkinter GUI: категории слева, тумблеры справа, пресеты, dry-run/apply, snapshots, bench до/после
 - [x] [assumption] README: install, usage, profiles, rollback
 - [x] [assumption] LICENSE: MIT
@@ -71,9 +71,9 @@
 npm warn Unknown cli config "--noEmit". This will stop working in the next major version of npm.
  |
 | test | SKIP | no test script in package.json |
-| drift | FAIL | missing exported: single_exe_uac_elevated_native_gui_elect |
+| drift | PASS | no capabilities in specs |
 | yagni | SKIP | no existing .ts sources to build a baseline from |
-| economy | PASS | cache 278.0 KB of 100.0 MB (703 entries) — within budget; ≈ 1463963 tok saved across 827 compress op(s) |
+| economy | PASS | cache 278.0 KB of 100.0 MB (703 entries) — within budget; ≈ 1463963 tok saved across 828 compress op(s) |
 | security | PASS | no obvious issues |
 | policy | PASS | no .orion/policy.json — no project gates to enforce |
 | verifiability | WARN | oracles: none · verifiability level 0 · tests weak/missing — low verifiability: treat this PASS as lower-confidence (human review advised) |
@@ -85,7 +85,6 @@ npm warn Unknown cli config "--noEmit". This will stop working in the next major
 - `changes/программу-оптимизации-windows-11/tasks.md`
 - `changes/программу-оптимизации-windows-11/forge-report.md`
 - `reports/программу-оптимизации-windows-11/guard-report.md`
-- `changes/программу-оптимизации-windows-11/specs/single_exe_uac_elevated_native_gui_elect/spec.md`
 - `changes/программу-оптимизации-windows-11/snippets/`
 
 ## Next steps
