@@ -276,6 +276,18 @@ PRESETS: tuple[Profile, ...] = (
             "explorer.show_extensions",
         ),
     ),
+    Profile(
+        name="Gaming",
+        description="Для геймеров: Game Bar/DVR off, Ultimate Performance, без Xbox-фон-сервисов. Не удаляет Xbox Game Pass.",
+        rule_ids=(
+            "gaming.disable_gamebar",
+            "gaming.disable_xbox_gamebar_hotkey",
+            "power.ultimate_performance",
+            "power.disable_hibernation",
+            "tasks.disable_xbox_related",
+            "tasks.disable_fehcache",
+        ),
+    ),
 )
 
 

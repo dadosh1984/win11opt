@@ -46,6 +46,9 @@ win11opt apply --profile Balanced --dry-run
 # Рекомендованная точка входа для новичков (7 low-risk твиков)
 win11opt apply --profile Safe --dry-run
 
+# Для геймеров: Game Bar/DVR off + Ultimate Performance (без удаления Xbox Game Pass)
+win11opt apply --profile Gaming --dry-run
+
 # Реально применить (попросит UAC)
 win11opt apply --profile Balanced
 
@@ -90,6 +93,8 @@ win11opt gui
 | **Privacy** | Полная телеметрия/реклама: CEIP, Activity History, Tailored, Cortana |
 | **Debloat** | Удаление UWP-приложений (Xbox, Bing, GetHelp). Необратимо. |
 | **Hardened** | Продвинутый: ослабление Defender Cloud + отложенные Update. **НЕ удаляет Defender/Edge.** |
+| **Safe** | 7 самых безопасных твиков. Рекомендованная точка входа для новичков. |
+| **Gaming** | Для геймеров: Game Bar/DVR off, Ultimate Performance, без Xbox-фон-сервисов. **Не удаляет Xbox Game Pass.** |
 
 ## Категории правил
 

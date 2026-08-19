@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.8.0 — Gaming пресет
+
+### Added
+- Пресет `Gaming` — 6 геймер-ориентированных low-risk правил: Game Bar/DVR off, Ultimate Performance, отключение Xbox-фон-сервисов и задач планировщика. Не удаляет Xbox Game Pass.
+
+### Tests
+- 92/92 passed (было 91; +1 Gaming preset)
+
 ## v1.7.0 — HTML bench diff report + GUI services_by_state
 
 ### Added

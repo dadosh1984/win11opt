@@ -411,3 +411,23 @@ def test_safe_preset_exists_and_low_risk():
     # Safe должен быть в PRESETS
     names = {p.name for p in PRESETS}
     assert "Safe" in names
+
+
+def test_gaming_preset_exists_and_gaming_relevant():
+    """Gaming пресет (v1.8.0) — геймер-ориентированные low-risk правила."""
+    from win11opt.rules.builtin import PRESETS, get_preset
+    gaming = get_preset("Gaming")
+    assert gaming is not None, "Gaming preset missing"
+    assert 5 <= len(gaming.rule_ids) <= 8, f"Gaming should have 5-8 rules, got {len(gaming.rule_ids)}"
+    rules = load_all(DEFAULT_RULES_DIR)
+    gaming_cats = set()
+    for rid in gaming.rule_ids:
+        assert rid in rules, f"Gaming references unknown rule {rid}"
+        gaming_cats.add(rules[rid].category)
+    # В Gaming должны быть gaming- и power-категории
+    assert "gaming" in gaming_cats, "Gaming should include gaming rules"
+    assert "power" in gaming_cats, "Gaming should include power plan"
+    # Не должен удалять Xbox Game Pass (чревато для геймеров)
+    assert "debloat.remove_xbox_apps" not in gaming.rule_ids
+    names = {p.name for p in PRESETS}
+    assert "Gaming" in names
