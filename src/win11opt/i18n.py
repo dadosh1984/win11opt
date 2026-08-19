@@ -74,10 +74,13 @@ def _load_mo(path: Path) -> dict[str, str]:
 
 
 def detect_system_language() -> str:
-    """Detect OS language, fallback to 'en'."""
+    """Detect OS language, fallback to 'en'.
+
+    ponytail: rung 1 — stdlib only, no external locale lib.
+    """
     try:
-        # Windows: USERPROFILE + LANG; *nix: LANG
-        loc = locale.getdefaultlocale()[0] or os.environ.get("LANG", "")
+        # Python 3.11+: locale.getlocale() instead of deprecated getdefaultlocale()
+        loc = locale.getlocale()[0] or os.environ.get("LANG", "") or os.environ.get("LC_ALL", "")
         if loc and loc.lower().startswith("ru"):
             return "ru"
     except Exception:  # noqa: BLE001
