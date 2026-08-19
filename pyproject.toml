@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "win11opt"
-version = "1.9.0"
+version = "1.9.1"
 description = "Native single-EXE Win11 optimizer (XP-like responsiveness)"
 requires-python = ">=3.11"
 license = { text = "MIT" }

@@ -25,7 +25,7 @@ import subprocess
 import sys
 import tkinter as tk
 from pathlib import Path
-from tkinter import messagebox, ttk
+from tkinter import ttk
 
 from .. import __version__
 from ..core import bench as bench_mod
@@ -65,6 +65,9 @@ class App:
         ttk.Button(top, text=_("Bench after"), command=self._bench_after).pack(side=tk.LEFT, padx=4)
         ttk.Separator(top, orient=tk.VERTICAL).pack(side=tk.LEFT, padx=8, fill=tk.Y)
         ttk.Button(top, text=_("System Info"), command=self._open_sysinfo).pack(side=tk.LEFT, padx=4)
+        ttk.Separator(top, orient=tk.VERTICAL).pack(side=tk.LEFT, padx=8, fill=tk.Y)
+        ttk.Button(top, text=_("Export…"), command=self._export_dialog).pack(side=tk.LEFT, padx=4)
+        ttk.Button(top, text=_("Import…"), command=self._import_dialog).pack(side=tk.LEFT, padx=4)
 
         # Search bar (фильтр по id + description)
         search_frame = ttk.Frame(self.root)
@@ -175,6 +178,64 @@ class App:
         txt.insert(tk.END, sysinfo_mod.format_human(info))
         txt.configure(state=tk.DISABLED)
 
+    def _export_dialog(self) -> None:
+        """Экспортировать выбранные чекбоксы в YAML-профиль."""
+        from tkinter import filedialog, messagebox
+        from ..rules import export as export_mod
+        ids = self._selected_ids()
+        if not ids:
+            messagebox.showinfo("Export", "No rules selected")
+            return
+        path = filedialog.asksaveasfilename(
+            title="Export profile",
+            defaultextension=".yaml",
+            filetypes=[("YAML", "*.yaml"), ("All", "*.*")],
+            initialfile="my-profile.yaml",
+        )
+        if not path:
+            return
+        try:
+            export_mod.export_profile(
+                name="CustomProfile",
+                description=f"Exported {len(ids)} rules from win11opt GUI",
+                rule_ids=ids,
+                rules_lookup=self.rules,
+                out_path=Path(path),
+            )
+            self._set_status(f"exported {len(ids)} rules → {path}")
+        except Exception as e:  # noqa: BLE001
+            messagebox.showerror("Export failed", str(e))
+
+    def _import_dialog(self) -> None:
+        """Импортировать YAML-профиль, отметить чекбоксы правил."""
+        from tkinter import filedialog, messagebox
+        from ..rules import export as export_mod
+        path = filedialog.askopenfilename(
+            title="Import profile",
+            filetypes=[("YAML", "*.yaml"), ("All", "*.*")],
+        )
+        if not path:
+            return
+        try:
+            name, ids = export_mod.import_profile(Path(path))
+        except Exception as e:  # noqa: BLE001
+            messagebox.showerror("Import failed", str(e))
+            return
+        # Отметить все категории
+        for var in self.selected.values():
+            var.set(False)
+        applied = 0
+        for rid in ids:
+            if rid in self.selected:
+                self.selected[rid].set(True)
+                applied += 1
+        self._set_status(f"imported '{name}': {applied}/{len(ids)} rules selected")
+        messagebox.showinfo(
+            "Import",
+            f"Profile '{name}': {applied} rules marked.\n"
+            f"Use 'Apply preset' or 'Apply selected' to apply.",
+        )
+
     def _selected_ids(self) -> list[str]:
         return [rid for rid, var in self.selected.items() if var.get()]
 
@@ -261,6 +322,7 @@ class App:
         log.info(msg)
 
     def _dry_run(self) -> None:
+        from tkinter import messagebox
         ids = self._selected_ids()
         if not ids:
             messagebox.showinfo("Dry-run", "No rules selected")
@@ -268,6 +330,7 @@ class App:
         self._apply_or_dry_run(ids, dry_run=True)
 
     def _apply(self) -> None:
+        from tkinter import messagebox
         ids = self._selected_ids()
         if not ids:
             messagebox.showinfo("Apply", "No rules selected")
@@ -280,6 +343,7 @@ class App:
         self._apply_or_dry_run(ids, dry_run=False)
 
     def _apply_or_dry_run(self, ids: list[str], *, dry_run: bool) -> None:
+        from tkinter import messagebox
         actions = []
         for rid in ids:
             actions.extend(self.rules[rid].actions)
@@ -322,6 +386,7 @@ class App:
 
     def _open_snapshots(self) -> None:
         """Открыть окно со списком snapshot'ов."""
+        from tkinter import messagebox
         win = tk.Toplevel(self.root)
         win.title("Snapshots")
         win.geometry("500x400")

@@ -89,6 +89,10 @@ def fake_tk(monkeypatch):
 
     monkeypatch.setitem(sys.modules, "tkinter", tk_mod)
     monkeypatch.setitem(sys.modules, "tkinter.ttk", ttk_mod)
+    filedialog_mod = types.ModuleType("tkinter.filedialog")
+    filedialog_mod.asksaveasfilename = lambda **k: ""
+    filedialog_mod.askopenfilename = lambda **k: ""
+    monkeypatch.setitem(sys.modules, "tkinter.filedialog", filedialog_mod)
     monkeypatch.setitem(sys.modules, "tkinter.messagebox", types.ModuleType("tkinter.messagebox"))
     sys.modules["tkinter.messagebox"].showinfo = lambda *a, **k: None
     sys.modules["tkinter.messagebox"].showerror = lambda *a, **k: None
@@ -133,4 +137,56 @@ def test_app_apply_preset_selection(fake_tk, fake_ps):
     app.preset_var.set("Balanced")
     app._apply_preset_selection()
     # Balanced включает visual.disable_animations
+    assert app.selected["visual.disable_animations"].get() is True
+
+
+def test_export_dialog_writes_yaml(tmp_path, fake_tk, fake_ps, monkeypatch):
+    """GUI export: выбранные правила → YAML файл."""
+    from tkinter import filedialog
+    out = tmp_path / "gui-export.yaml"
+    monkeypatch.setattr(filedialog, "asksaveasfilename", lambda **k: str(out))
+    from win11opt.gui.app import App
+    root = fake_tk.Tk()
+    app = App(root)
+    app._render_rules("visual")
+    app.selected["visual.disable_animations"].set(True)
+    app._export_dialog()
+    assert out.exists()
+    import yaml
+    data = yaml.safe_load(out.read_text(encoding="utf-8"))
+    assert "visual.disable_animations" in [r["id"] for r in data["rules"]]
+
+
+def test_export_dialog_no_selection(tmp_path, fake_tk, fake_ps, monkeypatch):
+    """Если ничего не выбрано — messagebox.showinfo, файл не создаётся."""
+    from tkinter import filedialog
+    from tkinter import messagebox
+    infos = []
+    monkeypatch.setattr(messagebox, "showinfo", lambda *a, **k: infos.append(a))
+    monkeypatch.setattr(filedialog, "asksaveasfilename", lambda **k: str(tmp_path / "x.yaml"))
+    from win11opt.gui.app import App
+    root = fake_tk.Tk()
+    app = App(root)
+    app._render_rules("visual")
+    app._export_dialog()
+    assert not (tmp_path / "x.yaml").exists()
+    assert infos, "showinfo should be called when no selection"
+
+
+def test_import_dialog_selects_rules(tmp_path, fake_tk, fake_ps, monkeypatch):
+    """GUI import: импорт помечает правила в текущей категории."""
+    from tkinter import filedialog
+    from win11opt.rules import export as export_mod
+    from win11opt.rules import get_rules
+    profile = tmp_path / "p.yaml"
+    export_mod.export_profile(
+        name="P", description="", rule_ids=["visual.disable_animations"],
+        rules_lookup=get_rules(), out_path=profile,
+    )
+    monkeypatch.setattr(filedialog, "askopenfilename", lambda **k: str(profile))
+    from win11opt.gui.app import App
+    root = fake_tk.Tk()
+    app = App(root)
+    app._render_rules("visual")
+    app._import_dialog()
     assert app.selected["visual.disable_animations"].get() is True

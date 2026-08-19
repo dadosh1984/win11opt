@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.9.1 — GUI export/import
+
+### Added
+- GUI: кнопки "Export…" и "Import…" в top bar (filedialog + валидация)
+- GUI export: выбранные чекбоксы → YAML-профиль
+- GUI import: YAML-профиль → отмечает чекбоксы правил
+- Lazy import messagebox (fix: тесты пересоздают мок-модуль)
+
+### Tests
+- 104/104 passed (было 101; +3 GUI export/import)
+
 ## v1.9.0 — Export/Import custom профилей
 
 ### Added
