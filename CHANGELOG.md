@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.9.2 — `import` теперь устанавливает профиль
+
+### Changed
+- `win11opt import profile.yaml` по умолчанию копирует файл в `rules/`
+  и печатает подсказку `use: win11opt apply --profile <name>`.
+  Раньше только валидировал и требовал ручного копирования.
+- Добавлен `--validate-only` — проверить файл без копирования.
+
+### Added
+- `rules/export.py::install_profile()` — копирует профиль в `dest_dir`
+  (по умолчанию `DEFAULT_RULES_DIR`).
+
+### Tests
+- 108/108 passed (было 104; +4 install/validate-only)
+
 ## Unreleased — CI/CD
 
 ### Added

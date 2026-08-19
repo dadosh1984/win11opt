@@ -116,11 +116,18 @@ def cmd_export(args: argparse.Namespace) -> int:
 
 
 def cmd_import(args: argparse.Namespace) -> int:
-    """Импортировать YAML-профиль и напечатать имя + правила."""
+    """Импортировать YAML-профиль: провалидировать и скопировать в rules/.
+
+    По умолчанию профиль копируется в DEFAULT_RULES_DIR и становится
+    доступен через 'win11opt apply --profile <name>'.
+
+    --validate-only — только проверить, ничего не копировать.
+    """
     from ..rules import export as export_mod
     from ..rules.loader import RuleLoadError
+    src = Path(args.profile_path)
     try:
-        name, rule_ids = export_mod.import_profile(Path(args.profile_path))
+        name, rule_ids = export_mod.import_profile(src)
     except RuleLoadError as e:
         print(f"import failed: {e}", file=sys.stderr)
         return 2
@@ -128,6 +135,17 @@ def cmd_import(args: argparse.Namespace) -> int:
     print(f"rules:   {len(rule_ids)}")
     for rid in rule_ids:
         print(f"  • {rid}")
+    if args.validate_only:
+        print("(validate-only: file not installed)")
+        return 0
+    try:
+        dest = export_mod.install_profile(src)
+    except OSError as e:
+        print(f"install failed: {e}", file=sys.stderr)
+        print("(use --validate-only to check without installing)", file=sys.stderr)
+        return 3
+    print(f"installed: {dest}")
+    print(f"use: win11opt apply --profile '{name}'")
     return 0
 
 
@@ -367,8 +385,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_export.add_argument("--out", required=True, help="путь к выходному .yaml")
     p_export.set_defaults(func=cmd_export)
 
-    p_import = sub.add_parser("import", help="импортировать профиль из YAML (валідація)")
+    p_import = sub.add_parser("import", help="импортировать профиль из YAML в rules/")
     p_import.add_argument("profile_path", help="путь к .yaml профиля")
+    p_import.add_argument(
+        "--validate-only", action="store_true",
+        help="только проверить файл, не копировать в rules/",
+    )
     p_import.set_defaults(func=cmd_import)
 
     return p

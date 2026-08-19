@@ -5,12 +5,26 @@ ponytail: rung 5 — переиспользуем существующий фо�
 """
 from __future__ import annotations
 
+import shutil
 from pathlib import Path
 from typing import Iterable
 
 import yaml
 
 from .loader import RuleLoadError, load_preset
+
+
+def install_profile(src: Path, dest_dir: Path | None = None) -> Path:
+    """Скопировать профиль в dest_dir (по умолчанию — DEFAULT_RULES_DIR).
+
+    Возвращает путь к скопированному файлу.
+    """
+    from .loader import DEFAULT_RULES_DIR
+    target_dir = dest_dir or DEFAULT_RULES_DIR
+    target_dir.mkdir(parents=True, exist_ok=True)
+    dest = target_dir / src.name
+    shutil.copy2(src, dest)
+    return dest
 
 
 def _rule_to_yaml_dict(rule) -> dict:

@@ -154,3 +154,73 @@ rules:
         assert "id" in str(e).lower() or "missing" in str(e).lower()
     else:
         raise AssertionError("expected RuleLoadError")
+
+
+def test_install_profile_copies_to_dir(tmp_path: Path):
+    """install_profile копирует файл в dest_dir."""
+    from win11opt.rules import export as export_mod
+    src = tmp_path / "src.yaml"
+    src.write_text("name: x\nrules: []\n", encoding="utf-8")
+    dest_dir = tmp_path / "rules"
+    result = export_mod.install_profile(src, dest_dir=dest_dir)
+    assert result == dest_dir / "src.yaml"
+    assert result.exists()
+    assert result.read_text(encoding="utf-8") == src.read_text(encoding="utf-8")
+
+
+def test_install_profile_default_dir(tmp_path, monkeypatch):
+    """install_profile без dest_dir копирует в DEFAULT_RULES_DIR."""
+    from win11opt.rules import export as export_mod
+    from win11opt.rules import loader as loader_mod
+    src = tmp_path / "p.yaml"
+    src.write_text("name: p\nrules: []\n", encoding="utf-8")
+    fake_dir = tmp_path / "fake_rules"
+    monkeypatch.setattr(loader_mod, "DEFAULT_RULES_DIR", fake_dir)
+    result = export_mod.install_profile(src)
+    assert result == fake_dir / "p.yaml"
+    assert result.exists()
+
+
+def test_cmd_import_validates_only_does_not_copy(tmp_path, monkeypatch, capsys):
+    """CLI import --validate-only не копирует файл."""
+    from win11opt.rules import loader as loader_mod
+    from win11opt.rules import get_rules
+    export_mod = __import__("win11opt.rules.export", fromlist=["export_profile"])
+    src = tmp_path / "p.yaml"
+    export_mod.export_profile(
+        name="P", description="", rule_ids=["visual.disable_animations"],
+        rules_lookup=get_rules(), out_path=src,
+    )
+    fake_dir = tmp_path / "rules"
+    monkeypatch.setattr(loader_mod, "DEFAULT_RULES_DIR", fake_dir)
+    from win11opt.cli.main import build_parser
+    parser = build_parser()
+    args = parser.parse_args(["import", str(src), "--validate-only"])
+    rc = args.func(args)
+    assert rc == 0
+    assert not fake_dir.exists(), "validate-only must not create rules dir"
+    out = capsys.readouterr().out
+    assert "validate-only" in out
+
+
+def test_cmd_import_copies_and_prints_install_path(tmp_path, monkeypatch, capsys):
+    """CLI import без --validate-only копирует и печатает путь."""
+    from win11opt.rules import loader as loader_mod
+    from win11opt.rules import get_rules
+    export_mod = __import__("win11opt.rules.export", fromlist=["export_profile"])
+    src = tmp_path / "p.yaml"
+    export_mod.export_profile(
+        name="MyProfile", description="", rule_ids=["visual.disable_animations"],
+        rules_lookup=get_rules(), out_path=src,
+    )
+    fake_dir = tmp_path / "rules"
+    monkeypatch.setattr(loader_mod, "DEFAULT_RULES_DIR", fake_dir)
+    from win11opt.cli.main import build_parser
+    parser = build_parser()
+    args = parser.parse_args(["import", str(src)])
+    rc = args.func(args)
+    assert rc == 0
+    assert (fake_dir / "p.yaml").exists()
+    out = capsys.readouterr().out
+    assert "installed:" in out
+    assert "MyProfile" in out
