@@ -1,75 +1,76 @@
-# Пресет: телеметрия и реклама
 name: telemetry
 description: Отключение телеметрии, рекламного ID, синхронизации, Activity History.
 rules:
-  - id: telemetry.advertising_id
-    name: Отключить рекламный ID
-    description: Рекламный ID используется приложениями UWP для таргетированной рекламы.
-    risk: low
-    ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/advertising-id
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo'
-        name: Enabled
-        value: '0'
-        value_type: DWord
-
-  - id: telemetry.disable_ceip
-    name: Отключить CEIP (Customer Experience Improvement Program)
-    description: CEIP собирает данные об использовании Windows. AllowTelemetry=0 + CEIPEnable=0 отключает сбор.
-    risk: low
-    ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/configure-windows-diagnostic-data-in-your-organization
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection'
-        name: AllowTelemetry
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Microsoft\SQMClient\Windows'
-        name: CEIPEnable
-        value: '0'
-        value_type: DWord
-
-  - id: telemetry.disable_activity_history
-    name: Отключить Activity History
-    description: Activity History синхронизирует историю действий между устройствами. Отключает сбор и отправку.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System'
-        name: EnableActivityFeed
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System'
-        name: PublishUserActivities
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System'
-        name: UploadUserActivities
-        value: '0'
-        value_type: DWord
-
-  - id: telemetry.disable_tailored_experiences
-    name: Отключить Tailored Experiences
-    description: TailoredExperiencesWithDiagnosticDataEnabled=0 — Windows не использует диагностику для персонализации рекламы.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy'
-        name: TailoredExperiencesWithDiagnosticDataEnabled
-        value: '0'
-        value_type: DWord
-
-  - id: telemetry.disable_feedback_frequency
-    name: Отключить запросы обратной связи
-    description: DoNotShowFeedbackNotifications=1 — Windows не спрашивает "как вам Windows?".
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Siuf\Rules'
-        name: NumberOfSIUFInPeriod
-        value: '0'
-        value_type: DWord
+- id: telemetry.advertising_id
+  name: Отключить рекламный ID
+  description: Рекламный ID используется приложениями UWP для таргетированной рекламы.
+  risk: low
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/advertising-id
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo
+    name: Enabled
+    value: '0'
+    value_type: DWord
+- id: telemetry.disable_ceip
+  name: Отключить CEIP (Customer Experience Improvement Program)
+  description: CEIP собирает данные об использовании Windows. AllowTelemetry=0 + CEIPEnable=0
+    отключает сбор.
+  risk: low
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/configure-windows-diagnostic-data-in-your-organization
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection
+    name: AllowTelemetry
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Microsoft\SQMClient\Windows
+    name: CEIPEnable
+    value: '0'
+    value_type: DWord
+- id: telemetry.disable_activity_history
+  name: Отключить Activity History
+  description: Activity History синхронизирует историю действий между устройствами.
+    Отключает сбор и отправку.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+    name: EnableActivityFeed
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+    name: PublishUserActivities
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+    name: UploadUserActivities
+    value: '0'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/Windows-10-activity-history
+- id: telemetry.disable_tailored_experiences
+  name: Отключить Tailored Experiences
+  description: TailoredExperiencesWithDiagnosticDataEnabled=0 — Windows не использует
+    диагностику для персонализации рекламы.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy
+    name: TailoredExperiencesWithDiagnosticDataEnabled
+    value: '0'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/enhanced-diagnostic-data
+- id: telemetry.disable_feedback_frequency
+  name: Отключить запросы обратной связи
+  description: DoNotShowFeedbackNotifications=1 — Windows не спрашивает "как вам Windows?".
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Siuf\Rules
+    name: NumberOfSIUFInPeriod
+    value: '0'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/feedback-diagnostics

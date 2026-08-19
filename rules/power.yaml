@@ -1,19 +1,21 @@
-# Пресет: питание
 name: power
 description: Планы электропитания, гибернация.
 rules:
-  - id: power.ultimate_performance
-    name: План питания Ultimate Performance
-    description: Скрытый план питания, который не экономит энергию — максимум отзывчивости. На ноутбуке разряжает быстрее.
-    risk: low
-    actions:
-      - kind: power_plan
-        target: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
-
-  - id: power.disable_hibernation
-    name: Отключить гибернацию
-    description: powercfg -h off — удаляет hiberfil.sys (40-75% RAM). Освобождает место на SSD и ускоряет TRIM. На десктопе без UPS безопасно.
-    risk: low
-    actions:
-      - kind: hibernate_off
-        target: hiberfil.sys
+- id: power.ultimate_performance
+  name: План питания Ultimate Performance
+  description: Скрытый план питания, который не экономит энергию — максимум отзывчивости.
+    На ноутбуке разряжает быстрее.
+  risk: low
+  actions:
+  - kind: power_plan
+    target: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+  ms_doc_url: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configure-processor-power-management
+- id: power.disable_hibernation
+  name: Отключить гибернацию
+  description: powercfg -h off — удаляет hiberfil.sys (40-75% RAM). Освобождает место
+    на SSD и ускоряет TRIM. На десктопе без UPS безопасно.
+  risk: low
+  actions:
+  - kind: hibernate_off
+    target: hiberfil.sys
+  ms_doc_url: https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options

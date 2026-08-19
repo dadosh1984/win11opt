@@ -1,77 +1,79 @@
-# Пресет: App Compatibility — отключение шага совместимости, AI
 name: appcompat
-description: "App Compatibility: отключение Application Compatibility Engine и AI-помощников."
+description: 'App Compatibility: отключение Application Compatibility Engine и AI-помощников.'
 rules:
-  - id: appcompat.disable_pca_engine
-    name: Отключить Program Compatibility Assistant
-    description: PCA каждый раз проверяет установленные программы на совместимость. На SSD тормозит систему.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat'
-        name: AITEnable
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat'
-        name: DisableUAR
-        value: '1'
-        value_type: DWord
-
-  - id: appcompat.disable_steps_recorder
-    name: Отключить Steps Recorder автозапуск
-    description: Steps Recorder не запускается автоматически, но отключает фоновые процессы.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat'
-        name: DisableStepsRecorder
-        value: '1'
-        value_type: DWord
-
-  - id: appcompat.disable_windows_suggestions
-    name: Отключить Windows Suggestions
-    description: Отключает подсказки в Settings и рекомендации приложений.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager'
-        name: SilentInstalledAppsEnabled
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager'
-        name: SubscribedContent-338387Enabled
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager'
-        name: SubscribedContent-338388Enabled
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager'
-        name: SubscribedContent-338389Enabled
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager'
-        name: SubscribedContent-353698Enabled
-        value: '0'
-        value_type: DWord
-
-  - id: appcompat.disable_copilot
-    name: Отключить Windows Copilot
-    description: DisableWindowsCopilot=1 — убирает AI-помощник из панели задач. Фоновая обработка отключается.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot'
-        name: TurnOffWindowsCopilot
-        value: '1'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot'
-        name: TurnOffWindowsCopilot
-        value: '1'
-        value_type: DWord
+- id: appcompat.disable_pca_engine
+  name: Отключить Program Compatibility Assistant
+  description: PCA каждый раз проверяет установленные программы на совместимость.
+    На SSD тормозит систему.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat
+    name: AITEnable
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat
+    name: DisableUAR
+    value: '1'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows-security/identity-protection/access-control/application-control
+- id: appcompat.disable_steps_recorder
+  name: Отключить Steps Recorder автозапуск
+  description: Steps Recorder не запускается автоматически, но отключает фоновые процессы.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat
+    name: DisableStepsRecorder
+    value: '1'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/client-management/record-steps-to-reproduce-a-problem
+- id: appcompat.disable_windows_suggestions
+  name: Отключить Windows Suggestions
+  description: Отключает подсказки в Settings и рекомендации приложений.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    name: SilentInstalledAppsEnabled
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    name: SubscribedContent-338387Enabled
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    name: SubscribedContent-338388Enabled
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    name: SubscribedContent-338389Enabled
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager
+    name: SubscribedContent-353698Enabled
+    value: '0'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/Windows-10-privacy-content-delivery-manager
+- id: appcompat.disable_copilot
+  name: Отключить Windows Copilot
+  description: DisableWindowsCopilot=1 — убирает AI-помощник из панели задач. Фоновая
+    обработка отключается.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot
+    name: TurnOffWindowsCopilot
+    value: '1'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot
+    name: TurnOffWindowsCopilot
+    value: '1'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/copilot/overview

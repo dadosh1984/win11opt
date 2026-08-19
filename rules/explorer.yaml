@@ -1,47 +1,50 @@
-# Пресет: Explorer — поведение Проводника
 name: explorer
-description: "Настройки Проводника: показ расширений, полный путь, классический вид."
+description: 'Настройки Проводника: показ расширений, полный путь, классический вид.'
 rules:
-  - id: explorer.show_extensions
-    name: Показывать расширения файлов
-    description: HideFileExt=0 — Windows показывает .txt, .exe и т.п. Безопасность + меньше фишинга.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-        name: HideFileExt
-        value: '0'
-        value_type: DWord
-
-  - id: explorer.show_full_path_in_title
-    name: Полный путь в заголовке окна
-    description: FullPath=1 — заголовок Проводника показывает полный путь к текущей папке.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState'
-        name: FullPath
-        value: '1'
-        value_type: DWord
-
-  - id: explorer.show_status_bar
-    name: Показывать строку состояния
-    description: ShowStatusBar=1 — внизу Проводника информация о выделенных файлах.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-        name: ShowStatusBar
-        value: '1'
-        value_type: DWord
-
-  - id: explorer.launch_to_this_pc
-    name: Открывать "Этот компьютер" вместо "Быстрого доступа"
-    description: LaunchTo=1 — при запуске Проводник открывает This PC (XP-style), а не Home.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-        name: LaunchTo
-        value: '1'
-        value_type: DWord
+- id: explorer.show_extensions
+  name: Показывать расширения файлов
+  description: HideFileExt=0 — Windows показывает .txt, .exe и т.п. Безопасность +
+    меньше фишинга.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    name: HideFileExt
+    value: '0'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/shell/folder-options
+- id: explorer.show_full_path_in_title
+  name: Полный путь в заголовке окна
+  description: FullPath=1 — заголовок Проводника показывает полный путь к текущей
+    папке.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState
+    name: FullPath
+    value: '1'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/shell/folder-options
+- id: explorer.show_status_bar
+  name: Показывать строку состояния
+  description: ShowStatusBar=1 — внизу Проводника информация о выделенных файлах.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    name: ShowStatusBar
+    value: '1'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/shell/folder-options
+- id: explorer.launch_to_this_pc
+  name: Открывать "Этот компьютер" вместо "Быстрого доступа"
+  description: LaunchTo=1 — при запуске Проводник открывает This PC (XP-style), а
+    не Home.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    name: LaunchTo
+    value: '1'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/shell/folder-options

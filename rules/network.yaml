@@ -1,41 +1,44 @@
-# Пресет: Network — низкая задержка для игр и отзывчивости
 name: network
-description: "Сеть: отключение Nagle-алгоритма и throttling для низкой задержки."
+description: 'Сеть: отключение Nagle-алгоритма и throttling для низкой задержки.'
 rules:
-  - id: network.disable_nagle
-    name: Отключить Nagle-алгоритм (TCP)
-    description: TcpAckFrequency=1 + TCPNoDelay=1 — отключает задержку Nagle. Меньше latency в играх и при удалённой работе. Незначительно увеличивает трафик.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces'
-        name: TcpAckFrequency
-        value: '1'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces'
-        name: TCPNoDelay
-        value: '1'
-        value_type: DWord
-
-  - id: network.disable_throttling
-    name: Отключить Network Throttling Index
-    description: NetworkThrottlingIndex=0xffffffff — Windows не ограничивает сетевую пропускную способность для мультимедиа. Полезно для стриминга и игр.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile'
-        name: NetworkThrottlingIndex
-        value: '0xffffffff'
-        value_type: DWord
-
-  - id: network.disable_gaming_qos
-    name: Отключить Gaming QoS (DSCP)
-    description: Do not use NLA=1 — отключает приоритизацию трафика Windows (DSCP). Убирает лишнюю обработку пакетов.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Psched'
-        name: NonBestEffortLimit
-        value: '0'
-        value_type: DWord
+- id: network.disable_nagle
+  name: Отключить Nagle-алгоритм (TCP)
+  description: TcpAckFrequency=1 + TCPNoDelay=1 — отключает задержку Nagle. Меньше
+    latency в играх и при удалённой работе. Незначительно увеличивает трафик.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces
+    name: TcpAckFrequency
+    value: '1'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces
+    name: TCPNoDelay
+    value: '1'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/winsock/ipproto-tcp
+- id: network.disable_throttling
+  name: Отключить Network Throttling Index
+  description: NetworkThrottlingIndex=0xffffffff — Windows не ограничивает сетевую
+    пропускную способность для мультимедиа. Полезно для стриминга и игр.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile
+    name: NetworkThrottlingIndex
+    value: '0xffffffff'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configure-processor-power-management
+- id: network.disable_gaming_qos
+  name: Отключить Gaming QoS (DSCP)
+  description: Do not use NLA=1 — отключает приоритизацию трафика Windows (DSCP).
+    Убирает лишнюю обработку пакетов.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Psched
+    name: NonBestEffortLimit
+    value: '0'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows-server/networking/technologies/qos/qos-policy

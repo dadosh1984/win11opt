@@ -1,26 +1,26 @@
-# Пресет: OneDrive — отключение из автозапуска
 name: onedrive
 description: OneDrive — отключение автозапуска и синхронизации.
 rules:
-  - id: onedrive.disable_startup
-    name: Убрать OneDrive из автозапуска
-    description: DisableFileSyncNGSC=1 — отключает фоновую синхронизацию OneDrive. OneDrive остаётся установленным.
-    risk: low
-    ms_doc_url: https://support.microsoft.com/en-us/onedrive
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\OneDrive'
-        name: DisableFileSyncNGSC
-        value: '1'
-        value_type: DWord
-
-  - id: onedrive.disable_autostart
-    name: Убрать OneDrive из автозагрузки
-    description: SilentAcquiredTier=DWORD:000000f5 — отключает запуск OneDrive при логине.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Microsoft\OneDrive\Accounts\1'
-        name: SilentAcquiredTier
-        value: '0xf5'
-        value_type: DWord
+- id: onedrive.disable_startup
+  name: Убрать OneDrive из автозапуска
+  description: DisableFileSyncNGSC=1 — отключает фоновую синхронизацию OneDrive. OneDrive
+    остаётся установленным.
+  risk: low
+  ms_doc_url: https://support.microsoft.com/en-us/onedrive
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\OneDrive
+    name: DisableFileSyncNGSC
+    value: '1'
+    value_type: DWord
+- id: onedrive.disable_autostart
+  name: Убрать OneDrive из автозагрузки
+  description: SilentAcquiredTier=DWORD:000000f5 — отключает запуск OneDrive при логине.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Microsoft\OneDrive\Accounts\1
+    name: SilentAcquiredTier
+    value: '0xf5'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/onedrive/turn-on-disable-onedrive

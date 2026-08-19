@@ -1,33 +1,34 @@
-# Пресет: визуальные оптимизации
-# Все правила категории "visual" — низкий риск, откатываемы.
 name: visual
-description: Визуальные оптимизации — отключение анимаций, эффектов, контекстного меню.
+description: Визуальные оптимизации — отключение анимаций, эффектов, контекстного
+  меню.
 rules:
-  - id: visual.disable_animations
-    name: Отключить анимации окон
-    description: Убирает анимацию свёртывания/развёртывания/закрытия окон. Сильно влияет на ощущение скорости UI.
-    risk: low
-    ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/uxguide/anim
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Control Panel\Desktop'
-        name: UserPreferencesMask
-        value: '0x90120A80D80100000090000090400000'
-        value_type: String
-      - kind: reg_set
-        target: 'HKCU:\Control Panel\Desktop\WindowMetrics'
-        name: MinAnimate
-        value: '0'
-        value_type: String
-
-  - id: visual.classic_context_menu
-    name: Классическое контекстное меню
-    description: Win11 прячет часть команд за "Show more options". Возвращаем полное меню сразу.
-    risk: low
-    requires_reboot: true
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Software\Classes\CLSID\{86ca1aa0-2e05-4d4c-9827-7c91b7bcae34}\InprocServer32'
-        name: '(Default)'
-        value: ''
-        value_type: String
+- id: visual.disable_animations
+  name: Отключить анимации окон
+  description: Убирает анимацию свёртывания/развёртывания/закрытия окон. Сильно влияет
+    на ощущение скорости UI.
+  risk: low
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/uxguide/anim
+  actions:
+  - kind: reg_set
+    target: HKCU:\Control Panel\Desktop
+    name: UserPreferencesMask
+    value: '0x90120A80D80100000090000090400000'
+    value_type: String
+  - kind: reg_set
+    target: HKCU:\Control Panel\Desktop\WindowMetrics
+    name: MinAnimate
+    value: '0'
+    value_type: String
+- id: visual.classic_context_menu
+  name: Классическое контекстное меню
+  description: Win11 прячет часть команд за "Show more options". Возвращаем полное
+    меню сразу.
+  risk: low
+  requires_reboot: true
+  actions:
+  - kind: reg_set
+    target: HKCU:\Software\Classes\CLSID\{86ca1aa0-2e05-4d4c-9827-7c91b7bcae34}\InprocServer32
+    name: (Default)
+    value: ''
+    value_type: String
+  ms_doc_url: https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-startmenu

@@ -1,59 +1,60 @@
-# Пресет: Defender — ослабление (НЕ удаление)
-# Defender — компонент ядра Win11. Удалить невозможно без BSOD.
-# Эти твики ОТКЛЮЧАЮТ облачную телеметрию и SmartScreen (меньше фоновой нагрузки),
-# но НЕ отключают сам Defender и real-time защиту.
 name: defender
-description: "Ослабление Defender: отключение облачной телеметрии, SmartScreen и сбора образцов. Реалтайм-защита остаётся."
+description: 'Ослабление Defender: отключение облачной телеметрии, SmartScreen и сбора
+  образцов. Реалтайм-защита остаётся.'
 rules:
-  - id: defender.disable_cloud_protection
-    name: Отключить Defender Cloud Protection
-    description: SpyNetReporting=0, SubmitSamplesConsent=0 — Defender перестаёт слать образцы в Microsoft. Уменьшает фоновый трафик.
-    risk: medium
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet'
-        name: SpyNetReporting
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet'
-        name: SubmitSamplesConsent
-        value: '2'
-        value_type: DWord
-
-  - id: defender.disable_smart_screen
-    name: Отключить SmartScreen
-    description: EnableSmartScreen=0 для Edge/Store/Explorer. Предупреждения о скачиваемых файлах отключаются. Защита от фишинга остаётся через DNS/Network protection.
-    risk: medium
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\System'
-        name: EnableSmartScreen
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer'
-        name: SmartScreenEnabled
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Phishing'
-        name: PhishingOverride
-        value: '0'
-        value_type: DWord
-
-  - id: defender.disable_mp_telemetry
-    name: Отключить MpTelemetry (Defender ETW)
-    description: MpTelemetry=0 — отключает ETW-канал телеметрии Defender. Уменьшает нагрузку на диск (меньше записей в Event Log).
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Reporting'
-        name: MpTelemetry
-        value: '0'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Reporting'
-        name: DisableGenericReports
-        value: '1'
-        value_type: DWord
+- id: defender.disable_cloud_protection
+  name: Отключить Defender Cloud Protection
+  description: SpyNetReporting=0, SubmitSamplesConsent=0 — Defender перестаёт слать
+    образцы в Microsoft. Уменьшает фоновый трафик.
+  risk: medium
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet
+    name: SpyNetReporting
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet
+    name: SubmitSamplesConsent
+    value: '2'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/defender-endpoint/cloud-protection-microsoft-defender-antivirus
+- id: defender.disable_smart_screen
+  name: Отключить SmartScreen
+  description: EnableSmartScreen=0 для Edge/Store/Explorer. Предупреждения о скачиваемых
+    файлах отключаются. Защита от фишинга остаётся через DNS/Network protection.
+  risk: medium
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+    name: EnableSmartScreen
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
+    name: SmartScreenEnabled
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Phishing
+    name: PhishingOverride
+    value: '0'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/security/identity-protection/access-control/access-control
+- id: defender.disable_mp_telemetry
+  name: Отключить MpTelemetry (Defender ETW)
+  description: MpTelemetry=0 — отключает ETW-канал телеметрии Defender. Уменьшает
+    нагрузку на диск (меньше записей в Event Log).
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Reporting
+    name: MpTelemetry
+    value: '0'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Reporting
+    name: DisableGenericReports
+    value: '1'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/defender-endpoint/report-monitor-microsoft-defender-antivirus

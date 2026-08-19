@@ -1,55 +1,58 @@
-# Пресет: Debloat UWP-приложений
 name: debloat
 description: Удаление встроенных UWP-приложений, которые жрут RAM/CPU.
 rules:
-  - id: debloat.remove_xbox_apps
-    name: Удалить Xbox UWP-приложения
-    description: Удаляет XboxGameOverlay, XboxGameCallableUI, XboxIdentityProvider, XboxSpeechToTextOverlay. Освобождает фоновые процессы.
-    risk: medium
-    actions:
-      - kind: appx_remove
-        target: '*XboxGameOverlay*'
-      - kind: appx_remove
-        target: '*XboxGameCallableUI*'
-      - kind: appx_remove
-        target: '*XboxIdentityProvider*'
-      - kind: appx_remove
-        target: '*XboxSpeechToTextOverlay*'
-
-  - id: debloat.remove_bing_apps
-    name: Удалить Bing/Новости UWP
-    description: Удаляет BingWeather, BingNews, BingFinance, BingSports. Используйте Edge/браузер для погоды.
-    risk: medium
-    actions:
-      - kind: appx_remove
-        target: '*BingWeather*'
-      - kind: appx_remove
-        target: '*BingNews*'
-      - kind: appx_remove
-        target: '*BingFinance*'
-      - kind: appx_remove
-        target: '*BingSports*'
-
-  - id: debloat.remove_help_apps
-    name: Удалить GetHelp/Tips
-    description: Удаляет GetHelp, Tips (Microsoft Tips), FeedbackHub. Не нужны обычному пользователю.
-    risk: low
-    actions:
-      - kind: appx_remove
-        target: '*GetHelp*'
-      - kind: appx_remove
-        target: '*Tips*'
-      - kind: appx_remove
-        target: '*FeedbackHub*'
-
-  - id: debloat.remove_apps_duplicates
-    name: Удалить дублирующие приложения
-    description: Удаляет MixedReality, PhoneLink, People — дублируют стандартные функции.
-    risk: medium
-    actions:
-      - kind: appx_remove
-        target: '*MixedReality*'
-      - kind: appx_remove
-        target: '*YourPhone*'
-      - kind: appx_remove
-        target: '*People*'
+- id: debloat.remove_xbox_apps
+  name: Удалить Xbox UWP-приложения
+  description: Удаляет XboxGameOverlay, XboxGameCallableUI, XboxIdentityProvider,
+    XboxSpeechToTextOverlay. Освобождает фоновые процессы.
+  risk: medium
+  actions:
+  - kind: appx_remove
+    target: '*XboxGameOverlay*'
+  - kind: appx_remove
+    target: '*XboxGameCallableUI*'
+  - kind: appx_remove
+    target: '*XboxIdentityProvider*'
+  - kind: appx_remove
+    target: '*XboxSpeechToTextOverlay*'
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/application-management/remove-appxpackage
+- id: debloat.remove_bing_apps
+  name: Удалить Bing/Новости UWP
+  description: Удаляет BingWeather, BingNews, BingFinance, BingSports. Используйте
+    Edge/браузер для погоды.
+  risk: medium
+  actions:
+  - kind: appx_remove
+    target: '*BingWeather*'
+  - kind: appx_remove
+    target: '*BingNews*'
+  - kind: appx_remove
+    target: '*BingFinance*'
+  - kind: appx_remove
+    target: '*BingSports*'
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/application-management/remove-appxpackage
+- id: debloat.remove_help_apps
+  name: Удалить GetHelp/Tips
+  description: Удаляет GetHelp, Tips (Microsoft Tips), FeedbackHub. Не нужны обычному
+    пользователю.
+  risk: low
+  actions:
+  - kind: appx_remove
+    target: '*GetHelp*'
+  - kind: appx_remove
+    target: '*Tips*'
+  - kind: appx_remove
+    target: '*FeedbackHub*'
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/application-management/remove-appxpackage
+- id: debloat.remove_apps_duplicates
+  name: Удалить дублирующие приложения
+  description: Удаляет MixedReality, PhoneLink, People — дублируют стандартные функции.
+  risk: medium
+  actions:
+  - kind: appx_remove
+    target: '*MixedReality*'
+  - kind: appx_remove
+    target: '*YourPhone*'
+  - kind: appx_remove
+    target: '*People*'
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/application-management/remove-appxpackage

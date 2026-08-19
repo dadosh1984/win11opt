@@ -1,55 +1,57 @@
-# Пресет: UI — мгновенные меню, подсказки, отключение lockscreen/Cortana
 name: ui
-description: "Скорость UI: мгновенные меню, тултипы, отключение lockscreen и Cortana."
+description: 'Скорость UI: мгновенные меню, тултипы, отключение lockscreen и Cortana.'
 rules:
-  - id: ui.instant_menu
-    name: Мгновенные меню
-    description: MenuShowDelay=0 — контекстные меню появляются без 400мс задержки. XP-style поведение.
-    risk: low
-    ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfo
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Control Panel\Desktop'
-        name: MenuShowDelay
-        value: '0'
-        value_type: String
-
-  - id: ui.instant_tooltips
-    name: Мгновенные подсказки
-    description: MouseHoverTime=10 — тултипы появляются через ~17мс вместо 400мс по умолчанию.
-    risk: low
-    actions:
-      - kind: reg_set
-        target: 'HKCU:\Control Panel\Desktop'
-        name: MouseHoverTime
-        value: '10'
-        value_type: String
-
-  - id: ui.no_lockscreen
-    name: Отключить lockscreen
-    description: DisableLockScreenAppNotifications=1 — убрать рекламный lockscreen. Требуется ребут.
-    risk: medium
-    requires_reboot: true
-    ms_doc_url: https://learn.microsoft.com/en-us/windows/security/identity-protection/access-control/lock-screen
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Personalization'
-        name: NoLockScreenCamera
-        value: '1'
-        value_type: DWord
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Personalization'
-        name: LockScreenImage
-        value: '1'
-        value_type: DWord
-
-  - id: ui.no_cortana
-    name: Отключить Cortana
-    description: AllowCortana=0 — отключает поиск Cortana. Плоский поиск Windows остаётся работать.
-    risk: medium
-    actions:
-      - kind: reg_set
-        target: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search'
-        name: AllowCortana
-        value: '0'
-        value_type: DWord
+- id: ui.instant_menu
+  name: Мгновенные меню
+  description: MenuShowDelay=0 — контекстные меню появляются без 400мс задержки. XP-style
+    поведение.
+  risk: low
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfo
+  actions:
+  - kind: reg_set
+    target: HKCU:\Control Panel\Desktop
+    name: MenuShowDelay
+    value: '0'
+    value_type: String
+- id: ui.instant_tooltips
+  name: Мгновенные подсказки
+  description: MouseHoverTime=10 — тултипы появляются через ~17мс вместо 400мс по
+    умолчанию.
+  risk: low
+  actions:
+  - kind: reg_set
+    target: HKCU:\Control Panel\Desktop
+    name: MouseHoverTime
+    value: '10'
+    value_type: String
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa
+- id: ui.no_lockscreen
+  name: Отключить lockscreen
+  description: DisableLockScreenAppNotifications=1 — убрать рекламный lockscreen.
+    Требуется ребут.
+  risk: medium
+  requires_reboot: true
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/security/identity-protection/access-control/lock-screen
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Personalization
+    name: NoLockScreenCamera
+    value: '1'
+    value_type: DWord
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Personalization
+    name: LockScreenImage
+    value: '1'
+    value_type: DWord
+- id: ui.no_cortana
+  name: Отключить Cortana
+  description: AllowCortana=0 — отключает поиск Cortana. Плоский поиск Windows остаётся
+    работать.
+  risk: medium
+  actions:
+  - kind: reg_set
+    target: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search
+    name: AllowCortana
+    value: '0'
+    value_type: DWord
+  ms_doc_url: https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-10-to-microsoft-services

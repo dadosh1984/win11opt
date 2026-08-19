@@ -379,3 +379,19 @@ def test_45_rules_count():
     """Контроль количества правил — помогает найти дубликаты."""
     rules = load_all(DEFAULT_RULES_DIR)
     assert len(rules) >= 45, f"expected >=45 rules, got {len(rules)}"
+
+
+def test_all_rules_have_ms_doc_url():
+    """Каждое правило должно иметь ms_doc_url для доверия."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    missing = [rid for rid, r in rules.items() if not r.ms_doc_url]
+    assert not missing, f"rules without ms_doc_url: {missing}"
+
+
+def test_ms_doc_url_is_microsoft_learn():
+    """ms_doc_url должен вести на learn.microsoft.com."""
+    rules = load_all(DEFAULT_RULES_DIR)
+    for rid, r in rules.items():
+        if r.ms_doc_url:
+            assert "learn.microsoft.com" in r.ms_doc_url or "support.microsoft.com" in r.ms_doc_url, \
+                f"{rid}: bad URL {r.ms_doc_url}"
