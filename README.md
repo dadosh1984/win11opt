@@ -212,11 +212,12 @@ rules:
 
 Поддерживаемые `kind`:
 - `reg_set` / `reg_delete` — реестр
-- `service_disable` / `service_manual` / `service_delete` — службы
+- `service_disable` / `service_manual` — службы
 - `power_plan` — план электропитания (target = GUID)
 - `hibernate_off` / `hibernate_on` — гибернация (powercfg -h)
 - `appx_remove` — удаление UWP-приложения (target = маска имени)
-- `sched_task_disable`, `shell_ext` — зарезервированы
+- `sched_task_disable` — отключение задачи планировщика
+- `service_delete`, `shell_ext` — зарезервированы (не реализованы)
 
 Перед использованием: `win11opt rules validate`.
 

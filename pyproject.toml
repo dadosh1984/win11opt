@@ -9,7 +9,11 @@ description = "Native single-EXE Win11 optimizer (XP-like responsiveness)"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "win11opt contributors" }]
-dependencies = []
+dependencies = ["pyyaml"]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+build = ["pyinstaller>=6.0"]
 
 [project.scripts]
 win11opt = "win11opt.cli:main"
