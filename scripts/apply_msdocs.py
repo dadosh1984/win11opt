@@ -12,9 +12,8 @@ sys.path.insert(0, str(ROOT / "src"))
 
 # Импортируем EXPECTED_URLS из audit
 sys.path.insert(0, str(ROOT / "scripts"))
-from audit_msdocs import EXPECTED_URLS  # noqa: E402
-
-import yaml  # noqa: E402
+import yaml
+from audit_msdocs import EXPECTED_URLS
 
 RULES_DIR = ROOT / "rules"
 

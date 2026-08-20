@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 
-from win11opt.rules.loader import load_all  # noqa: E402
+from win11opt.rules.loader import load_all
 
 EXPECTED_URLS = {
     # power

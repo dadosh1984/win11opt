@@ -1,7 +1,6 @@
 """Generate ru.po from win11opt.pot with Russian translations."""
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -88,7 +87,6 @@ TRANSLATIONS: dict[str, str] = {
         "Бенчмарк ДО: RAM %d/%d МБ, CPU %.1f%%, служб %d, задач %d",
     "Bench AFTER: RAM %d MB (Δ%+d), services %d (Δ%+d), tasks %d (Δ%+d)":
         "Бенчмарк ПОСЛЕ: RAM %d МБ (Δ%+d), служб %d (Δ%+d), задач %d (Δ%+d)",
-    "Bench after": "Бенчмарк после",
     "Bench diff": "Сравнить с baseline",
     "Bench list": "Список baseline",
     "Bench save": "Сохранить baseline",
