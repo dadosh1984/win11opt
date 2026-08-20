@@ -168,6 +168,28 @@ def test_measure_ram_uses_kb_not_mb(monkeypatch):
     assert result.total_ram_mb == 40960
 
 
+def test_run_uses_ps_run_ps_and_swallows_errors(monkeypatch):
+    """Regression: bench._run должен идти через ps.run_ps (UTF-8 + FileNotFoundError),
+    а не через сырой subprocess, и глотать PowerShellError."""
+    from win11opt.core import ps
+
+    calls = []
+
+    def fake_run_ps(script, timeout=10):
+        calls.append(script)
+        return "  42  \n"
+
+    monkeypatch.setattr(ps, "run_ps", fake_run_ps)
+    assert bench._run("Get-Foo") == "42"
+    assert calls and "Get-Foo" in calls[0]
+
+    def boom(script, timeout=10):
+        raise ps.PowerShellError("boom")
+
+    monkeypatch.setattr(ps, "run_ps", boom)
+    assert bench._run("Get-Foo") == ""
+
+
 def test_bench_powershell_script_divides_ram_by_kb():
     """Regression: bench PowerShell делит RAM на 1KB."""
     import inspect

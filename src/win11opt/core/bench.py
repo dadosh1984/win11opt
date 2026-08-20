@@ -16,10 +16,11 @@ from __future__ import annotations
 import json
 import logging
 import re
-import subprocess
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from pathlib import Path
+
+from . import ps
 
 log = logging.getLogger(__name__)
 
@@ -49,18 +50,14 @@ class BenchResult:
 
 
 def _run(cmd: str, timeout: int = 10) -> str:
-    """Запустить PowerShell-команду и вернуть stdout."""
+    """Запустить PowerShell-команду и вернуть stdout (UTF-8)."""
     script = f"""
 $ErrorActionPreference = 'SilentlyContinue'
 {cmd}
 """
     try:
-        out = subprocess.run(
-            ["powershell", "-NoProfile", "-NonInteractive", "-Command", script],
-            capture_output=True, text=True, timeout=timeout,
-        )
-        return (out.stdout or "").strip()
-    except Exception as e:
+        return ps.run_ps(script, timeout=timeout).strip()
+    except ps.PowerShellError as e:
         log.warning("bench command failed: %s: %s", cmd[:60], e)
         return ""
 
@@ -146,12 +143,9 @@ try {
 } catch { return 0 }
 """
     try:
-        out = subprocess.run(
-            ["powershell", "-NoProfile", "-NonInteractive", "-Command", script],
-            capture_output=True, text=True, timeout=8,
-        )
-        return _parse_float(out.stdout)
-    except Exception:
+        out = ps.run_ps(script, timeout=8)
+        return _parse_float(out)
+    except ps.PowerShellError:
         return 0.0
 
 
