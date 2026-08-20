@@ -49,3 +49,25 @@ def test_load_round_trip_all_action_kinds(tmp_path, monkeypatch, fake_ps):
     kinds = [a.kind for a in loaded.actions_undone]
     assert kinds == [ActionKind.REG_SET, ActionKind.REG_DELETE,
                      ActionKind.SERVICE_DISABLE, ActionKind.SCHED_TASK_DISABLE]
+
+
+def test_undo_value_round_trips_independently_of_value(tmp_path, monkeypatch, fake_ps):
+    """Regression: undo_value (исходное) не должен подменяться value (новым).
+
+    До фикса to_dict() не сериализовал undo_value, а load() подставлял
+    undo_value = value — rollback после перезапуска возвращал реестр в
+    НОВОЕ значение вместо исходного.
+    """
+    monkeypatch.setattr(snap_mod, "_snapshots_dir", lambda: tmp_path)
+    action = Action(
+        kind=ActionKind.REG_SET, target="HKCU:\\Software\\X", name="Foo",
+        value=0, value_type="DWord",
+        undo_target="HKCU:\\Software\\X", undo_value=1,
+    )
+    snap = snap_mod.make_snapshot(["x.y"], [action])
+    snap_mod.save(snap)
+    loaded = snap_mod.load(snap.id)
+    a = loaded.actions_undone[0]
+    assert a.value == 0          # новое значение
+    assert a.undo_value == 1     # исходное значение — не подменено
+    assert a.undo_target == "HKCU:\\Software\\X"

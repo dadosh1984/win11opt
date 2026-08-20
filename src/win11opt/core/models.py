@@ -21,13 +21,13 @@ class ActionKind(str, Enum):
     REG_DELETE = "reg_delete"     # Remove-ItemProperty
     SERVICE_DISABLE = "svc_disable"
     SERVICE_MANUAL = "svc_manual"
-    SERVICE_DELETE = "svc_delete"
+    SERVICE_DELETE = "svc_delete"      # зарезервировано — не реализовано
     SCHED_TASK_DISABLE = "task_disable"
     APPX_REMOVE = "appx_remove"
     POWER_PLAN = "power_plan"     # powercfg /setactive
     POWER_HIBERNATE_DISABLE = "hibernate_off"   # powercfg -h off
     POWER_HIBERNATE_ENABLE = "hibernate_on"     # powercfg -h on
-    SHELL_EXT = "shell_ext"       # будущее
+    SHELL_EXT = "shell_ext"       # зарезервировано — будущее
 
 
 @dataclass(frozen=True)
@@ -87,6 +87,8 @@ class Snapshot:
                     "kind": a.kind.value, "target": a.target,
                     "name": a.name, "value": a.value,
                     "value_type": a.value_type,
+                    "undo_target": a.undo_target,
+                    "undo_value": a.undo_value,
                 }
                 for a in self.actions_undone
             ],

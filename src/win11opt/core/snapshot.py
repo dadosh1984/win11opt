@@ -48,7 +48,8 @@ def load(snap_id: str) -> Snapshot:
             kind=ActionKind(a["kind"]), target=a["target"],
             name=a.get("name"), value=a.get("value"),
             value_type=a.get("value_type"),
-            undo_target=a["target"], undo_value=a.get("value"),
+            undo_target=a.get("undo_target", a["target"]),
+            undo_value=a.get("undo_value", a.get("value")),
         )
         for a in data.get("actions_undone", [])
     ]
